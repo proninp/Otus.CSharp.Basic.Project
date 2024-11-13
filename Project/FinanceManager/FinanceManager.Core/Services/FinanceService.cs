@@ -9,10 +9,10 @@ public sealed class FinanceService(
 {
     public async Task<FinanceViewModel> GetUserFinanceData(Guid userId)
     {
-        var accounts = await accountManager.GetAccounts(userId);
-        var categories = await categoryManager.GetCategories(userId);
-        var transactions = await transactionManager.GetTransactions(userId);
-        var transfers = await transferManager.GetTransfers(userId);
+        var accounts = await accountManager.Get(userId);
+        var categories = await categoryManager.Get(userId);
+        var transactions = await transactionManager.Get(userId);
+        var transfers = await transferManager.Get(userId);
         
 
         return new FinanceViewModel

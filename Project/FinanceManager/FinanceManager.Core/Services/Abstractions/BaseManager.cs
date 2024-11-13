@@ -1,5 +1,6 @@
 ﻿using FinanceManager.Core.DataTransferObjects.Commands.Abstractions;
 using FinanceManager.Core.Models.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services.Abstractions;
 public abstract class BaseManager<T, TDto>
@@ -16,7 +17,7 @@ public abstract class BaseManager<T, TDto>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task PutEntry(TDto command)
+    public virtual async Task Put(TDto command)
     {
         if (command.Id is null)
         {
@@ -30,7 +31,7 @@ public abstract class BaseManager<T, TDto>
         await _unitOfWork.Commit();
     }
 
-    public async Task DeleteEntry(Guid id)
+    public async Task Delete(Guid id)
     {
         var entry = await GetEntityById(id);
         _repository.Delete(entry);

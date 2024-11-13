@@ -18,5 +18,6 @@ public sealed class AppInitializer : BackgroundService
         using var scope = _services.CreateScope();
         using var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await appDbContext.Database.MigrateAsync(stoppingToken);
+
     }
 }

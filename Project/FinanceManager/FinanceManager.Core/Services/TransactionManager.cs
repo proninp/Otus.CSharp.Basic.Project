@@ -2,22 +2,39 @@
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Managers;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class TransactionManager : BaseManager<Transaction, PutTransactionDto>
+public class TransactionManager : BaseManager<Transaction, PutTransactionDto>, ITransactionManager
 {
-    public TransactionManager(IRepository<Transaction> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+    public TransactionManager(
+        IAccountManager accountManager,
+        IRepository<Transaction> repository,
+        IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
+        _accountManager = accountManager;
     }
+
+    private readonly IAccountManager _accountManager;
 
     public async Task<TransactionDto?> GetById(Guid id)
     {
         return (await _repository.GetById(id))?.ToDto();
     }
 
-    public async Task<TransactionDto[]> GetTransactions(Guid userId)
+    public async Task<TransactionDto[]> Get(Guid userId)
     {
         return await _repository.Get(t => t.UserId == userId, t => t.ToDto());
+    }
+
+    public override Task Put(PutTransactionDto command)
+    {
+        var accountTpe = _accountManager.GetById(command.AccountId);
+        if (accountTpe is null)
+            throw new ArgumentException("Невозможно зарегистрировать транзакцию: не указан счет.");
+
+        return base.Put(command);
     }
 
     protected override void Update(Transaction transaction, PutTransactionDto command)

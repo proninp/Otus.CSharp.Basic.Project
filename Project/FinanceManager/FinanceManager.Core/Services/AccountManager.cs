@@ -2,9 +2,11 @@
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Managers;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class AccountManager : BaseManager<Account, PutAccountDto>
+public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManager
 {
     public AccountManager(IRepository<Account> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -15,10 +17,10 @@ public class AccountManager : BaseManager<Account, PutAccountDto>
         return (await _repository.GetById(id))?.ToDto();
     }
 
-    public async Task<AccountDto[]> GetAccounts(Guid userId)
+    public async Task<AccountDto[]> Get(Guid userId)
     {
         return await _repository.Get(a => a.UserId == userId, a => a.ToDto());
-    }
+    }   
 
     protected override void Update(Account account, PutAccountDto command)
     {

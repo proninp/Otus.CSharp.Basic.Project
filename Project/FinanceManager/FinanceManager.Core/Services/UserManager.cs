@@ -2,10 +2,12 @@
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Managers;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
 
-public class UserManager : BaseManager<User, PutUserDto>
+public class UserManager : BaseManager<User, PutUserDto>, IUserManager
 {
     public UserManager(IRepository<User> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {

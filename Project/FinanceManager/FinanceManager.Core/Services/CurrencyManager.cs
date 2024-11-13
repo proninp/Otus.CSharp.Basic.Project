@@ -2,10 +2,11 @@
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
 
-public class CurrencyManager
+public class CurrencyManager : IReadOnlyManager<CurrencyDto>
 {
     private IRepository<Currency> _repository;
 
@@ -19,7 +20,7 @@ public class CurrencyManager
         return (await _repository.GetById(id))?.ToDto();
     }
 
-    public async Task<CurrencyDto[]> GetCurrencies()
+    public async Task<CurrencyDto[]> GetAll()
     {
         return await _repository.Get(_ => true, c => c.ToDto());
     }
