@@ -14,10 +14,12 @@ public class PutTransactionDto : BasePutDto<Transaction>
 
     public DateTime Date { get; set; }
 
+    public TransactionType TransactionType { get; set; }
+
     public decimal Amount { get; set; }
 
     public string? Description { get; set; }
 
     public override Transaction ToModel() =>
-        new Transaction(UserId, AccountId, CategoryId, Date, Amount, Description);
+        new Transaction(UserId, AccountId, CategoryId, Date, TransactionType, Amount, Description);
 }

@@ -13,6 +13,8 @@ public class TransactionDto
 
     public DateTime Date { get; init; }
 
+    public TransactionType TransactionType { get; set; }
+
     public decimal Amount { get; init; }
 
     public string? Description { get; init; }
@@ -29,6 +31,7 @@ public static class TransactionMappings
             AccoutId = entry.AccountId,
             CategoryId = entry.CategoryId,
             Date = entry.Date,
+            TransactionType = entry.TransactionType,
             Amount = entry.Amount,
             Description = entry.Description,
         };
