@@ -1,11 +1,12 @@
 ﻿using FinanceManager.Core.DataTransferObjects.ViewModels;
+using FinanceManager.Core.Services.Abstractions.Managers;
 
 namespace FinanceManager.Core.Services;
 public sealed class FinanceService(
-    AccountManager accountManager,
-    CategoryManager categoryManager,
-    TransactionManager transactionManager,
-    TransferManager transferManager)
+    IAccountManager accountManager,
+    ICategoryManager categoryManager,
+    ITransactionManager transactionManager,
+    ITransferManager transferManager)
 {
     public async Task<FinanceViewModel> GetUserFinanceData(Guid userId)
     {

@@ -9,14 +9,15 @@ namespace FinanceManager.Core.Services;
 public class TransactionManager : BaseManager<Transaction, PutTransactionDto>, ITransactionManager
 {
     public TransactionManager(
-        IAccountManager accountManager,
+        ITransactionValidator transactionValidator,
         IRepository<Transaction> repository,
         IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
-        _accountManager = accountManager;
+        _transactionValidator = transactionValidator;
     }
 
-    private readonly IAccountManager _accountManager;
+    
+    private readonly ITransactionValidator _transactionValidator;
 
     public async Task<TransactionDto?> GetById(Guid id)
     {
@@ -30,9 +31,7 @@ public class TransactionManager : BaseManager<Transaction, PutTransactionDto>, I
 
     public override Task Put(PutTransactionDto command)
     {
-        var accountTpe = _accountManager.GetById(command.AccountId);
-        if (accountTpe is null)
-            throw new ArgumentException("Невозможно зарегистрировать транзакцию: не указан счет.");
+        _transactionValidator.Validate(command);
 
         return base.Put(command);
     }

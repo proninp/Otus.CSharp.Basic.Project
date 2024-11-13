@@ -29,6 +29,7 @@ public static class DependencyInjection
         services.AddScoped<ICategoryManager, CategoryManager>();
         services.AddScoped<ITransactionManager, TransactionManager>();
         services.AddScoped<ITransferManager, TransferManager>();
+        services.AddScoped<ITransactionValidator, TransactionValidator>();
         services.AddScoped<FinanceService>();
 
         return services;
