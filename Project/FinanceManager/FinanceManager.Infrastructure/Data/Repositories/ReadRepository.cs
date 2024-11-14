@@ -1,5 +1,5 @@
 ﻿using FinanceManager.Core.Models.Abstractions;
-using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceManager.Infrastructure.Data.Repositories;

@@ -1,6 +1,10 @@
-﻿using FinanceManager.Core.Options;
+﻿using FinanceManager.Core.DataTransferObjects;
+using FinanceManager.Core.DataTransferObjects.ViewModels;
+using FinanceManager.Core.Options;
 using FinanceManager.Core.Services;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Managers;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 using FinanceManager.Infrastructure.Data;
 using FinanceManager.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -19,10 +23,13 @@ public static class DependencyInjection
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<UserManager>();
-        services.AddScoped<AccountManager>();
-        services.AddScoped<CategoryManager>();
-        services.AddScoped<TransactionManager>();
-        services.AddScoped<TransferManager>();
+        services.AddScoped<IReadOnlyManager<AccountTypeDto>, AccountTypeManager>();
+        services.AddScoped<IReadOnlyManager<CurrencyDto>, CurrencyManager>();
+        services.AddScoped<IAccountManager, AccountManager>();
+        services.AddScoped<ICategoryManager, CategoryManager>();
+        services.AddScoped<ITransactionManager, TransactionManager>();
+        services.AddScoped<ITransferManager, TransferManager>();
+        services.AddScoped<ITransactionValidator, TransactionValidator>();
         services.AddScoped<FinanceService>();
 
         return services;

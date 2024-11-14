@@ -2,9 +2,11 @@
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Managers;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class CategoryManager : BaseManager<Category, PutCategoryDto>
+public class CategoryManager : BaseManager<Category, PutCategoryDto>, ICategoryManager
 {
     public CategoryManager(IRepository<Category> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -15,7 +17,7 @@ public class CategoryManager : BaseManager<Category, PutCategoryDto>
         return (await _repository.GetById(id))?.ToDto();
     }
 
-    public async Task<CategoryDto[]> GetCategories(Guid userId)
+    public async Task<CategoryDto[]> Get(Guid userId)
     {
         return await _repository.Get(c => c.UserId == userId, c => c.ToDto());
     }

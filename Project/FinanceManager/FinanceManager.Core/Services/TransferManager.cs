@@ -2,9 +2,11 @@
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Managers;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class TransferManager : BaseManager<Transfer, PutTransferDto>
+public class TransferManager : BaseManager<Transfer, PutTransferDto>, ITransferManager
 {
     public TransferManager(IRepository<Transfer> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -15,7 +17,7 @@ public class TransferManager : BaseManager<Transfer, PutTransferDto>
         return (await _repository.GetById(id))?.ToDto();
     }
 
-    public async Task<TransferDto[]> GetTransfers(Guid userId)
+    public async Task<TransferDto[]> Get(Guid userId)
     {
         return await _repository.Get(t => t.UserId == userId, t => t.ToDto());
     }

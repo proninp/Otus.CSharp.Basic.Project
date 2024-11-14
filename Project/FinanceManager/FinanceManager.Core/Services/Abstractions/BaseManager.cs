@@ -1,5 +1,6 @@
 ﻿using FinanceManager.Core.DataTransferObjects.Commands.Abstractions;
 using FinanceManager.Core.Models.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services.Abstractions;
 public abstract class BaseManager<T, TDto>
@@ -16,7 +17,7 @@ public abstract class BaseManager<T, TDto>
         _unitOfWork = unitOfWork;
     }
 
-    public async Task PutEntry(TDto command)
+    public virtual async Task Put(TDto command)
     {
         if (command.Id is null)
         {
@@ -30,18 +31,18 @@ public abstract class BaseManager<T, TDto>
         await _unitOfWork.Commit();
     }
 
-    public async Task DeleteEntry(Guid id)
+    public async Task Delete(Guid id)
     {
         var entry = await GetEntityById(id);
         _repository.Delete(entry);
         await _unitOfWork.Commit();
     }
 
-    private async Task<T> GetEntityById(Guid id)
+    protected async Task<T> GetEntityById(Guid id)
     {
         var entry = await _repository.GetById(id);
         if (entry is null)
-            throw new ArgumentException($"{typeof(T).Name} with id {id} was not found");
+            throw new ArgumentException($"Запись {typeof(T).Name} с id:'{id}' не была найдена.");
         return entry;
     }
 
