@@ -70,4 +70,4 @@
 
 ## Схема БД
 
-![db](/images/dbschema.png)
+![db](/docs/images/dbschema.png)
