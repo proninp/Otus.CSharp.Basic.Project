@@ -29,4 +29,19 @@ public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManag
         account.IsDefault = command.IsDefault;
         account.IsArchived = command.IsArchived;
     }
+
+    public async Task UpdateBalance(PutTransactionDto command, bool isCommit)
+    {
+        var account = await _repository.GetById(command.AccountId);
+        if (account is null)
+            throw new ArgumentException("В транзакции не указан счет.");
+
+        if (command.TransactionType is TransactionType.Income)
+            account.Balance += command.Amount;
+        else if (command.TransactionType is TransactionType.Expense)
+            account.Balance -= command.Amount;
+
+        if (isCommit)
+            await _unitOfWork.Commit();
+    }
 }

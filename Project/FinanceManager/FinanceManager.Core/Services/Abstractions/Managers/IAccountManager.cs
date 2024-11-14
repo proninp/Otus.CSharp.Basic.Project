@@ -11,4 +11,6 @@ public interface IAccountManager
     public Task Put(PutAccountDto command);
 
     public Task Delete(Guid id);
+
+    public Task UpdateBalance(PutTransactionDto command, bool isCommit);
 }
