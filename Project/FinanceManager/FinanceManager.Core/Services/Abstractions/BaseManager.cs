@@ -38,11 +38,11 @@ public abstract class BaseManager<T, TDto>
         await _unitOfWork.Commit();
     }
 
-    private async Task<T> GetEntityById(Guid id)
+    protected async Task<T> GetEntityById(Guid id)
     {
         var entry = await _repository.GetById(id);
         if (entry is null)
-            throw new ArgumentException($"{typeof(T).Name} with id {id} was not found");
+            throw new ArgumentException($"Запись {typeof(T).Name} с id:'{id}' не была найдена.");
         return entry;
     }
 

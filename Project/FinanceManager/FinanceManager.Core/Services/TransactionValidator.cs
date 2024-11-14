@@ -1,25 +1,28 @@
 ﻿using FinanceManager.Core.DataTransferObjects.Commands;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Managers;
 
 namespace FinanceManager.Core.Services;
 public class TransactionValidator : ITransactionValidator
 {
-    public void Validate(PutTransactionDto command, Transaction? transaction)
+    private readonly IAccountManager _accountManager;
+
+    public TransactionValidator(IAccountManager accountManager)
     {
-        if (command.Amount < 0)
-            throw new ArgumentException("Операция не может быть зарегистрирован с отрицательной суммой");
+        _accountManager = accountManager;
+    }
 
-        if (command.Id is not null)
-        {
-            if (transaction is null)
-                throw new ArgumentNullException($"Транзакция с id {command.Id.Value} не найдена.");
-
-            if (transaction.TransactionType != command.TransactionType)
-                throw new ArgumentException("Нельзя изменить тип транзакции.");
-        }
+    public void Validate(PutTransactionDto command)
+    {
+        if (command.Amount <= 0)
+            throw new ArgumentException("Операция может быть зарегистрирована только для положительного значения суммы.");
 
         if (command.TransactionType is not (TransactionType.Income or TransactionType.Expense))
             throw new ArgumentException("Неизвестный тип транзакциии.");
+
+        var account = _accountManager.GetById(command.AccountId);
+        if (account is null)
+            throw new ArgumentException("В транзакции не указан счет.");
     }
 }

@@ -20,7 +20,7 @@ public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManag
     public async Task<AccountDto[]> Get(Guid userId)
     {
         return await _repository.Get(a => a.UserId == userId, a => a.ToDto());
-    }   
+    }
 
     protected override void Update(Account account, PutAccountDto command)
     {
@@ -30,16 +30,11 @@ public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManag
         account.IsArchived = command.IsArchived;
     }
 
-    public async Task UpdateBalance(PutTransactionDto command, bool isCommit)
+    public async Task UpdateBalance(Guid id, decimal amount, bool isCommit)
     {
-        var account = await _repository.GetById(command.AccountId);
-        if (account is null)
-            throw new ArgumentException("В транзакции не указан счет.");
+        var account = await GetEntityById(id);
 
-        if (command.TransactionType is TransactionType.Income)
-            account.Balance += command.Amount;
-        else if (command.TransactionType is TransactionType.Expense)
-            account.Balance -= command.Amount;
+        account.Balance += amount;
 
         if (isCommit)
             await _unitOfWork.Commit();

@@ -22,4 +22,5 @@ public class PutTransactionDto : BasePutDto<Transaction>
 
     public override Transaction ToModel() =>
         new Transaction(UserId, AccountId, CategoryId, Date, TransactionType, Amount, Description);
+
 }

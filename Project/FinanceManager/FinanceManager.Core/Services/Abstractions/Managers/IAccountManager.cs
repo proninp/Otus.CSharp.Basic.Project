@@ -12,5 +12,5 @@ public interface IAccountManager
 
     public Task Delete(Guid id);
 
-    public Task UpdateBalance(PutTransactionDto command, bool isCommit);
+    public Task UpdateBalance(Guid id, decimal amount, bool isCommit);
 }
