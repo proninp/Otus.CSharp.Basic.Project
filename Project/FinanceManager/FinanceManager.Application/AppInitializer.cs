@@ -1,14 +1,16 @@
-﻿using FinanceManager.Infrastructure.Data;
+﻿using FinanceManager.Bot.Abstractions;
+using FinanceManager.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace FinanceManager.Application;
 public sealed class AppInitializer : BackgroundService
 {
     private readonly IServiceProvider _services;
 
-    public AppInitializer(IServiceProvider services)
+    public AppInitializer(IServiceProvider services, ILogger logger)
     {
         _services = services;
     }
@@ -18,5 +20,8 @@ public sealed class AppInitializer : BackgroundService
         using var scope = _services.CreateScope();
         using var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await appDbContext.Database.MigrateAsync(stoppingToken);
+
+        var pollingService = scope.ServiceProvider.GetRequiredService<IPollingService>();
+        await pollingService.DoWork(stoppingToken);
     }
 }

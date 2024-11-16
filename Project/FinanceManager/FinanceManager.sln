@@ -5,13 +5,15 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FFE556EB-C669-4660-B597-59529D8315B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.Core", "FinanceManager.Core\FinanceManager.Core.csproj", "{BFD0A284-3C9F-41AA-A214-8C7AFC368516}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceManager.Core", "FinanceManager.Core\FinanceManager.Core.csproj", "{BFD0A284-3C9F-41AA-A214-8C7AFC368516}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.Infrastructure", "FinanceManager.Infrastructure\FinanceManager.Infrastructure.csproj", "{143B1F40-1535-4DEC-A83D-BAB649041B5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceManager.Infrastructure", "FinanceManager.Infrastructure\FinanceManager.Infrastructure.csproj", "{143B1F40-1535-4DEC-A83D-BAB649041B5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.Application", "FinanceManager.Application\FinanceManager.Application.csproj", "{77DF6537-A0D3-46A4-AB30-50D4AC08724A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceManager.Application", "FinanceManager.Application\FinanceManager.Application.csproj", "{77DF6537-A0D3-46A4-AB30-50D4AC08724A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.API", "FinanceManager.API\FinanceManager.API.csproj", "{E36D9ED3-61A4-4273-B18F-7552C5ED3BF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinanceManager.API", "FinanceManager.API\FinanceManager.API.csproj", "{E36D9ED3-61A4-4273-B18F-7552C5ED3BF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.Bot", "FinanceManager.Bot\FinanceManager.Bot.csproj", "{AAF8CA7B-9CFF-43A5-A717-BDB099DEDDA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{E36D9ED3-61A4-4273-B18F-7552C5ED3BF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E36D9ED3-61A4-4273-B18F-7552C5ED3BF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E36D9ED3-61A4-4273-B18F-7552C5ED3BF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAF8CA7B-9CFF-43A5-A717-BDB099DEDDA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAF8CA7B-9CFF-43A5-A717-BDB099DEDDA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAF8CA7B-9CFF-43A5-A717-BDB099DEDDA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAF8CA7B-9CFF-43A5-A717-BDB099DEDDA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +50,7 @@ Global
 		{143B1F40-1535-4DEC-A83D-BAB649041B5C} = {FFE556EB-C669-4660-B597-59529D8315B1}
 		{77DF6537-A0D3-46A4-AB30-50D4AC08724A} = {FFE556EB-C669-4660-B597-59529D8315B1}
 		{E36D9ED3-61A4-4273-B18F-7552C5ED3BF0} = {FFE556EB-C669-4660-B597-59529D8315B1}
+		{AAF8CA7B-9CFF-43A5-A717-BDB099DEDDA1} = {FFE556EB-C669-4660-B597-59529D8315B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {28D9C0ED-006D-4D81-AC7A-D916596AC58F}
