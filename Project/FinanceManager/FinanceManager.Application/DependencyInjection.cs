@@ -9,6 +9,7 @@ using FinanceManager.Infrastructure.Data;
 using FinanceManager.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace FinanceManager.Application;
 
@@ -16,9 +17,14 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
+        Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
         services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
         services.AddDbContext<IUnitOfWork, AppDbContext>();
 
+        services.AddSingleton(Log.Logger);
         services.AddHostedService<AppInitializer>();
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -31,6 +37,8 @@ public static class DependencyInjection
         services.AddScoped<ITransferManager, TransferManager>();
         services.AddScoped<ITransactionValidator, TransactionValidator>();
         services.AddScoped<FinanceService>();
+
+        services.AddTelegram(configuration);
 
         return services;
     }

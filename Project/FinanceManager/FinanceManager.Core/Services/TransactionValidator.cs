@@ -21,6 +21,7 @@ public class TransactionValidator : ITransactionValidator
         if (command.TransactionType is not (TransactionType.Income or TransactionType.Expense))
             throw new ArgumentException("Неизвестный тип транзакциии.");
 
+        // TODO может быть отловлено самой БД через Foreign Key ?
         var account = _accountManager.GetById(command.AccountId);
         if (account is null)
             throw new ArgumentException("В транзакции не указан счет.");

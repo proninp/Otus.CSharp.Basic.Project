@@ -36,7 +36,7 @@ public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManag
 
         account.Balance += amount;
 
-        if (isCommit)
+        if (isCommit) // TODO убираем
             await _unitOfWork.Commit();
     }
 }
