@@ -2,6 +2,10 @@ using FinanceManager.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Host
+    .AddLogging(builder.Configuration)
+    .AddGlobalExceptionHandler();
+    
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
