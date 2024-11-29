@@ -1,4 +1,4 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
@@ -7,7 +7,7 @@ using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
 
-public class UserManager : BaseManager<User, PutUserDto>, IUserManager
+public class UserManager : BaseManager<User, UpdateUserDto>, IUserManager
 {
     public UserManager(IRepository<User> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -18,7 +18,7 @@ public class UserManager : BaseManager<User, PutUserDto>, IUserManager
         return (await _repository.GetById(id))?.ToDto();
     }
 
-    protected override void Update(User user, PutUserDto command)
+    protected override void Update(User user, UpdateUserDto command)
     {
         user.Name = command.Name;
     }

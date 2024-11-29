@@ -4,9 +4,9 @@ namespace FinanceManager.Core.Services.Abstractions.Repositories;
 
 public interface IRepository<T> : IReadRepository<T> where T : BaseModel
 {
-    void Add(T item);
+    T Add(T item);
 
-    void Update(T item);
+    T Update(T item);
 
     void Delete(T item);
 

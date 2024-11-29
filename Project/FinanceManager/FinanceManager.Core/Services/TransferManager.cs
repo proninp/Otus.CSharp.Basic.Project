@@ -1,4 +1,4 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
@@ -6,7 +6,7 @@ using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class TransferManager : BaseManager<Transfer, PutTransferDto>, ITransferManager
+public class TransferManager : BaseManager<Transfer, UpdateTransferDto>, ITransferManager
 {
     public TransferManager(IRepository<Transfer> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -22,7 +22,7 @@ public class TransferManager : BaseManager<Transfer, PutTransferDto>, ITransferM
         return await _repository.Get(t => t.UserId == userId, t => t.ToDto());
     }
 
-    protected override void Update(Transfer transfer, PutTransferDto command)
+    protected override void Update(Transfer transfer, UpdateTransferDto command)
     {
         transfer.FromAccountId = command.FromAccountId;
         transfer.ToAccountId = command.ToAccountId;

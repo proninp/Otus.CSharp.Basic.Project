@@ -1,4 +1,5 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Create;
+using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
@@ -6,7 +7,7 @@ using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class CategoryManager : BaseManager<Category, PutCategoryDto>, ICategoryManager
+public class CategoryManager : BaseManager<Category, CategoryDto, CreateCategoryDto, UpdateCategoryDto>, ICategoryManager
 {
     public CategoryManager(IRepository<Category> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -22,9 +23,12 @@ public class CategoryManager : BaseManager<Category, PutCategoryDto>, ICategoryM
         return await _repository.Get(c => c.UserId == userId, c => c.ToDto());
     }
 
-    protected override void Update(Category category, PutCategoryDto command)
+    protected override void UpdateModel(Category category, UpdateCategoryDto command)
     {
         category.Title = command.Title;
         category.ParentCategoryId = command.ParentCategoryId;
     }
+
+    protected override CategoryDto GetViewDto(Category model) =>
+        model.ToDto();
 }

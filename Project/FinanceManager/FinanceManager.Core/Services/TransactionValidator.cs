@@ -1,4 +1,4 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
@@ -13,7 +13,7 @@ public class TransactionValidator : ITransactionValidator
         _accountManager = accountManager;
     }
 
-    public void Validate(PutTransactionDto command)
+    public void Validate(UpdateTransactionDto command)
     {
         if (command.Amount <= 0)
             throw new ArgumentException("Операция может быть зарегистрирована только для положительного значения суммы.");

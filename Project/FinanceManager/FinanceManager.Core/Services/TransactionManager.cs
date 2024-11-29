@@ -1,4 +1,4 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
@@ -35,7 +35,7 @@ public class TransactionManager : ITransactionManager
         return await _repository.Get(t => t.UserId == userId, t => t.ToDto());
     }
 
-    public virtual async Task Put(PutTransactionDto command)
+    public virtual async Task Put(UpdateTransactionDto command)
     {
         _transactionValidator.Validate(command);
 
