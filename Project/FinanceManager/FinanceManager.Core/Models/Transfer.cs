@@ -9,7 +9,7 @@ public class Transfer : BaseModel
 
     public Guid ToAccountId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     public decimal FromAmount { get; set; }
 
@@ -25,12 +25,12 @@ public class Transfer : BaseModel
 
     protected Transfer() { }
 
-    public Transfer(Guid userId, Guid fromAccountId, Guid toAccountId, DateTime? date, decimal fromAmount = 0, decimal toAmount = 0, string? description = null)
+    public Transfer(Guid userId, Guid fromAccountId, Guid toAccountId, DateOnly? date, decimal fromAmount = 0, decimal toAmount = 0, string? description = null)
     {
         UserId = userId;
         FromAccountId = fromAccountId;
         ToAccountId = toAccountId;
-        Date = date ?? DateTime.UtcNow;
+        Date = date ?? DateOnly.FromDateTime(DateTime.UtcNow);
         FromAmount = fromAmount;
         ToAmount = toAmount;
         Description = description;

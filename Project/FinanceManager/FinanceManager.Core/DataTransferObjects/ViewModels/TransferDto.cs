@@ -10,7 +10,7 @@ public class TransferDto : BaseViewDto
 
     public Guid ToAccountId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     public decimal FromAmount { get; set; }
 

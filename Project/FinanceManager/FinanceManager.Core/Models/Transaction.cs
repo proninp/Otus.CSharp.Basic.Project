@@ -10,7 +10,7 @@ public sealed class Transaction : BaseModel
 
     public Guid? CategoryId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     public TransactionType TransactionType { get; set; }
 
@@ -26,12 +26,12 @@ public sealed class Transaction : BaseModel
 
     protected Transaction() { }
 
-    public Transaction(Guid userId, Guid accountId, Guid? categoryId = null, DateTime? date = null, TransactionType transactionType = TransactionType.Expense, decimal amount = 0, string? description = null)
+    public Transaction(Guid userId, Guid accountId, Guid? categoryId = null, DateOnly? date = null, TransactionType transactionType = TransactionType.Expense, decimal amount = 0, string? description = null)
     {
         UserId = userId;
         AccountId = accountId;
         CategoryId = categoryId;
-        Date = date ?? DateTime.UtcNow;
+        Date = date ?? DateOnly.FromDateTime(DateTime.UtcNow);
         TransactionType = transactionType;
         Amount = amount;
         Description = description;

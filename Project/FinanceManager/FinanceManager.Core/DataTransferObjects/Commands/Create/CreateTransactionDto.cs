@@ -10,7 +10,7 @@ public class CreateTransactionDto : IPutModel<Transaction>
 
     public Guid? CategoryId { get; set; }
 
-    public DateTime Date { get; set; }
+    public DateOnly Date { get; set; }
 
     public TransactionType TransactionType { get; set; }
 
