@@ -43,6 +43,11 @@ public class TransactionManager : BaseManager<Transaction, TransactionDto, Creat
         return await _repository.Get(t => t.UserId == userId, t => t.ToDto());
     }
 
+    public async Task<decimal> GetAccountBalance(Guid userId, Guid accountId)
+    {
+        return (await _repository.Get(t => t.UserId == userId && t.AccountId == accountId, t => t.ToDto())).Sum(t => t.Amount);
+    }
+
     protected override TransactionDto GetViewDto(Transaction model) =>
         model.ToDto();
 

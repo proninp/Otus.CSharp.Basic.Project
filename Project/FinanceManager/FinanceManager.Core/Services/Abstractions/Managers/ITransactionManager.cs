@@ -9,6 +9,8 @@ public interface ITransactionManager
 
     public Task<TransactionDto[]> Get(Guid userId);
 
+    public Task<decimal> GetAccountBalance(Guid userId, Guid accountId);
+
     public Task<TransactionDto> Create(CreateTransactionDto command);
 
     public Task<TransactionDto> Update(UpdateTransactionDto command);

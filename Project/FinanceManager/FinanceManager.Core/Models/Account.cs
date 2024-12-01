@@ -11,8 +11,6 @@ public sealed class Account : BaseModel
 
     public string? Title { get; set; }
 
-    public decimal Balance { get; set; }
-
     public bool IsDefault { get; set; }
 
     public bool IsArchived { get; set; }
@@ -21,13 +19,12 @@ public sealed class Account : BaseModel
 
     public Currency Currency { get; }
 
-    public Account(Guid userId, Guid accountTypeId, Guid currencyId, string? title = null, decimal balance = 0, bool isDefault = false, bool isArchived = false)
+    public Account(Guid userId, Guid accountTypeId, Guid currencyId, string? title = null, bool isDefault = false, bool isArchived = false)
     {
         UserId = userId;
         AccountTypeId = accountTypeId;
         CurrencyId = currencyId;
         Title = title;
-        Balance = balance;
         IsDefault = isDefault;
         IsArchived = isArchived;
     }

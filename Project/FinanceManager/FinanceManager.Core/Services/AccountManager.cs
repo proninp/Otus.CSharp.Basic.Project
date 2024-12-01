@@ -9,36 +9,39 @@ using FinanceManager.Core.Services.Abstractions.Repositories;
 namespace FinanceManager.Core.Services;
 public class AccountManager : BaseManager<Account, AccountDto, CreateAccountDto, UpdateAccountDto>, IAccountManager
 {
-    public AccountManager(IRepository<Account> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+
+    private readonly ITransactionManager _transactionManager;
+    public AccountManager(ITransactionManager transactionManager, IRepository<Account> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
+        _transactionManager = transactionManager;
     }
 
     public async Task<AccountDto?> GetById(Guid id)
     {
-        return (await _repository.GetById(id))?.ToDto();
+        var accountDto = (await _repository.GetById(id))?.ToDto();
+        if (accountDto is not null)
+            accountDto.Balance = await GetBalance(accountDto);
+        return accountDto;
     }
 
     public async Task<AccountDto[]> Get(Guid userId)
     {
-        return await _repository.Get(a => a.UserId == userId, a => a.ToDto());
+        var accountDtos = await _repository.Get(a => a.UserId == userId, a => a.ToDto());
+        foreach (var accountDto in accountDtos)
+            accountDto.Balance = await GetBalance(accountDto);
+        return accountDtos;
     }
 
     protected override void UpdateModel(Account account, UpdateAccountDto command)
     {
         account.Title = command.Title;
-        account.Balance = command.Balance;
         account.IsDefault = command.IsDefault;
         account.IsArchived = command.IsArchived;
     }
 
-    public async Task UpdateBalance(Guid id, decimal amount, bool isCommit)
+    public async Task<decimal> GetBalance(AccountDto accountDto)
     {
-        var account = await GetEntityById(id);
-
-        account.Balance += amount;
-
-        if (isCommit) // TODO убираем
-            await _unitOfWork.Commit();
+        return await _transactionManager.GetAccountBalance(accountDto.UserId, accountDto.Id);
     }
 
     protected override AccountDto GetViewDto(Account model) =>

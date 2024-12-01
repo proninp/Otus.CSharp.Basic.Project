@@ -7,11 +7,8 @@ using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 using FinanceManager.Infrastructure.Data;
 using FinanceManager.Infrastructure.Data.Repositories;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Serilog;
 
 namespace FinanceManager.Application;
 
@@ -40,5 +37,5 @@ public static class DependencyInjection
         return services;
     }
 
-    
+
 }

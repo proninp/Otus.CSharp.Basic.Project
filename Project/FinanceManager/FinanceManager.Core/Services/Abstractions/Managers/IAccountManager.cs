@@ -15,5 +15,5 @@ public interface IAccountManager
 
     public Task Delete(Guid id);
 
-    public Task UpdateBalance(Guid id, decimal amount, bool isCommit);
+    public Task<decimal> GetBalance(AccountDto viewModel);
 }

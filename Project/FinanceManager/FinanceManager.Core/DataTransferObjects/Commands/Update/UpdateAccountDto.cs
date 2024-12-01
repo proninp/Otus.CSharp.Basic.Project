@@ -12,12 +12,10 @@ public class UpdateAccountDto : BaseUpdateDto<Account>
 
     public string? Title { get; set; }
 
-    public decimal Balance { get; set; }
-
     public bool IsDefault { get; set; }
 
     public bool IsArchived { get; set; }
 
     public override Account ToModel() =>
-        new Account(UserId, AccountTypeId, CurrencyId, Title, Balance, IsDefault, IsArchived);
+        new Account(UserId, AccountTypeId, CurrencyId, Title, IsDefault, IsArchived);
 }

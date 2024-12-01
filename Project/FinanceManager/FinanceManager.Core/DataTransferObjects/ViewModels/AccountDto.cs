@@ -30,7 +30,6 @@ public static class AccountMappings
             Title = account.Title,
             AccountTypeId = account.AccountTypeId,
             CurrencyId = account.CurrencyId,
-            Balance = account.Balance,
             IsDefault = account.IsDefault,
             IsArchived = account.IsArchived,
         };
