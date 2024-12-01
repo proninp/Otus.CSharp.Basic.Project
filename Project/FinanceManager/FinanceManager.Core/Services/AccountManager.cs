@@ -1,4 +1,5 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Create;
+using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
@@ -6,7 +7,7 @@ using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManager
+public class AccountManager : BaseManager<Account, AccountDto, CreateAccountDto, UpdateAccountDto>, IAccountManager
 {
     public AccountManager(IRepository<Account> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -22,7 +23,7 @@ public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManag
         return await _repository.Get(a => a.UserId == userId, a => a.ToDto());
     }
 
-    protected override void Update(Account account, PutAccountDto command)
+    protected override void UpdateModel(Account account, UpdateAccountDto command)
     {
         account.Title = command.Title;
         account.Balance = command.Balance;
@@ -39,4 +40,7 @@ public class AccountManager : BaseManager<Account, PutAccountDto>, IAccountManag
         if (isCommit) // TODO убираем
             await _unitOfWork.Commit();
     }
+
+    protected override AccountDto GetViewDto(Account model) =>
+        model.ToDto();
 }

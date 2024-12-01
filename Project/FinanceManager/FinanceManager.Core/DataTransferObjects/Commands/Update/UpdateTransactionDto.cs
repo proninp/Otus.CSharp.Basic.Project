@@ -1,11 +1,9 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands.Abstractions;
+﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
 using FinanceManager.Core.Models;
 
-namespace FinanceManager.Core.DataTransferObjects.Commands;
-public class PutTransactionDto : BasePutDto<Transaction>
+namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
+public class UpdateTransactionDto : BaseUpdateDto<Transaction>
 {
-    public Guid? Id { get; init; }
-
     public Guid UserId { get; init; }
 
     public Guid AccountId { get; set; }

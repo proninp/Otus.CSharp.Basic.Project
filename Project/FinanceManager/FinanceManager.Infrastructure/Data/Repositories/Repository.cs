@@ -9,14 +9,17 @@ public class Repository<T> : ReadRepository<T>, IRepository<T> where T : BaseMod
     {
     }
 
-    public void Add(T item)
+    public T Add(T item)
     {
-        _context.Add(item);
+        var addResult = _context.Add(item);
+        return addResult.Entity;
     }
 
-    public void Update(T item)
+    public T Update(T item)
     {
-        _context.Set<T>().Update(item);
+        var updateResult = _context.Set<T>().Update(item);
+        return updateResult.Entity;
+        
     }
 
     public void Delete(T item)

@@ -1,11 +1,9 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands.Abstractions;
+﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
 using FinanceManager.Core.Models;
 
-namespace FinanceManager.Core.DataTransferObjects.Commands;
-public class PutCategoryDto : BasePutDto<Category>
+namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
+public class UpdateCategoryDto : BaseUpdateDto<Category>, IPutModel<Category>
 {
-    public Guid? Id { get; init; }
-
     public Guid UsertId { get; init; }
 
     public string? Title { get; set; }

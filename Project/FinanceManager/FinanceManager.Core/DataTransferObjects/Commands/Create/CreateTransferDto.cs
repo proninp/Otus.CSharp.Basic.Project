@@ -1,11 +1,9 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands.Abstractions;
+﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
 using FinanceManager.Core.Models;
 
-namespace FinanceManager.Core.DataTransferObjects.Commands;
-public class PutTransferDto : BasePutDto<Transfer>
+namespace FinanceManager.Core.DataTransferObjects.Commands.Create;
+public class CreateTransferDto : IPutModel<Transfer>
 {
-    public Guid? Id { get; init; }
-
     public Guid UserId { get; init; }
 
     public Guid FromAccountId { get; set; }
@@ -20,6 +18,6 @@ public class PutTransferDto : BasePutDto<Transfer>
 
     public string? Description { get; set; }
 
-    public override Transfer ToModel() =>
+    public Transfer ToModel() =>
         new Transfer(UserId, FromAccountId, ToAccountId, Date, FromAmount, ToAmount, Description);
 }

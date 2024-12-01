@@ -1,4 +1,5 @@
-﻿using FinanceManager.Core.Models.Abstractions;
+﻿using System.Linq.Expressions;
+using FinanceManager.Core.Models.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,11 +21,11 @@ public class ReadRepository<T> : IReadRepository<T> where T : BaseModel
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<TResult[]> Get<TResult>(Func<T, bool> predicate, Func<T, TResult> selector)
+    public async Task<TResult[]> Get<TResult>(Expression<Func<T, bool>> predicate, Func<T, TResult> selector)
     {
         return await _context
             .Set<T>()
-            .Where(x => predicate(x))
+            .Where(predicate)
             .AsNoTracking()
             .Select(x => selector(x))
             .ToArrayAsync();

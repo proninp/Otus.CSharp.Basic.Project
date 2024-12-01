@@ -1,10 +1,9 @@
-﻿using FinanceManager.Core.Models;
+﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
+using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.ViewModels;
-public class UserDto
+public class UserDto : BaseViewDto
 {
-    public Guid Id { get; init; }
-
     public long TelegramId { get; init; }
 
     public string? Name { get; init; }

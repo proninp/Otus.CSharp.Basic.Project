@@ -1,10 +1,9 @@
-﻿using FinanceManager.Core.Models;
+﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
+using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects;
-public class CurrencyDto
+public class CurrencyDto : BaseViewDto
 {
-    public Guid Id { get; init; }
-
     public string Title { get; init; }
 
     public string CurrencyCode { get; init; }

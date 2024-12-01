@@ -1,10 +1,9 @@
-﻿using FinanceManager.Core.Models;
+﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
+using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.ViewModels;
-public class TransferDto
+public class TransferDto : BaseViewDto
 {
-    public Guid Id { get; init; }
-
     public Guid UserId { get; init; }
 
     public Guid FromAccountId { get; set; }

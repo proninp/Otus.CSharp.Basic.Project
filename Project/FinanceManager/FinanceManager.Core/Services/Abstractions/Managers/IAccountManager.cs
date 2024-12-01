@@ -1,4 +1,5 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Create;
+using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 
 namespace FinanceManager.Core.Services.Abstractions.Managers;
@@ -8,7 +9,9 @@ public interface IAccountManager
 
     public Task<AccountDto[]> Get(Guid userId);
 
-    public Task Put(PutAccountDto command);
+    public Task<AccountDto> Create(CreateAccountDto command);
+
+    public Task<AccountDto> Update(UpdateAccountDto command);
 
     public Task Delete(Guid id);
 
