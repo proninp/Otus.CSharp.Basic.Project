@@ -10,8 +10,10 @@ public abstract class BaseManager<T, TViewDto, TCreateDto, TUpdateDto>
     where TUpdateDto : BaseUpdateDto<T>
 {
     protected readonly IRepository<T> _repository;
-
     protected readonly IUnitOfWork _unitOfWork;
+    
+    public event Action<TCreateDto>? OnBeforeCreate;
+    public event Action<TUpdateDto>? OnBeforeUpdate;
 
     public BaseManager(IRepository<T> repository, IUnitOfWork unitOfWork)
     {
@@ -21,6 +23,9 @@ public abstract class BaseManager<T, TViewDto, TCreateDto, TUpdateDto>
 
     public async Task<TViewDto> Create(TCreateDto command)
     {
+        if (OnBeforeCreate is not null)
+            OnBeforeCreate.Invoke(command);
+
         var model = _repository.Add(command.ToModel());
         await _unitOfWork.Commit();
         return GetViewDto(model);
@@ -28,9 +33,15 @@ public abstract class BaseManager<T, TViewDto, TCreateDto, TUpdateDto>
 
     public virtual async Task<TViewDto> Update(TUpdateDto command)
     {
+        if (OnBeforeUpdate is not null)
+            OnBeforeUpdate.Invoke(command);
+
         var model = await GetEntityById(command.Id);
         UpdateModel(model, command);
         _repository.Update(model);
+
+
+
         await _unitOfWork.Commit();
         return GetViewDto(model);
     }

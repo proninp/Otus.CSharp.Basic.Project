@@ -1,4 +1,5 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands.Update;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Create;
+using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
@@ -6,7 +7,7 @@ using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class TransferManager : BaseManager<Transfer, UpdateTransferDto>, ITransferManager
+public class TransferManager : BaseManager<Transfer, TransferDto, CreateTransferDto, UpdateTransferDto>, ITransferManager
 {
     public TransferManager(IRepository<Transfer> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
     {
@@ -22,13 +23,16 @@ public class TransferManager : BaseManager<Transfer, UpdateTransferDto>, ITransf
         return await _repository.Get(t => t.UserId == userId, t => t.ToDto());
     }
 
-    protected override void Update(Transfer transfer, UpdateTransferDto command)
+    protected override void UpdateModel(Transfer model, UpdateTransferDto command)
     {
-        transfer.FromAccountId = command.FromAccountId;
-        transfer.ToAccountId = command.ToAccountId;
-        transfer.Date = command.Date;
-        transfer.FromAmount = command.FromAmount;
-        transfer.ToAmount = command.ToAmount;
-        transfer.Description = command.Description;
+        model.FromAccountId = command.FromAccountId;
+        model.ToAccountId = command.ToAccountId;
+        model.Date = command.Date;
+        model.FromAmount = command.FromAmount;
+        model.ToAmount = command.ToAmount;
+        model.Description = command.Description;
     }
+
+    protected override TransferDto GetViewDto(Transfer model) =>
+        model.ToDto();
 }
