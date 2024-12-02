@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.ViewModels;
-public class TransactionDto : BaseViewDto
+public sealed class TransactionDto : ViewDtoBase
 {
     public Guid UserId { get; init; }
 
@@ -11,8 +11,6 @@ public class TransactionDto : BaseViewDto
     public Guid? CategoryId { get; init; }
 
     public DateOnly Date { get; init; }
-
-    public TransactionType TransactionType { get; set; }
 
     public decimal Amount { get; init; }
 
@@ -30,7 +28,6 @@ public static class TransactionMappings
             AccoutId = entry.AccountId,
             CategoryId = entry.CategoryId,
             Date = entry.Date,
-            TransactionType = entry.TransactionType,
             Amount = entry.Amount,
             Description = entry.Description,
         };

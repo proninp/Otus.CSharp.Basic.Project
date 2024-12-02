@@ -12,8 +12,6 @@ public sealed class Transaction : BaseModel
 
     public DateOnly Date { get; set; }
 
-    public TransactionType TransactionType { get; set; }
-
     public decimal Amount { get; set; }
 
     public string? Description { get; set; }
@@ -24,15 +22,12 @@ public sealed class Transaction : BaseModel
 
     public Category? Category { get; set; }
 
-    protected Transaction() { }
-
-    public Transaction(Guid userId, Guid accountId, Guid? categoryId = null, DateOnly? date = null, TransactionType transactionType = TransactionType.Expense, decimal amount = 0, string? description = null)
+    public Transaction(Guid userId, Guid accountId, Guid? categoryId = null, DateOnly? date = null, decimal amount = 0, string? description = null)
     {
         UserId = userId;
         AccountId = accountId;
         CategoryId = categoryId;
         Date = date ?? DateOnly.FromDateTime(DateTime.UtcNow);
-        TransactionType = transactionType;
         Amount = amount;
         Description = description;
     }

@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
-public class UpdateTransactionDto : BaseUpdateDto<Transaction>
+public sealed class UpdateTransactionDto : UpdateDtoBase<Transaction>
 {
     public Guid UserId { get; init; }
 
@@ -19,6 +19,11 @@ public class UpdateTransactionDto : BaseUpdateDto<Transaction>
     public string? Description { get; set; }
 
     public override Transaction ToModel() =>
-        new Transaction(UserId, AccountId, CategoryId, Date, TransactionType, Amount, Description);
+        new Transaction(UserId,
+            AccountId,
+            CategoryId,
+            Date,
+            TransactionType is TransactionType.Expense ? -Math.Abs(Amount) : Math.Abs(Amount),
+            Description);
 
 }

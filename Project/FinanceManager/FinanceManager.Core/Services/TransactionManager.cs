@@ -7,19 +7,16 @@ using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;
-public class TransactionManager : BaseManager<Transaction, TransactionDto, CreateTransactionDto, UpdateTransactionDto>, ITransactionManager
+public class TransactionManager : TransactionManagerBase, ITransactionManager
 {
-    private readonly IAccountManager _accountManager;
     private readonly ITransactionValidator _transactionValidator;
 
     public TransactionManager(
-        IAccountManager accountManager,
         ITransactionValidator transactionValidator,
         IRepository<Transaction> repository,
         IUnitOfWork unitOfWork)
         : base(repository, unitOfWork)
     {
-        _accountManager = accountManager;
         _transactionValidator = transactionValidator;
 
         OnBeforeCreate += (command) =>
@@ -56,7 +53,8 @@ public class TransactionManager : BaseManager<Transaction, TransactionDto, Creat
         model.AccountId = command.AccountId;
         model.CategoryId = command.CategoryId;
         model.Date = command.Date;
-        model.Amount = command.Amount;
+        model.Amount = command.TransactionType is TransactionType.Expense ? 
+            -Math.Abs(command.Amount) : Math.Abs(command.Amount);
         model.Description = command.Description;
     }
 }

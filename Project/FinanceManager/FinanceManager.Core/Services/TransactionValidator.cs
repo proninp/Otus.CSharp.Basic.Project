@@ -1,4 +1,5 @@
-﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
+﻿using FinanceManager.Core.DataTransferObjects.Commands.Create;
+using FinanceManager.Core.DataTransferObjects.Commands.Update;
 using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
@@ -13,18 +14,31 @@ public class TransactionValidator : ITransactionValidator
         _accountManager = accountManager;
     }
 
-    public void Validate(IPutModel<Transaction> command)
+    public void Validate(CreateTransactionDto command)
     {
-        var model = command.ToModel();
-        if (model.Amount <= 0)
-            throw new ArgumentException("Операция может быть зарегистрирована только для положительного значения суммы.");
+        CheckCommand(command.Amount, command.TransactionType);
+        Validate(command.ToModel());
+    }
 
-        if (model.TransactionType is not (TransactionType.Income or TransactionType.Expense))
-            throw new ArgumentException("Неизвестный тип транзакциии.");
+    public void Validate(UpdateTransactionDto command)
+    {
+        CheckCommand(command.Amount, command.TransactionType);
+        Validate(command.ToModel());
+    }
 
-        // TODO может быть отловлено самой БД через Foreign Key ?
+    private void Validate(Transaction model)
+    {
         var account = _accountManager.GetById(model.AccountId);
         if (account is null)
             throw new ArgumentException("В транзакции не указан счет.");
+    }
+
+    private void CheckCommand(decimal amount, TransactionType transactionType)
+    {
+        if (amount <= 0)
+            throw new ArgumentException("Операция может быть зарегистрирована только для положительного значения суммы.");
+
+        if (transactionType is not (TransactionType.Income or TransactionType.Expense))
+            throw new ArgumentException("Неизвестный тип транзакциии.");
     }
 }

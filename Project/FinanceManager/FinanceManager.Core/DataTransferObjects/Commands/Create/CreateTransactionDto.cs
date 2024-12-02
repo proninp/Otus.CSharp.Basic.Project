@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Create;
-public class CreateTransactionDto : IPutModel<Transaction>
+public sealed class CreateTransactionDto : IPutModel<Transaction>
 {
     public Guid UserId { get; init; }
 
@@ -19,5 +19,11 @@ public class CreateTransactionDto : IPutModel<Transaction>
     public string? Description { get; set; }
 
     public Transaction ToModel() =>
-        new Transaction(UserId, AccountId, CategoryId, Date, TransactionType, Amount, Description);
+        new Transaction(
+            UserId,
+            AccountId,
+            CategoryId,
+            Date,
+            TransactionType is TransactionType.Expense ? -Math.Abs(Amount) : Math.Abs(Amount),
+            Description);
 }
