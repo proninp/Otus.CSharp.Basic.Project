@@ -3,7 +3,7 @@ using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.ViewModels;
 
-public class AccountTypeDto : BaseViewDto
+public sealed class AccountTypeDto : ViewDtoBase
 {
     public string Name { get; init; }
 }

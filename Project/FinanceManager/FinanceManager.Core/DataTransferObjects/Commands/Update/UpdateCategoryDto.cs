@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
-public class UpdateCategoryDto : BaseUpdateDto<Category>, IPutModel<Category>
+public sealed class UpdateCategoryDto : UpdateDtoBase<Category>, IPutModel<Category>
 {
     public Guid UsertId { get; init; }
 

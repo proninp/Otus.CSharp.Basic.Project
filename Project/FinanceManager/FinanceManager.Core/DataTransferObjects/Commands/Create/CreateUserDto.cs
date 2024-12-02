@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Create;
-public class CreateUserDto : IPutModel<User>
+public sealed class CreateUserDto : IPutModel<User>
 {
     public long TelegramId { get; init; }
 

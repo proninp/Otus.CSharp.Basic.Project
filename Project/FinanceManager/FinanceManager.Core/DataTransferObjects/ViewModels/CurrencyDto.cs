@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects;
-public class CurrencyDto : BaseViewDto
+public sealed class CurrencyDto : ViewDtoBase
 {
     public string Title { get; init; }
 

@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.ViewModels;
-public class UserDto : BaseViewDto
+public sealed class UserDto : ViewDtoBase
 {
     public long TelegramId { get; init; }
 

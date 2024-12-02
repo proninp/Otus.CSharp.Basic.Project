@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
-public class UpdateUserDto : BaseUpdateDto<User>
+public sealed class UpdateUserDto : UpdateDtoBase<User>
 {
     public long TelegramId { get; init; }
 

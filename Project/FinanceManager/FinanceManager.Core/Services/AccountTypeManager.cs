@@ -1,6 +1,6 @@
 ﻿using FinanceManager.Core.DataTransferObjects.ViewModels;
 using FinanceManager.Core.Models;
-using FinanceManager.Core.Services.Abstractions;
+using FinanceManager.Core.Services.Abstractions.Interfaces;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services;

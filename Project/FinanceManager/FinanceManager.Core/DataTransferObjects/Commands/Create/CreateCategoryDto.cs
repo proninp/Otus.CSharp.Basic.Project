@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Create;
-public class CreateCategoryDto : IPutModel<Category>
+public sealed class CreateCategoryDto : IPutModel<Category>
 {
     public Guid UsertId { get; init; }
 
