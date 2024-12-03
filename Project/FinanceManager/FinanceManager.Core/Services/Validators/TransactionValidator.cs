@@ -4,7 +4,7 @@ using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
 
-namespace FinanceManager.Core.Services;
+namespace FinanceManager.Core.Services.Validators;
 public class TransactionValidator : ITransactionValidator
 {
     private readonly IAccountManager _accountManager;
@@ -13,6 +13,8 @@ public class TransactionValidator : ITransactionValidator
     {
         _accountManager = accountManager;
     }
+
+    // ITransactionCommand - общий интерфейс с общими полями для транзакции и валидатор принимает его
 
     public void Validate(CreateTransactionDto command)
     {
@@ -23,7 +25,7 @@ public class TransactionValidator : ITransactionValidator
     public void Validate(UpdateTransactionDto command)
     {
         CheckCommand(command.Amount, command.TransactionType);
-        Validate(command.ToModel());
+        Validate(command.ToModel()); // TODO валидировать только команду, моель валидировать не нужно
     }
 
     private void Validate(Transaction model)

@@ -13,17 +13,19 @@ public class ReadRepository<T> : IReadRepository<T> where T : BaseModel
         _context = context;
     }
 
-    public async Task<T?> GetById(Guid id)
+    // TODO прокидывать CancellationToken во всех async методах
+    
+    public Task<T?> GetById(Guid id)
     {
-        return await _context
+        return _context
             .Set<T>()
             .AsNoTracking()
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<TResult[]> Get<TResult>(Expression<Func<T, bool>> predicate, Func<T, TResult> selector)
+    public Task<TResult[]> Get<TResult>(Expression<Func<T, bool>> predicate, Func<T, TResult> selector)
     {
-        return await _context
+        return _context
             .Set<T>()
             .Where(predicate)
             .AsNoTracking()

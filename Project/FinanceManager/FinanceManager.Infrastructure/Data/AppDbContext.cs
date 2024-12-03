@@ -22,6 +22,8 @@ public sealed class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Transfer> Transfers { get; set; }
     public DbSet<User> Users { get; set; }
 
+    // TODO DB Context не должен реализовываь IUnitOfWork
+    // TODO Нужно завести отдельный класс UnitOfWork, который реализует IUnitOfWork, он будет знать о dbContext
     public async Task<int> Commit(CancellationToken cancellationToken = default)
     {
         return await SaveChangesAsync(cancellationToken);

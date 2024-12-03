@@ -6,7 +6,7 @@ using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
-namespace FinanceManager.Core.Services;
+namespace FinanceManager.Core.Services.Managers;
 public class TransactionManager : TransactionManagerBase, ITransactionManager
 {
     private readonly ITransactionValidator _transactionValidator;
@@ -53,7 +53,7 @@ public class TransactionManager : TransactionManagerBase, ITransactionManager
         model.AccountId = command.AccountId;
         model.CategoryId = command.CategoryId;
         model.Date = command.Date;
-        model.Amount = command.TransactionType is TransactionType.Expense ? 
+        model.Amount = command.TransactionType is TransactionType.Expense ?
             -Math.Abs(command.Amount) : Math.Abs(command.Amount);
         model.Description = command.Description;
     }

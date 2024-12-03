@@ -6,7 +6,7 @@ using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
-namespace FinanceManager.Core.Services;
+namespace FinanceManager.Core.Services.Managers;
 public class TransferManager : BaseManager<Transfer, TransferDto, CreateTransferDto, UpdateTransferDto>, ITransferManager
 {
     public TransferManager(IRepository<Transfer> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)

@@ -8,13 +8,14 @@ public sealed class FinanceService(
     ITransactionManager transactionManager,
     ITransferManager transferManager)
 {
+
+    // TODO Убрать всё, что связано
     public async Task<FinanceViewModel> GetUserFinanceData(Guid userId)
     {
         var accounts = await accountManager.Get(userId);
         var categories = await categoryManager.Get(userId);
         var transactions = await transactionManager.Get(userId);
         var transfers = await transferManager.Get(userId);
-        
 
         return new FinanceViewModel
         {

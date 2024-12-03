@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.ViewModels;
-public sealed class CategoryDto : ViewDtoBase
+public sealed class CategoryDto : IdentityDtoBase
 {
     public Guid UserId { get; init; }
 

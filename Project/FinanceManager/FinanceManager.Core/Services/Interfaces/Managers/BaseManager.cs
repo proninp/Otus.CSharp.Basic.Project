@@ -5,12 +5,14 @@ using FinanceManager.Core.Services.Abstractions.Repositories;
 namespace FinanceManager.Core.Services.Abstractions.Managers;
 public abstract class BaseManager<T, TViewDto, TCreateDto, TUpdateDto>
     where T : BaseModel
-    where TViewDto : ViewDtoBase
+    where TViewDto : IdentityDtoBase
     where TCreateDto : IPutModel<T>
     where TUpdateDto : UpdateDtoBase<T>
 {
     protected readonly IRepository<T> _repository;
     protected readonly IUnitOfWork _unitOfWork;
+
+    // TODO Убрать BaseManager и перенести всё в отдельные сервисы Transaction, Category, Transfer и т.д.
 
     public BaseManager(IRepository<T> repository, IUnitOfWork unitOfWork)
     {
@@ -30,7 +32,6 @@ public abstract class BaseManager<T, TViewDto, TCreateDto, TUpdateDto>
         var model = await GetEntityById(command.Id);
         UpdateModel(model, command);
         _repository.Update(model);
-
         await _unitOfWork.Commit();
         return GetViewDto(model);
     }

@@ -1,5 +1,5 @@
 ﻿namespace FinanceManager.Core.DataTransferObjects.Abstractions;
-public abstract class ViewDtoBase
+public abstract class IdentityDtoBase
 {
     public Guid Id { get; init; }
 }

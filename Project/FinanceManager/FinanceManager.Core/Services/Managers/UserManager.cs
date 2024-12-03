@@ -6,7 +6,7 @@ using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
-namespace FinanceManager.Core.Services;
+namespace FinanceManager.Core.Services.Managers;
 
 public class UserManager : BaseManager<User, UserDto, CreateUserDto, UpdateUserDto>, IUserManager
 {

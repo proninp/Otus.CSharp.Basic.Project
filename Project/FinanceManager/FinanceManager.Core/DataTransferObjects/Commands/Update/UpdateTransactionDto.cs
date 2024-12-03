@@ -25,5 +25,4 @@ public sealed class UpdateTransactionDto : UpdateDtoBase<Transaction>
             Date,
             TransactionType is TransactionType.Expense ? -Math.Abs(Amount) : Math.Abs(Amount),
             Description);
-
 }
