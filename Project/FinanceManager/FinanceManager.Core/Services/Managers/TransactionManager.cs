@@ -5,29 +5,20 @@ using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
+using FinanceManager.Core.Services.Interfaces.Managers;
 
 namespace FinanceManager.Core.Services.Managers;
-public class TransactionManager : TransactionManagerBase, ITransactionManager
+public sealed class TransactionManager : ITransactionManager, IEntityProvider<Transaction>
 {
     private readonly ITransactionValidator _transactionValidator;
+    private readonly IRepository<Transaction> _repository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public TransactionManager(
-        ITransactionValidator transactionValidator,
-        IRepository<Transaction> repository,
-        IUnitOfWork unitOfWork)
-        : base(repository, unitOfWork)
+    public TransactionManager(ITransactionValidator transactionValidator, IRepository<Transaction> repository, IUnitOfWork unitOfWork)
     {
         _transactionValidator = transactionValidator;
-
-        OnBeforeCreate += (command) =>
-        {
-            _transactionValidator.Validate(command);
-        };
-
-        OnBeforeUpdate += (command) =>
-        {
-            _transactionValidator.Validate(command);
-        };
+        _repository = repository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<TransactionDto?> GetById(Guid id)
@@ -45,16 +36,42 @@ public class TransactionManager : TransactionManagerBase, ITransactionManager
         return (await _repository.Get(t => t.UserId == userId && t.AccountId == accountId, t => t.ToDto())).Sum(t => t.Amount);
     }
 
-    protected override TransactionDto GetViewDto(Transaction model) =>
-        model.ToDto();
-
-    protected override void UpdateModel(Transaction model, UpdateTransactionDto command)
+    public async Task<TransactionDto> Create(CreateTransactionDto command)
     {
-        model.AccountId = command.AccountId;
-        model.CategoryId = command.CategoryId;
-        model.Date = command.Date;
-        model.Amount = command.TransactionType is TransactionType.Expense ?
-            -Math.Abs(command.Amount) : Math.Abs(command.Amount);
-        model.Description = command.Description;
+        _transactionValidator.Validate(command);
+        var transaction = _repository.Add(command.ToModel());
+        await _unitOfWork.Commit();
+        return transaction.ToDto();
+    }
+
+    public async Task<TransactionDto> Update(UpdateTransactionDto command)
+    {
+        _transactionValidator.Validate(command);
+        var transaction = await GetEntityById(command.Id);
+
+        transaction.AccountId = command.AccountId;
+        transaction.CategoryId = command.CategoryId;
+        transaction.Date = command.Date;
+        transaction.Amount = command.TransactionType is TransactionType.Income ?
+            Math.Abs(command.Amount) : -Math.Abs(command.Amount);
+        transaction.Description = command.Description;
+
+        _repository.Update(transaction);
+        await _unitOfWork.Commit();
+        return transaction.ToDto();
+    }
+
+    public async Task Delete(Guid id)
+    {
+        var transaction = await GetEntityById(id);
+        _repository.Delete(transaction);
+        await _unitOfWork.Commit();
+    }
+
+    private async Task<Transaction> GetEntityById(Guid id)
+    {
+        var entityProvider = (IEntityProvider<Transaction>)this; // TODO Questionable: IEntityProvider
+        var transaction = await entityProvider.GetEntityById(_repository, id);
+        return transaction;
     }
 }
