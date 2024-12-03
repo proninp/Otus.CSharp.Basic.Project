@@ -31,15 +31,14 @@ public sealed class TransferManager : ITransferManager, IEntityProvider<Transfer
 
     public async Task<TransferDto> Create(CreateTransferDto command)
     {
-        var model = _repository.Add(command.ToModel());
+        var transfer = _repository.Add(command.ToModel());
         await _unitOfWork.Commit();
-        return model.ToDto();
+        return transfer.ToDto();
     }
 
     public async Task<TransferDto> Update(UpdateTransferDto command)
     {
-        var entityProvider = (IEntityProvider<Transfer>)this; // TODO Questionable: IEntityProvider
-        var transfer = await entityProvider.GetEntityById(_repository, command.Id);
+        var transfer = await GetEntityById(command.Id);
 
         transfer.FromAccountId = command.FromAccountId;
         transfer.ToAccountId = command.ToAccountId;
@@ -55,9 +54,15 @@ public sealed class TransferManager : ITransferManager, IEntityProvider<Transfer
 
     public async Task Delete(Guid id)
     {
-        var entityProvider = (IEntityProvider<Transfer>)this; // TODO Questionable: IEntityProvider
-        var transfer = await entityProvider.GetEntityById(_repository, id);
+        var transfer = await GetEntityById(id);
         _repository.Delete(transfer);
         await _unitOfWork.Commit();
+    }
+
+    private async Task<Transfer> GetEntityById(Guid id)
+    {
+        var entityProvider = (IEntityProvider<Transfer>)this; // TODO Questionable: IEntityProvider
+        var transfer = await entityProvider.GetEntityById(_repository, id);
+        return transfer;
     }
 }

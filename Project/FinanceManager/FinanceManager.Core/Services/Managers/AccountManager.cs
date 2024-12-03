@@ -40,15 +40,14 @@ public sealed class AccountManager : IAccountManager, IEntityProvider<Account>
 
     public async Task<AccountDto> Create(CreateAccountDto command)
     {
-        var model = _repository.Add(command.ToModel());
+        var account = _repository.Add(command.ToModel());
         await _unitOfWork.Commit();
-        return model.ToDto();
+        return account.ToDto();
     }
 
     public async Task<AccountDto> Update(UpdateAccountDto command)
     {
-        var entityProvider = (IEntityProvider<Account>)this; // TODO Questionable: IEntityProvider
-        var account = await entityProvider.GetEntityById(_repository, command.Id);
+        var account = await GetEntityById(command.Id);
 
         account.Title = command.Title;
         account.IsDefault = command.IsDefault;
@@ -61,14 +60,20 @@ public sealed class AccountManager : IAccountManager, IEntityProvider<Account>
 
     public async Task Delete(Guid id)
     {
-        var entityProvider = (IEntityProvider<Account>)this; // TODO Questionable: IEntityProvider
-        var entry = await entityProvider.GetEntityById(_repository, id);
-        _repository.Delete(entry);
+        var account = await GetEntityById(id);
+        _repository.Delete(account);
         await _unitOfWork.Commit();
     }
 
     public async Task<decimal> GetBalance(AccountDto accountDto)
     {
         return await _transactionManager.GetAccountBalance(accountDto.UserId, accountDto.Id);
+    }
+
+    private async Task<Account> GetEntityById(Guid id)
+    {
+        var entityProvider = (IEntityProvider<Account>)this; // TODO Questionable: IEntityProvider
+        var account = await entityProvider.GetEntityById(_repository, id);
+        return account;
     }
 }

@@ -34,8 +34,7 @@ public sealed class UserManager : IUserManager, IEntityProvider<User>
 
     public async Task<UserDto> Update(UpdateUserDto command)
     {
-        var entityProvider = (IEntityProvider<User>)this; // TODO Questionable: IEntityProvider
-        var user = await entityProvider.GetEntityById(_repository, command.Id);
+        var user = await GetEntityById(command.Id);
 
         user.Name = command.Name;
 
@@ -46,9 +45,15 @@ public sealed class UserManager : IUserManager, IEntityProvider<User>
 
     public async Task Delete(Guid id)
     {
-        var entityProvider = (IEntityProvider<User>)this; // TODO Questionable: IEntityProvider
-        var user = await entityProvider.GetEntityById(_repository, id);
+        var user = await GetEntityById(id);
         _repository.Delete(user);
         await _unitOfWork.Commit();
+    }
+
+    private async Task<User> GetEntityById(Guid id)
+    {
+        var entityProvider = (IEntityProvider<User>)this; // TODO Questionable: IEntityProvider
+        var user = await entityProvider.GetEntityById(_repository, id);
+        return user;
     }
 }

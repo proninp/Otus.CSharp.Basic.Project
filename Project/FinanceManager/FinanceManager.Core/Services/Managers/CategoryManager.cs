@@ -31,15 +31,14 @@ public sealed class CategoryManager : ICategoryManager, IEntityProvider<Category
 
     public async Task<CategoryDto> Create(CreateCategoryDto command)
     {
-        var model = _repository.Add(command.ToModel());
+        var category = _repository.Add(command.ToModel());
         await _unitOfWork.Commit();
-        return model.ToDto();
+        return category.ToDto();
     }
 
     public async Task<CategoryDto> Update(UpdateCategoryDto command)
     {
-        var entityProvider = (IEntityProvider<Category>)this; // TODO Questionable: IEntityProvider
-        var category = await entityProvider.GetEntityById(_repository, command.Id);
+        var category = await GetEntityById(command.Id);
 
         category.Title = command.Title;
         category.ParentCategoryId = command.ParentCategoryId;
@@ -51,9 +50,15 @@ public sealed class CategoryManager : ICategoryManager, IEntityProvider<Category
 
     public async Task Delete(Guid id)
     {
-        var entityProvider = (IEntityProvider<Category>)this; // TODO Questionable: IEntityProvider
-        var category = await entityProvider.GetEntityById(_repository, id);
+        var category = await GetEntityById(id);
         _repository.Delete(category);
         await _unitOfWork.Commit();
+    }
+
+    private async Task<Category> GetEntityById(Guid id)
+    {
+        var entityProvider = (IEntityProvider<Category>)this; // TODO Questionable: IEntityProvider
+        var category = await entityProvider.GetEntityById(_repository, id);
+        return category;
     }
 }

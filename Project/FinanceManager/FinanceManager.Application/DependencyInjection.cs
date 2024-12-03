@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddHostedService<AppInitializer>();
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-        services.AddScoped<UserManager>();
+        services.AddScoped<IUserManager, UserManager>();
         services.AddScoped<IReadOnlyManager<AccountTypeDto>, AccountTypeManager>();
         services.AddScoped<IReadOnlyManager<CurrencyDto>, CurrencyManager>();
         services.AddScoped<IAccountManager, AccountManager>();
