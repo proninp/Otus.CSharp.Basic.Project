@@ -5,14 +5,20 @@ using FinanceManager.Core.Models;
 using FinanceManager.Core.Services.Abstractions;
 using FinanceManager.Core.Services.Abstractions.Managers;
 using FinanceManager.Core.Services.Abstractions.Repositories;
+using FinanceManager.Core.Services.Interfaces.Managers;
 
 namespace FinanceManager.Core.Services.Managers;
-public class AccountManager : BaseManager<Account, AccountDto, CreateAccountDto, UpdateAccountDto>, IAccountManager
-{
 
+public sealed class AccountManager : IAccountManager, IEntityProvider<Account>
+{
+    private readonly IRepository<Account> _repository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ITransactionManager _transactionManager;
-    public AccountManager(ITransactionManager transactionManager, IRepository<Account> repository, IUnitOfWork unitOfWork) : base(repository, unitOfWork)
+
+    public AccountManager(ITransactionManager transactionManager, IRepository<Account> repository, IUnitOfWork unitOfWork)
     {
+        _repository = repository;
+        _unitOfWork = unitOfWork;
         _transactionManager = transactionManager;
     }
 
@@ -32,18 +38,37 @@ public class AccountManager : BaseManager<Account, AccountDto, CreateAccountDto,
         return accountDtos;
     }
 
-    protected override void UpdateModel(Account account, UpdateAccountDto command)
+    public async Task<AccountDto> Create(CreateAccountDto command)
     {
+        var model = _repository.Add(command.ToModel());
+        await _unitOfWork.Commit();
+        return model.ToDto();
+    }
+
+    public async Task<AccountDto> Update(UpdateAccountDto command)
+    {
+        var entityProvider = (IEntityProvider<Account>)this; // TODO Questionable: IEntityProvider
+        var account = await entityProvider.GetEntityById(_repository, command.Id);
+
         account.Title = command.Title;
         account.IsDefault = command.IsDefault;
         account.IsArchived = command.IsArchived;
+
+        _repository.Update(account);
+        await _unitOfWork.Commit();
+        return account.ToDto();
+    }
+
+    public async Task Delete(Guid id)
+    {
+        var entityProvider = (IEntityProvider<Account>)this; // TODO Questionable: IEntityProvider
+        var entry = await entityProvider.GetEntityById(_repository, id);
+        _repository.Delete(entry);
+        await _unitOfWork.Commit();
     }
 
     public async Task<decimal> GetBalance(AccountDto accountDto)
     {
         return await _transactionManager.GetAccountBalance(accountDto.UserId, accountDto.Id);
     }
-
-    protected override AccountDto GetViewDto(Account model) =>
-        model.ToDto();
 }
