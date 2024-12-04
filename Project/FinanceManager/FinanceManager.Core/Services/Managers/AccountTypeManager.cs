@@ -4,7 +4,7 @@ using FinanceManager.Core.Services.Abstractions.Interfaces;
 using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services.Managers;
-public class AccountTypeManager : IReadOnlyManager<AccountTypeDto>
+public sealed class AccountTypeManager : IReadOnlyManager<AccountTypeDto>
 {
     private IRepository<AccountType> _repository;
 

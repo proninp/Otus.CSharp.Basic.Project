@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
-public sealed class UpdateAccountDto : UpdateDtoBase<Account>
+public sealed class UpdateAccountDto : IdentityDtoBase, IPutModel<Account>
 {
     public Guid UserId { get; init; }
 
@@ -16,6 +16,6 @@ public sealed class UpdateAccountDto : UpdateDtoBase<Account>
 
     public bool IsArchived { get; set; }
 
-    public override Account ToModel() =>
+    public Account ToModel() =>
         new Account(UserId, AccountTypeId, CurrencyId, Title, IsDefault, IsArchived);
 }

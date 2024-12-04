@@ -2,7 +2,7 @@
 
 namespace FinanceManager.Core.Services.Abstractions.Repositories;
 
-public interface IRepository<T> : IReadRepository<T> where T : BaseModel
+public interface IRepository<T> : IReadRepository<T> where T : IdentityModel
 {
     T Add(T item);
 

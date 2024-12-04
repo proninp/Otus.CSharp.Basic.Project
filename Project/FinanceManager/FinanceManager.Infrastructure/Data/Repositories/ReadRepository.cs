@@ -4,7 +4,7 @@ using FinanceManager.Core.Services.Abstractions.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceManager.Infrastructure.Data.Repositories;
-public class ReadRepository<T> : IReadRepository<T> where T : BaseModel
+public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
 {
     protected AppDbContext _context;
 

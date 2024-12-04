@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Core.Models.Abstractions;
 
 namespace FinanceManager.Core.Models;
-public class AccountType : BaseModel
+public class AccountType : IdentityModel
 {
     public string Name { get; init; }
 

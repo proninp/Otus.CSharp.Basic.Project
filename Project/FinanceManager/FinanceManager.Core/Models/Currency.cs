@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Core.Models.Abstractions;
 
 namespace FinanceManager.Core.Models;
-public class Currency : BaseModel
+public class Currency : IdentityModel
 {
     public string Title { get; init; }
 

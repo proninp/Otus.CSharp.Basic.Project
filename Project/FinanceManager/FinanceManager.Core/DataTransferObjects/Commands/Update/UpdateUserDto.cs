@@ -2,12 +2,12 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
-public sealed class UpdateUserDto : UpdateDtoBase<User>
+public sealed class UpdateUserDto : IdentityDtoBase, IPutModel<User>
 {
     public long TelegramId { get; init; }
 
     public string? Name { get; init; }
 
-    public override User ToModel() =>
+    public User ToModel() =>
         new User(TelegramId, Name);
 }

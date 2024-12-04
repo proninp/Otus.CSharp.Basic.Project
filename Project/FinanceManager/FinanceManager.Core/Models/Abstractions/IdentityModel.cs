@@ -1,5 +1,5 @@
 ﻿namespace FinanceManager.Core.Models.Abstractions;
-public abstract class BaseModel
+public abstract class IdentityModel
 {
     public Guid Id { get; init; }
 }
