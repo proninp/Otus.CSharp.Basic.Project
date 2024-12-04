@@ -2,7 +2,7 @@
 
 namespace FinanceManager.Core.Models;
 
-public sealed class Transaction : BaseModel
+public sealed class Transaction : IdentityModel
 {
     public Guid UserId { get; init; }
 

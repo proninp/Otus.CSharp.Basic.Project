@@ -2,7 +2,7 @@
 
 namespace FinanceManager.Core.Models;
 
-public class Category : BaseModel
+public class Category : IdentityModel
 {
     public Guid UserId { get; init; }
 

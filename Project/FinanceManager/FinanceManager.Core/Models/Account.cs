@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Core.Models.Abstractions;
 
 namespace FinanceManager.Core.Models;
-public sealed class Account : BaseModel
+public sealed class Account : IdentityModel
 {
     public Guid UserId { get; init; }
 

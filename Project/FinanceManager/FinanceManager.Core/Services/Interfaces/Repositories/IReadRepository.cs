@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models.Abstractions;
 
 namespace FinanceManager.Core.Services.Abstractions.Repositories;
-public interface IReadRepository<T> where T : BaseModel
+public interface IReadRepository<T> where T : IdentityModel
 {
     Task<T?> GetById(Guid id);
 

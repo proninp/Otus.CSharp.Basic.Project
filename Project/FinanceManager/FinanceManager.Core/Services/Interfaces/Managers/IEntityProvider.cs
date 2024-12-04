@@ -3,7 +3,7 @@ using FinanceManager.Core.Services.Abstractions.Repositories;
 
 namespace FinanceManager.Core.Services.Interfaces.Managers;
 public interface IEntityProvider<T>
-    where T : BaseModel
+    where T : IdentityModel
 {
     public async Task<T> GetEntityById(IRepository<T> repository, Guid id)
     {
