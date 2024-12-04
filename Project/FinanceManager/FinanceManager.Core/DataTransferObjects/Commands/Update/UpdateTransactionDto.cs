@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
-public sealed class UpdateTransactionDto : UpdateDtoBase<Transaction>
+public sealed class UpdateTransactionDto : UpdateDtoBase<Transaction>, ITransactionableCommand
 {
     public Guid UserId { get; init; }
 

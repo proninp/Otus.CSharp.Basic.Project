@@ -1,9 +1,7 @@
-﻿using FinanceManager.Core.DataTransferObjects.Commands.Create;
-using FinanceManager.Core.DataTransferObjects.Commands.Update;
+﻿using FinanceManager.Core.DataTransferObjects.Abstractions;
 
 namespace FinanceManager.Core.Services.Abstractions;
 public interface ITransactionValidator
 {
-    void Validate(CreateTransactionDto command);
-    void Validate(UpdateTransactionDto command);
+    void Validate(ITransactionableCommand transactionCommand);
 }

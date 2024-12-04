@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Create;
-public sealed class CreateTransactionDto : IPutModel<Transaction>
+public sealed class CreateTransactionDto : IPutModel<Transaction>, ITransactionableCommand
 {
     public Guid UserId { get; init; }
 
