@@ -33,7 +33,6 @@ public static class DependencyInjection
         services.AddScoped<ITransactionManager, TransactionManager>();
         services.AddScoped<ITransferManager, TransferManager>();
         services.AddScoped<ITransactionValidator, TransactionValidator>();
-        services.AddScoped<FinanceService>();
 
         services.AddTelegram(configuration);
 
