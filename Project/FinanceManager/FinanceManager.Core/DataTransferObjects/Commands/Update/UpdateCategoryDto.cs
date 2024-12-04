@@ -2,7 +2,7 @@
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Core.DataTransferObjects.Commands.Update;
-public sealed class UpdateCategoryDto : UpdateDtoBase<Category>, IPutModel<Category>
+public sealed class UpdateCategoryDto : IdentityDtoBase, IPutModel<Category>
 {
     public Guid UsertId { get; init; }
 
@@ -10,6 +10,6 @@ public sealed class UpdateCategoryDto : UpdateDtoBase<Category>, IPutModel<Categ
 
     public Guid? ParentCategoryId { get; set; }
 
-    public override Category ToModel() =>
+    public Category ToModel() =>
         new Category(UsertId, Title, ParentCategoryId);
 }
