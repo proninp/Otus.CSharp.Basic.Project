@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Core.Models.Abstractions;
 
 namespace FinanceManager.Core.Models;
-public class Transfer : IdentityModel
+public sealed class Transfer : IdentityModel
 {
     public Guid UserId { get; init; }
 

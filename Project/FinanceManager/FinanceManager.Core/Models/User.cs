@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Core.Models.Abstractions;
 
 namespace FinanceManager.Core.Models;
-public class User : IdentityModel
+public sealed class User : IdentityModel
 {
     public long TelegramId { get; init; }
 
