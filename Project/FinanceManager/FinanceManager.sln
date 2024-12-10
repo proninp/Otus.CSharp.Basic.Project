@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35514.174 d17.12
+VisualStudioVersion = 17.12.35514.174
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.API", "FinanceManager.API\FinanceManager.API.csproj", "{6104CEB3-38A5-4E74-8604-ED1EC523A7A3}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.Persistence", "FinanceManager.Persistence\FinanceManager.Persistence.csproj", "{A9292350-A4B3-452C-8205-B456015AC924}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.Application", "FinanceManager.Application\FinanceManager.Application.csproj", "{AD96979C-8E5D-4139-B4D4-319EA15C45B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinanceManager.Infrastructure", "FinanceManager.Infrastructure\FinanceManager.Infrastructure.csproj", "{50CF9BEA-0193-48FF-B5A0-B0B9AEE52DAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{AD96979C-8E5D-4139-B4D4-319EA15C45B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD96979C-8E5D-4139-B4D4-319EA15C45B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD96979C-8E5D-4139-B4D4-319EA15C45B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50CF9BEA-0193-48FF-B5A0-B0B9AEE52DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50CF9BEA-0193-48FF-B5A0-B0B9AEE52DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50CF9BEA-0193-48FF-B5A0-B0B9AEE52DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50CF9BEA-0193-48FF-B5A0-B0B9AEE52DAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,5 +50,6 @@ Global
 		{7C6D0607-14ED-4490-BDCE-1E6215FCA736} = {5362CF75-21FE-4923-8DEF-19D225D16CE3}
 		{A9292350-A4B3-452C-8205-B456015AC924} = {5362CF75-21FE-4923-8DEF-19D225D16CE3}
 		{AD96979C-8E5D-4139-B4D4-319EA15C45B0} = {5362CF75-21FE-4923-8DEF-19D225D16CE3}
+		{50CF9BEA-0193-48FF-B5A0-B0B9AEE52DAE} = {5362CF75-21FE-4923-8DEF-19D225D16CE3}
 	EndGlobalSection
 EndGlobal
