@@ -7,7 +7,7 @@ public interface IReadRepository<T> where T : IdentityModel
     Task<T?> GetById(Guid id);
 
     Task<TResult[]> Get<TResult>(
-        Expression<Func<T, bool>> predicate, 
+        Expression<Func<T, bool>> predicate,
         Func<T, TResult> selector,
-        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy);
+        Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null);
 }
