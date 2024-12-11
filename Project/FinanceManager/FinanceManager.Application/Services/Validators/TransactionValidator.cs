@@ -1,16 +1,17 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Abstractions;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces;
-using FinanceManager.Application.Services.Interfaces.Managers;
+using FinanceManager.Core.Interfaces.Repositories;
+using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.Services.Validators;
 public class TransactionValidator : ITransactionValidator
 {
-    private readonly IAccountManager _accountManager;
+    private readonly IRepository<Account> _repository;
 
-    public TransactionValidator(IAccountManager accountManager)
+    public TransactionValidator(IRepository<Account> repository)
     {
-        _accountManager = accountManager;
+        _repository = repository;
     }
 
     public void Validate(ITransactionableCommand transactionCommand)
@@ -21,7 +22,7 @@ public class TransactionValidator : ITransactionValidator
         if (transactionCommand.TransactionType is not (TransactionType.Income or TransactionType.Expense))
             throw new ArgumentException("Неизвестный тип транзакциии.");
 
-        var account = _accountManager.GetById(transactionCommand.AccountId);
+        var account = _repository.GetById(transactionCommand.AccountId);
         if (account is null)
             throw new ArgumentException("В транзакции не указан счет.");
     }

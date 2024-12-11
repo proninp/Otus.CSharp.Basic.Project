@@ -1,14 +1,13 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.Services.Managers;
-public sealed class CategoryManager : ICategoryManager, IEntityProvider<Category>
+public sealed class CategoryManager : ICategoryManager
 {
     private readonly IRepository<Category> _repository;
     private readonly IUnitOfWork _unitOfWork;
@@ -38,7 +37,7 @@ public sealed class CategoryManager : ICategoryManager, IEntityProvider<Category
 
     public async Task<CategoryDto> Update(UpdateCategoryDto command)
     {
-        var category = await GetEntityById(command.Id);
+        var category = await _repository.GetByIdOrThrow(command.Id);
 
         category.Title = command.Title;
         category.ParentCategoryId = command.ParentCategoryId;
@@ -50,15 +49,8 @@ public sealed class CategoryManager : ICategoryManager, IEntityProvider<Category
 
     public async Task Delete(Guid id)
     {
-        var category = await GetEntityById(id);
+        var category = await _repository.GetByIdOrThrow(id);
         _repository.Delete(category);
         await _unitOfWork.CommitAsync();
-    }
-
-    private async Task<Category> GetEntityById(Guid id)
-    {
-        var entityProvider = (IEntityProvider<Category>)this; // TODO Questionable: IEntityProvider
-        var category = await entityProvider.GetEntityById(_repository, id);
-        return category;
     }
 }

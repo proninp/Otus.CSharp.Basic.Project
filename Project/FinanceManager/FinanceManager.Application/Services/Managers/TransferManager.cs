@@ -8,7 +8,7 @@ using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.Services.Managers;
-public sealed class TransferManager : ITransferManager, IEntityProvider<Transfer>
+public sealed class TransferManager : ITransferManager
 {
     private readonly IRepository<Transfer> _repository;
     private readonly IUnitOfWork _unitOfWork;
@@ -38,7 +38,7 @@ public sealed class TransferManager : ITransferManager, IEntityProvider<Transfer
 
     public async Task<TransferDto> Update(UpdateTransferDto command)
     {
-        var transfer = await GetEntityById(command.Id);
+        var transfer = await _repository.GetByIdOrThrow(command.Id);
 
         transfer.FromAccountId = command.FromAccountId;
         transfer.ToAccountId = command.ToAccountId;
@@ -54,15 +54,8 @@ public sealed class TransferManager : ITransferManager, IEntityProvider<Transfer
 
     public async Task Delete(Guid id)
     {
-        var transfer = await GetEntityById(id);
+        var transfer = await _repository.GetByIdOrThrow(id);
         _repository.Delete(transfer);
         await _unitOfWork.CommitAsync();
-    }
-
-    private async Task<Transfer> GetEntityById(Guid id)
-    {
-        var entityProvider = (IEntityProvider<Transfer>)this; // TODO Questionable: IEntityProvider
-        var transfer = await entityProvider.GetEntityById(_repository, id);
-        return transfer;
     }
 }

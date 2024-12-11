@@ -17,9 +17,20 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
 
     public Task<T?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
-        return _dbSet
+        var entity = _dbSet
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+        return entity;
+    }
+
+    public async Task<T> GetByIdOrThrow(Guid id, CancellationToken cancellationToken = default)
+    {
+        var entity = await GetById(id, cancellationToken);
+
+        if (entity is null)
+            throw new ArgumentException($"Запись {typeof(T).Name} с id:'{id}' не была найдена.");
+        return entity;
     }
 
     public Task<TResult[]> Get<TResult>(

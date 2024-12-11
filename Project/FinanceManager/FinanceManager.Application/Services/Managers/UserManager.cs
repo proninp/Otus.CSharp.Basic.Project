@@ -1,14 +1,13 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.Services.Managers;
-public sealed class UserManager : IUserManager, IEntityProvider<User>
+public sealed class UserManager : IUserManager
 {
     private readonly IRepository<User> _repository;
     private readonly IUnitOfWork _unitOfWork;
@@ -33,7 +32,7 @@ public sealed class UserManager : IUserManager, IEntityProvider<User>
 
     public async Task<UserDto> Update(UpdateUserDto command)
     {
-        var user = await GetEntityById(command.Id);
+        var user = await _repository.GetByIdOrThrow(command.Id);
 
         user.Name = command.Name;
 
@@ -44,15 +43,8 @@ public sealed class UserManager : IUserManager, IEntityProvider<User>
 
     public async Task Delete(Guid id)
     {
-        var user = await GetEntityById(id);
+        var user = await _repository.GetByIdOrThrow(id);
         _repository.Delete(user);
         await _unitOfWork.CommitAsync();
-    }
-
-    private async Task<User> GetEntityById(Guid id)
-    {
-        var entityProvider = (IEntityProvider<User>)this; // TODO Questionable: IEntityProvider
-        var user = await entityProvider.GetEntityById(_repository, id);
-        return user;
     }
 }

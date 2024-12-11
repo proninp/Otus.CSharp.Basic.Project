@@ -1,14 +1,13 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.Services.Managers;
-public sealed class AccountManager : IAccountManager, IEntityProvider<Account>
+public sealed class AccountManager : IAccountManager
 {
     private readonly IRepository<Account> _repository;
     private readonly IUnitOfWork _unitOfWork;
@@ -51,7 +50,7 @@ public sealed class AccountManager : IAccountManager, IEntityProvider<Account>
 
     public async Task<AccountDto> Update(UpdateAccountDto command)
     {
-        var account = await GetEntityById(command.Id);
+        var account = await _repository.GetByIdOrThrow(command.Id);
 
         account.Title = command.Title;
         account.IsDefault = command.IsDefault;
@@ -62,15 +61,10 @@ public sealed class AccountManager : IAccountManager, IEntityProvider<Account>
         return account.ToDto();
     }
 
-    public Task Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        throw new NotImplementedException();
-    }
-
-    private async Task<Account> GetEntityById(Guid id)
-    {
-        var entityProvider = (IEntityProvider<Account>)this; // TODO Questionable: IEntityProvider
-        var account = await entityProvider.GetEntityById(_repository, id);
-        return account;
+        var account = await _repository.GetByIdOrThrow(id);
+        _repository.Delete(account);
+        await _unitOfWork.CommitAsync();
     }
 }

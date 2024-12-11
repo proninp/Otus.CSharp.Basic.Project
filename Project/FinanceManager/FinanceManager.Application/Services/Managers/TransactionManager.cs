@@ -8,7 +8,7 @@ using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.Services.Managers;
-public sealed class TransactionManager : ITransactionManager, IEntityProvider<Transaction>
+public sealed class TransactionManager : ITransactionManager
 {
     private readonly ITransactionValidator _transactionValidator;
     private readonly IRepository<Transaction> _repository;
@@ -47,7 +47,7 @@ public sealed class TransactionManager : ITransactionManager, IEntityProvider<Tr
     public async Task<TransactionDto> Update(UpdateTransactionDto command)
     {
         _transactionValidator.Validate(command);
-        var transaction = await GetEntityById(command.Id);
+        var transaction = await _repository.GetByIdOrThrow(command.Id);
 
         transaction.AccountId = command.AccountId;
         transaction.CategoryId = command.CategoryId;
@@ -63,15 +63,8 @@ public sealed class TransactionManager : ITransactionManager, IEntityProvider<Tr
 
     public async Task Delete(Guid id)
     {
-        var transaction = await GetEntityById(id);
+        var transaction = await _repository.GetByIdOrThrow(id);
         _repository.Delete(transaction);
         await _unitOfWork.CommitAsync();
-    }
-
-    private async Task<Transaction> GetEntityById(Guid id)
-    {
-        var entityProvider = (IEntityProvider<Transaction>)this; // TODO Questionable: IEntityProvider
-        var transaction = await entityProvider.GetEntityById(_repository, id);
-        return transaction;
     }
 }
