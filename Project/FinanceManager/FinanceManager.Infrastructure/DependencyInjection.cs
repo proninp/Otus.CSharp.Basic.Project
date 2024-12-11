@@ -3,6 +3,7 @@ using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Application.Services.Managers;
 using FinanceManager.Application.Services.Validators;
+using FinanceManager.Bot.Application;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Options;
@@ -31,7 +32,7 @@ public static class DependencyInjection
         services.AddScoped<ITransferManager, TransferManager>();
         services.AddScoped<ITransactionValidator, TransactionValidator>();
 
-        //services.AddTelegram(configuration);
+        services.AddTelegram(configuration);
 
         return services;
     }

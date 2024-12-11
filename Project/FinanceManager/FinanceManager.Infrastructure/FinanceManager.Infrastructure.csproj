@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinanceManager.Application\FinanceManager.Application.csproj" />
+    <ProjectReference Include="..\FinanceManager.Bot\FinanceManager.Bot.csproj" />
     <ProjectReference Include="..\FinanceManager.Persistence\FinanceManager.Persistence.csproj" />
   </ItemGroup>
 

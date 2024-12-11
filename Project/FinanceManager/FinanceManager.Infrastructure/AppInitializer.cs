@@ -1,4 +1,5 @@
-﻿using FinanceManager.Persistence.Data;
+﻿using FinanceManager.Bot.Services.Abstractions;
+using FinanceManager.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,5 +20,7 @@ public sealed class AppInitializer : BackgroundService
         using var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await appDbContext.Database.MigrateAsync(stoppingToken);
 
+        var pollingService = scope.ServiceProvider.GetRequiredService<IPollingService>();
+        await pollingService.DoWork(stoppingToken);
     }
 }
