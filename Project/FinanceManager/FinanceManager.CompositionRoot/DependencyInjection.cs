@@ -7,12 +7,12 @@ using FinanceManager.Bot.Application;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Options;
-using FinanceManager.Persistence.Data;
-using FinanceManager.Persistence.Data.Repositories;
+using FinanceManager.DataAccess.Data;
+using FinanceManager.DataAccess.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FinanceManager.Infrastructure;
+namespace FinanceManager.CompositionRoot;
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)

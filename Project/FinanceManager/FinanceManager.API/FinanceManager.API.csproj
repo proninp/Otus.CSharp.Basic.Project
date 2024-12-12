@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinanceManager.Infrastructure\FinanceManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\FinanceManager.CompositionRoot\FinanceManager.CompositionRoot.csproj" />
   </ItemGroup>
 
 </Project>

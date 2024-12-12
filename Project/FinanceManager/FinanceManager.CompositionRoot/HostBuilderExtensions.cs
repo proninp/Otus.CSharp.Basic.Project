@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace FinanceManager.Infrastructure;
+namespace FinanceManager.CompositionRoot;
 public static class HostBuilderExtensions
 {
     public static IHostBuilder AddLogging(this IHostBuilder hostBuilder, IConfiguration configuration)

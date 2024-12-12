@@ -4,7 +4,7 @@ using FinanceManager.Core.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace FinanceManager.Persistence.Data;
+namespace FinanceManager.DataAccess.Data;
 public class AppDbContext : DbContext, IUnitOfWork
 {
     private readonly AppSettings _options;

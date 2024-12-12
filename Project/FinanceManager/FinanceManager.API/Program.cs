@@ -1,4 +1,4 @@
-using FinanceManager.Infrastructure;
+using FinanceManager.CompositionRoot;
 
 var builder = WebApplication.CreateBuilder(args);
 

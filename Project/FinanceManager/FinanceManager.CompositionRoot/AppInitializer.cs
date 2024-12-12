@@ -1,10 +1,10 @@
 ﻿using FinanceManager.Bot.Services.Abstractions;
-using FinanceManager.Persistence.Data;
+using FinanceManager.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace FinanceManager.Infrastructure;
+namespace FinanceManager.CompositionRoot;
 public sealed class AppInitializer : BackgroundService
 {
     private readonly IServiceProvider _services;

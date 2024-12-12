@@ -1,9 +1,9 @@
 ﻿using FinanceManager.Core.Models;
-using FinanceManager.Persistence.Seeding;
+using FinanceManager.DataAccess.Seeding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FinanceManager.Persistence.Data.Configurations;
+namespace FinanceManager.DataAccess.Data.Configurations;
 public class AccountTypeConfiguration : IEntityTypeConfiguration<AccountType>
 {
     public void Configure(EntityTypeBuilder<AccountType> builder)

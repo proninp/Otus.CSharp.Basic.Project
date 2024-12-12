@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FinanceManager.Persistence.Data.Configurations;
+namespace FinanceManager.DataAccess.Data.Configurations;
 public class TransferConfiguration : IEntityTypeConfiguration<Transfer>
 {
     public void Configure(EntityTypeBuilder<Transfer> builder)
