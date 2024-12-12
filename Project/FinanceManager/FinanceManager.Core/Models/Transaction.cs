@@ -21,6 +21,8 @@ public sealed class Transaction : IdentityModel
 
     public Category? Category { get; set; }
 
+    protected Transaction() { }
+
     public Transaction(Guid userId, Guid accountId, Guid? categoryId = null, DateOnly? date = null, decimal amount = 0, string? description = null)
     {
         UserId = userId;

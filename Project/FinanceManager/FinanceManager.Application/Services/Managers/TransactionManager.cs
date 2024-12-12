@@ -38,7 +38,7 @@ public sealed class TransactionManager : ITransactionManager
 
     public async Task<TransactionDto> Create(CreateTransactionDto command)
     {
-        _transactionValidator.Validate(command);
+        await _transactionValidator.Validate(command);
         var transaction = _repository.Add(command.ToModel());
         await _unitOfWork.CommitAsync();
         return transaction.ToDto();
@@ -46,7 +46,7 @@ public sealed class TransactionManager : ITransactionManager
 
     public async Task<TransactionDto> Update(UpdateTransactionDto command)
     {
-        _transactionValidator.Validate(command);
+        await _transactionValidator.Validate(command);
         var transaction = await _repository.GetByIdOrThrow(command.Id);
 
         transaction.AccountId = command.AccountId;

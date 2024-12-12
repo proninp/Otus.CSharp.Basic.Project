@@ -3,5 +3,5 @@
 namespace FinanceManager.Application.Services.Interfaces;
 public interface ITransactionValidator
 {
-    void Validate(ITransactionableCommand transactionCommand);
+    Task Validate(ITransactionableCommand transactionCommand);
 }
