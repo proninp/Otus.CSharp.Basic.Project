@@ -5,8 +5,12 @@ public sealed class CreateUserDto
 {
     public long TelegramId { get; init; }
 
-    public string? Name { get; init; }
+    public string? Username { get; init; }
+
+    public string? Firstname { get; set; }
+
+    public string? Lastname { get; set; }
 
     public User ToModel() =>
-        new User(TelegramId, Name);
+        new User(TelegramId, Username, Firstname, Lastname);
 }

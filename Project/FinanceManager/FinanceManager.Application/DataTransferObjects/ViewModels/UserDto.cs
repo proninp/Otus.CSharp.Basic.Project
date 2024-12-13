@@ -6,7 +6,11 @@ public sealed class UserDto : IdentityDtoBase
 {
     public long TelegramId { get; init; }
 
-    public string? Name { get; init; }
+    public string? Username { get; init; }
+
+    public string? Firstname { get; set; }
+
+    public string? Lastname { get; set; }
 }
 
 public static class UserMappings
@@ -16,8 +20,10 @@ public static class UserMappings
         return new UserDto()
         {
             Id = user.Id,
-            Name = user.Name,
-            TelegramId = user.TelegramId
+            TelegramId = user.TelegramId,
+            Username = user.Username,
+            Firstname = user.Firstname,
+            Lastname = user.Lastname,
         };
     }
 }

@@ -5,7 +5,11 @@ public sealed class User : IdentityModel
 {
     public long TelegramId { get; init; }
 
-    public string? Name { get; set; }
+    public string? Username { get; set; }
+
+    public string? Firstname { get; set; }
+
+    public string? Lastname { get; set; }
 
     public ICollection<Account> Accounts { get; } = Array.Empty<Account>();
 
@@ -13,9 +17,11 @@ public sealed class User : IdentityModel
 
     public ICollection<Transaction> Transactions { get; } = Array.Empty<Transaction>();
 
-    public User(long telegramId, string? name = null)
+    public User(long telegramId, string? username = null, string? firstname = null, string? lastname = null)
     {
         TelegramId = telegramId;
-        Name = name;
+        Username = username;
+        Firstname = firstname;
+        Lastname = lastname;
     }
 }

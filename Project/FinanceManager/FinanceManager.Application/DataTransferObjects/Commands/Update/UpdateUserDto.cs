@@ -5,5 +5,9 @@ public sealed class UpdateUserDto : IdentityDtoBase
 {
     public long TelegramId { get; init; }
 
-    public string? Name { get; init; }
+    public string? Username { get; init; }
+
+    public string? Firstname { get; set; }
+
+    public string? Lastname { get; set; }
 }

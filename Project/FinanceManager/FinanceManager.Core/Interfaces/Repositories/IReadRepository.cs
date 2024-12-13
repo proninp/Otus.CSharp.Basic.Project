@@ -1,11 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using FinanceManager.Core.Models.Abstractions;
 
 namespace FinanceManager.Core.Interfaces.Repositories;
 public interface IReadRepository<T> where T : IdentityModel
 {
-    
+
     Task<T?> GetById(Guid id, CancellationToken cancellationToken = default);
 
     Task<T> GetByIdOrThrow(Guid id, CancellationToken cancellationToken = default);
