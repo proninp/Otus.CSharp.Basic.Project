@@ -1,4 +1,4 @@
-﻿using FinanceManager.Bot.Services.Abstractions;
+﻿using FinanceManager.Bot.Services.Telegram.Abstractions;
 using FinanceManager.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

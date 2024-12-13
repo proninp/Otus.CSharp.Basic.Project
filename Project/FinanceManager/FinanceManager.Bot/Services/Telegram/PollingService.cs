@@ -1,7 +1,7 @@
-﻿using FinanceManager.Bot.Services.Abstractions;
+﻿using FinanceManager.Bot.Services.Telegram.Abstractions;
 using Serilog;
 
-namespace FinanceManager.Bot.Services;
+namespace FinanceManager.Bot.Services.Telegram;
 public class PollingService(IReceiverService receiverService, ILogger logger) : IPollingService
 {
     public async Task DoWork(CancellationToken stoppingToken)

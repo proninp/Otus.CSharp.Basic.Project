@@ -7,7 +7,7 @@ using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 
-namespace FinanceManager.Bot.Services.Abstractions;
+namespace FinanceManager.Bot.Services.Telegram.Abstractions;
 public abstract class ReceiverServiceBase<TUpdateHandler> : IReceiverService
     where TUpdateHandler : IUpdateHandler
 {

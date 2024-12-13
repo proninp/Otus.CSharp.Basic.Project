@@ -6,7 +6,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace FinanceManager.Bot.Services;
+namespace FinanceManager.Bot.Services.Telegram;
 public class UpdateHandler(ITelegramBotClient bot, ILogger logger) : IUpdateHandler
 {
     public async Task HandleErrorAsync(
@@ -33,15 +33,16 @@ public class UpdateHandler(ITelegramBotClient bot, ILogger logger) : IUpdateHand
         });
     }
 
-    private async Task OnMessage(Message msg)
+    private async Task OnMessage(Message message)
     {
-        logger.Information("Receive message type: {MessageType}", msg.Type);
-        if (msg.Text is not { } messageText)
+        logger.Information("Receive message type: {MessageType}", message.Type);
+        if (message.Text is not { } messageText)
             return;
 
+        
         var echo = $"Yout message: {messageText}";
 
-        var sentMessage = await bot.SendMessage(msg.Chat, echo, parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
+        var sentMessage = await bot.SendMessage(message.Chat, echo, parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
 
         logger.Information("The message was sent with id: {SentMessageId}", sentMessage.Id);
     }

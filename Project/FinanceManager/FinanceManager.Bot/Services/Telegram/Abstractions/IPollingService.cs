@@ -1,4 +1,4 @@
-﻿namespace FinanceManager.Bot.Services.Abstractions;
+﻿namespace FinanceManager.Bot.Services.Telegram.Abstractions;
 public interface IPollingService
 {
     Task DoWork(CancellationToken stoppingToken);
