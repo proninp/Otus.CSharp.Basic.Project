@@ -1,5 +1,7 @@
-﻿using FinanceManager.Bot.Services;
-using FinanceManager.Bot.Services.Abstractions;
+﻿using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Telegram;
+using FinanceManager.Bot.Services.Telegram.Abstractions;
+using FinanceManager.Bot.Services.UserServices;
 using FinanceManager.Core.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,6 +27,8 @@ public static class TelegramInjection
         services.AddScoped<UpdateHandler>();
         services.AddScoped<IReceiverService, ReceiverService>();
         services.AddScoped<IPollingService, PollingService>();
+        services.AddScoped<IUserSessionManager, UserSessionManager>();
+        services.AddSingleton<IUserSessionProvider, UserSessionProvider>();
 
         return services;
     }

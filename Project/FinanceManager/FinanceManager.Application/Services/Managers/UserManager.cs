@@ -23,6 +23,12 @@ public sealed class UserManager : IUserManager
         return (await _repository.GetById(id))?.ToDto();
     }
 
+    public async Task<UserDto?> GetByTelegramId(long telegramId)
+    {
+        return (await _repository.Get(u => u.TelegramId == telegramId, u => u.ToDto()))?
+            .FirstOrDefault();
+    }
+
     public async Task<UserDto> Create(CreateUserDto command)
     {
         var user = _repository.Add(command.ToModel());
@@ -34,7 +40,7 @@ public sealed class UserManager : IUserManager
     {
         var user = await _repository.GetByIdOrThrow(command.Id);
 
-        user.Name = command.Name;
+        user.Username = command.Username;
 
         _repository.Update(user);
         await _unitOfWork.CommitAsync();

@@ -7,6 +7,8 @@ public interface IUserManager
 {
     public Task<UserDto?> GetById(Guid id);
 
+    public Task<UserDto?> GetByTelegramId(long telegramId);
+
     public Task<UserDto> Create(CreateUserDto command);
 
     public Task<UserDto> Update(UpdateUserDto command);
