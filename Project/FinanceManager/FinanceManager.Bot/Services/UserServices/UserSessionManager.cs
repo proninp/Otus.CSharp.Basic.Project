@@ -1,11 +1,10 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services;
+namespace FinanceManager.Bot.Services.UserServices;
 public class UserSessionManager : IUserSessionManager
 {
     private readonly IUserManager _userManager;
@@ -29,13 +28,6 @@ public class UserSessionManager : IUserSessionManager
             };
             userDto = await _userManager.Create(userCommand);
         }
-
-        return new UserSession
-        {
-            Id = userDto.Id,
-            TelegramId = userDto.TelegramId,
-            UserName = userDto.Username,
-            UserState = UserState.Default
-        };
+        return userDto.ToUserSession();
     }
 }
