@@ -1,4 +1,6 @@
-﻿using FinanceManager.Bot.Services.Interfaces;
+﻿using FinanceManager.Bot.Services;
+using FinanceManager.Bot.Services.CommandHandlers;
+using FinanceManager.Bot.Services.Interfaces;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
 using FinanceManager.Bot.Services.UserServices;
@@ -24,11 +26,21 @@ public static class TelegramInjection
                     return new TelegramBotClient(options, httpClient);
                 });
 
-        services.AddScoped<UpdateHandler>();
-        services.AddScoped<IReceiverService, ReceiverService>();
-        services.AddScoped<IPollingService, PollingService>();
-        services.AddScoped<IUserSessionManager, UserSessionManager>();
-        services.AddSingleton<IUserSessionProvider, UserSessionProvider>();
+        services
+            .AddSingleton<IUserSessionProvider, UserSessionProvider>()
+            .AddScoped<UpdateHandler>()
+            .AddScoped<IReceiverService, ReceiverService>()
+            .AddScoped<IPollingService, PollingService>()
+            .AddScoped<IUserSessionManager, UserSessionManager>()
+            .AddScoped<IBotStateManager, BotStateMachine>()
+            .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
+            .AddScoped<ChooseAccountTypeStateHandler>()
+            .AddScoped<ChooseCurrencyStateHandler>()
+            .AddScoped<CreateAccountStateHandler>()
+            .AddScoped<RegisterExpenseStateHandler>()
+            .AddScoped<RegisterIncomeStateHandler>()
+            .AddScoped<SetInitialBalanceStateHandler>()
+            .AddScoped<StartStateHandler>();
 
         return services;
     }
