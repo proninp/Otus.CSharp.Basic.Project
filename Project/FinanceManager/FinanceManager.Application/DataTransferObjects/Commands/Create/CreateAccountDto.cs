@@ -5,8 +5,6 @@ public sealed class CreateAccountDto
 {
     public Guid UserId { get; init; }
 
-    public Guid AccountTypeId { get; init; }
-
     public Guid CurrencyId { get; init; }
 
     public string? Title { get; set; }
@@ -16,5 +14,5 @@ public sealed class CreateAccountDto
     public bool IsArchived { get; set; }
 
     public Account ToModel() =>
-        new Account(UserId, AccountTypeId, CurrencyId, Title, IsDefault, IsArchived);
+        new Account(UserId, CurrencyId, Title, IsDefault, IsArchived);
 }

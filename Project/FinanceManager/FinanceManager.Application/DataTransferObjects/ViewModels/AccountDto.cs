@@ -6,8 +6,6 @@ public sealed class AccountDto : IdentityDtoBase
 {
     public Guid UserId { get; init; }
 
-    public Guid AccountTypeId { get; init; }
-
     public Guid CurrencyId { get; init; }
 
     public string? Title { get; set; }
@@ -28,7 +26,6 @@ public static class AccountMappings
             Id = account.Id,
             UserId = account.UserId,
             Title = account.Title,
-            AccountTypeId = account.AccountTypeId,
             CurrencyId = account.CurrencyId,
             IsDefault = account.IsDefault,
             IsArchived = account.IsArchived,

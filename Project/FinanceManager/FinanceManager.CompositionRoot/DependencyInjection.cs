@@ -24,7 +24,6 @@ public static class DependencyInjection
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUserManager, UserManager>();
-        services.AddScoped<IReadOnlyManager<AccountTypeDto>, AccountTypeManager>();
         services.AddScoped<IReadOnlyManager<CurrencyDto>, CurrencyManager>();
         services.AddScoped<IAccountManager, AccountManager>();
         services.AddScoped<ICategoryManager, CategoryManager>();

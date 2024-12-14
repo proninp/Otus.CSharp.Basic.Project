@@ -12,11 +12,6 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
             .HasForeignKey(a => a.UserId)
             .IsRequired();
 
-        builder.HasOne(a => a.AccountType)
-            .WithMany()
-            .HasForeignKey(a => a.AccountTypeId)
-            .IsRequired();
-
         builder.HasOne(a => a.Currency)
             .WithMany()
             .HasForeignKey(a => a.CurrencyId)
