@@ -3,5 +3,5 @@
 namespace FinanceManager.Bot.Services.Interfaces;
 public interface IBotStateManager
 {
-    void HandleMessage(Message message);
+    Task HandleMessageAsync(Message message, CancellationToken cancellationToken);
 }

@@ -1,5 +1,6 @@
 ﻿using FinanceManager.Bot.Services;
 using FinanceManager.Bot.Services.CommandHandlers;
+using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.Interfaces;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
@@ -32,15 +33,15 @@ public static class TelegramInjection
             .AddScoped<IReceiverService, ReceiverService>()
             .AddScoped<IPollingService, PollingService>()
             .AddScoped<IUserSessionManager, UserSessionManager>()
-            .AddScoped<IBotStateManager, BotStateMachine>()
+            .AddScoped<IBotStateManager, BotStateManager>()
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
-            .AddScoped<ChooseAccountTypeStateHandler>()
             .AddScoped<ChooseCurrencyStateHandler>()
             .AddScoped<CreateAccountStateHandler>()
             .AddScoped<RegisterExpenseStateHandler>()
             .AddScoped<RegisterIncomeStateHandler>()
             .AddScoped<SetInitialBalanceStateHandler>()
-            .AddScoped<StartStateHandler>();
+            .AddScoped<StartStateHandler>()
+            .AddScoped<DefaultStateHandler>();
 
         return services;
     }

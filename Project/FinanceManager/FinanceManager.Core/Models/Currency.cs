@@ -9,10 +9,13 @@ public sealed class Currency : IdentityModel
 
     public string CurrencySign { get; init; }
 
-    public Currency(string title, string currencyCode, string currencySign)
+    public string? Emoji { get; init; }
+
+    public Currency(string title, string currencyCode, string currencySign, string? emoji = null)
     {
         Title = title;
         CurrencyCode = currencyCode;
         CurrencySign = currencySign;
+        Emoji = emoji;
     }
 }

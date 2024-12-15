@@ -2,10 +2,19 @@
 public enum UserState
 {
     Start,
-    ChooseAccountType,
-    RegisterExpense,
-    RegisterIncome,
-    CreateAccount,
+    Default,
+    AddAccount,
+    DeleteAccount,
+    AddCategory,
+    DeleteCategory,
+    AddExpense,
+    DeleteExpense,
+    AddIncome,
+    DeleteIncome,
+    AddTransfer,
+    DeleteTransfer,
     ChooseCurrency,
     SetInitialBalance,
+    History,
+    Settings
 }

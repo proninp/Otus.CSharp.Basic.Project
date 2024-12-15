@@ -1,4 +1,5 @@
 ﻿using FinanceManager.Bot.Enums;
+using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,15 +13,15 @@ public class StateHandlerFactory : IStateHandlerFactory
         _serviceProvider = serviceProvider;
     }
 
-    public ICommandStateHandler GetHandler(UserState userState) => userState switch
+    public IStateHandler GetHandlerAsync(UserState userState) => userState switch
     {
         UserState.Start => _serviceProvider.GetRequiredService<StartStateHandler>(),
-        UserState.RegisterExpense => _serviceProvider.GetRequiredService<RegisterExpenseStateHandler>(),
-        UserState.RegisterIncome => _serviceProvider.GetRequiredService<RegisterIncomeStateHandler>(),
-        UserState.CreateAccount => _serviceProvider.GetRequiredService<CreateAccountStateHandler>(),
+        UserState.Default => _serviceProvider.GetRequiredService<DefaultStateHandler>(),
+        UserState.AddExpense => _serviceProvider.GetRequiredService<RegisterExpenseStateHandler>(),
+        UserState.AddIncome => _serviceProvider.GetRequiredService<RegisterIncomeStateHandler>(),
+        UserState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountStateHandler>(),
         UserState.ChooseCurrency => _serviceProvider.GetRequiredService<ChooseCurrencyStateHandler>(),
-        UserState.ChooseAccountType => _serviceProvider.GetRequiredService<ChooseAccountTypeStateHandler>(),
         UserState.SetInitialBalance => _serviceProvider.GetRequiredService<SetInitialBalanceStateHandler>(),
-            _ => throw new InvalidOperationException($"Нет обработчика для состояния {userState}")
+        _ => throw new InvalidOperationException($"There is no handler for the state {userState}")
     };
 }
