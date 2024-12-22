@@ -1,5 +1,5 @@
 ﻿namespace FinanceManager.Application.Services.Interfaces;
 public interface IAccountValidator
 {
-    Task<bool> AccountExists(Guid accountId);
+    Task<bool> AccountExists(Guid accountId, CancellationToken cancellationToken);
 }

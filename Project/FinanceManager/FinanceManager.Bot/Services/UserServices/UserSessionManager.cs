@@ -14,9 +14,9 @@ public class UserSessionManager : IUserSessionManager
         _userManager = userManager;
     }
 
-    public async Task<UserSession> InstantiateSession(User from)
+    public async Task<UserSession> InstantiateSession(User from, CancellationToken cancellationToken)
     {
-        var userDto = await _userManager.GetByTelegramId(from.Id);
+        var userDto = await _userManager.GetByTelegramId(from.Id, cancellationToken);
         if (userDto is null)
         {
             var userCommand = new CreateUserDto
@@ -26,7 +26,7 @@ public class UserSessionManager : IUserSessionManager
                 Firstname = from.FirstName,
                 Lastname = from.LastName
             };
-            userDto = await _userManager.Create(userCommand);
+            userDto = await _userManager.Create(userCommand, cancellationToken);
         }
         return userDto.ToUserSession();
     }

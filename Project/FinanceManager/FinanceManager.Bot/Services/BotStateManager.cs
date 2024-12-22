@@ -15,7 +15,7 @@ public class BotStateManager : IBotStateManager
 
     public async Task HandleMessageAsync(Message message, CancellationToken cancellationToken)
     {
-        var session = await _userSessionProvider.GetUserSession(message.From);
+        var session = await _userSessionProvider.GetUserSession(message.From, cancellationToken);
 
         var handler = _stateHandlerFactory.GetHandlerAsync(session.UserState);
         await handler.HandleStateAsync(session, message, cancellationToken);

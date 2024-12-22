@@ -5,13 +5,13 @@ using FinanceManager.Application.DataTransferObjects.ViewModels;
 namespace FinanceManager.Application.Services.Interfaces.Managers;
 public interface ITransferManager
 {
-    public Task<TransferDto?> GetById(Guid id);
+    public Task<TransferDto?> GetById(Guid id, CancellationToken cancellationToken);
 
-    public Task<TransferDto[]> Get(Guid userId);
+    public Task<TransferDto[]> Get(Guid userId, CancellationToken cancellationToken);
 
-    public Task<TransferDto> Create(CreateTransferDto command);
+    public Task<TransferDto> Create(CreateTransferDto command, CancellationToken cancellationToken);
 
-    public Task<TransferDto> Update(UpdateTransferDto command);
+    public Task<TransferDto> Update(UpdateTransferDto command, CancellationToken cancellationToken);
 
-    public Task Delete(Guid id);
+    public Task Delete(Guid id, CancellationToken cancellationToken);
 }

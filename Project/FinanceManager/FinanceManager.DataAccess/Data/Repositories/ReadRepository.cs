@@ -15,7 +15,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
         _dbSet = _context.Set<T>();
     }
 
-    public Task<T?> GetById(Guid id, CancellationToken cancellationToken = default)
+    public Task<T?> GetById(Guid id, CancellationToken cancellationToken)
     {
         var entity = _dbSet
             .AsNoTracking()
@@ -24,7 +24,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
         return entity;
     }
 
-    public async Task<T> GetByIdOrThrow(Guid id, CancellationToken cancellationToken = default)
+    public async Task<T> GetByIdOrThrow(Guid id, CancellationToken cancellationToken)
     {
         var entity = await GetById(id, cancellationToken);
 

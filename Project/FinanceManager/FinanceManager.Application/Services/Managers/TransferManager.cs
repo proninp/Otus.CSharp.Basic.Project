@@ -1,7 +1,6 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
@@ -19,26 +18,26 @@ public sealed class TransferManager : ITransferManager
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<TransferDto?> GetById(Guid id)
+    public async Task<TransferDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id))?.ToDto();
+        return (await _repository.GetById(id, cancellationToken))?.ToDto();
     }
 
-    public Task<TransferDto[]> Get(Guid userId)
+    public Task<TransferDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
-        return _repository.Get(t => t.UserId == userId, t => t.ToDto());
+        return _repository.Get(t => t.UserId == userId, t => t.ToDto(), cancellationToken: cancellationToken);
     }
 
-    public async Task<TransferDto> Create(CreateTransferDto command)
+    public async Task<TransferDto> Create(CreateTransferDto command, CancellationToken cancellationToken)
     {
         var transfer = _repository.Add(command.ToModel());
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return transfer.ToDto();
     }
 
-    public async Task<TransferDto> Update(UpdateTransferDto command)
+    public async Task<TransferDto> Update(UpdateTransferDto command, CancellationToken cancellationToken)
     {
-        var transfer = await _repository.GetByIdOrThrow(command.Id);
+        var transfer = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
 
         transfer.FromAccountId = command.FromAccountId;
         transfer.ToAccountId = command.ToAccountId;
@@ -48,14 +47,14 @@ public sealed class TransferManager : ITransferManager
         transfer.Description = command.Description;
 
         _repository.Update(transfer);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return transfer.ToDto();
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var transfer = await _repository.GetByIdOrThrow(id);
+        var transfer = await _repository.GetByIdOrThrow(id, cancellationToken);
         _repository.Delete(transfer);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 }

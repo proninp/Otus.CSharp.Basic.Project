@@ -18,39 +18,39 @@ public sealed class CategoryManager : ICategoryManager
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CategoryDto?> GetById(Guid id)
+    public async Task<CategoryDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id))?.ToDto();
+        return (await _repository.GetById(id, cancellationToken))?.ToDto();
     }
 
-    public Task<CategoryDto[]> Get(Guid userId)
+    public Task<CategoryDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
-        return _repository.Get(c => c.UserId == userId, c => c.ToDto());
+        return _repository.Get(c => c.UserId == userId, c => c.ToDto(), cancellationToken: cancellationToken);
     }
 
-    public async Task<CategoryDto> Create(CreateCategoryDto command)
+    public async Task<CategoryDto> Create(CreateCategoryDto command, CancellationToken cancellationToken)
     {
         var category = _repository.Add(command.ToModel());
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return category.ToDto();
     }
 
-    public async Task<CategoryDto> Update(UpdateCategoryDto command)
+    public async Task<CategoryDto> Update(UpdateCategoryDto command, CancellationToken cancellationToken)
     {
-        var category = await _repository.GetByIdOrThrow(command.Id);
+        var category = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
 
         category.Title = command.Title;
         category.ParentCategoryId = command.ParentCategoryId;
 
         _repository.Update(category);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return category.ToDto();
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _repository.GetByIdOrThrow(id);
+        var category = await _repository.GetByIdOrThrow(id, cancellationToken);
         _repository.Delete(category);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 }

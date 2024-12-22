@@ -5,15 +5,15 @@ using FinanceManager.Application.DataTransferObjects.ViewModels;
 namespace FinanceManager.Application.Services.Interfaces.Managers;
 public interface IAccountManager
 {
-    public Task<AccountDto?> GetById(Guid id);
+    public Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken);
 
-    public Task<AccountDto[]> Get(Guid userId);
+    public Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken);
 
-    public Task<AccountDto> Create(CreateAccountDto command);
+    public Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken);
 
-    public Task<AccountDto> Update(UpdateAccountDto command);
+    public Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken);
 
-    public Task Delete(Guid id);
+    public Task Delete(Guid id, CancellationToken cancellationToken);
 
-    public Task<decimal> GetBalance(AccountDto viewModel);
+    public Task<decimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken);
 }

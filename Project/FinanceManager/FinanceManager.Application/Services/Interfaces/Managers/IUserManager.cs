@@ -5,13 +5,13 @@ using FinanceManager.Application.DataTransferObjects.ViewModels;
 namespace FinanceManager.Application.Services.Interfaces.Managers;
 public interface IUserManager
 {
-    public Task<UserDto?> GetById(Guid id);
+    public Task<UserDto?> GetById(Guid id, CancellationToken cancellationToken);
 
-    public Task<UserDto?> GetByTelegramId(long telegramId);
+    public Task<UserDto?> GetByTelegramId(long telegramId, CancellationToken cancellationToken);
 
-    public Task<UserDto> Create(CreateUserDto command);
+    public Task<UserDto> Create(CreateUserDto command, CancellationToken cancellationToken);
 
-    public Task<UserDto> Update(UpdateUserDto command);
+    public Task<UserDto> Update(UpdateUserDto command, CancellationToken cancellationToken);
 
-    public Task Delete(Guid id);
+    public Task Delete(Guid id, CancellationToken cancellationToken);
 }

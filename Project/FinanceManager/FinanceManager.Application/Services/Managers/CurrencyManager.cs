@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FinanceManager.Application.DataTransferObjects.ViewModels;
+﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
@@ -14,13 +13,13 @@ public sealed class CurrencyManager : IReadOnlyManager<CurrencyDto>
         _repository = repository;
     }
 
-    public async Task<CurrencyDto?> GetById(Guid id)
+    public async Task<CurrencyDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id))?.ToDto();
+        return (await _repository.GetById(id, cancellationToken))?.ToDto();
     }
 
-    public async Task<CurrencyDto[]> GetAll()
+    public async Task<CurrencyDto[]> GetAll(CancellationToken cancellationToken)
     {
-        return await _repository.Get(_ => true, c => c.ToDto());
+        return await _repository.Get(_ => true, c => c.ToDto(), cancellationToken: cancellationToken);
     }
 }

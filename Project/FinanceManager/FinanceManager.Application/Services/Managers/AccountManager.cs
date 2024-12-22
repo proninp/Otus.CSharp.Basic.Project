@@ -20,51 +20,54 @@ public sealed class AccountManager : IAccountManager
         _transactionManager = transactionManager;
     }
 
-    public async Task<AccountDto?> GetById(Guid id)
+    public async Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var accountDto = (await _repository.GetById(id))?.ToDto();
+        var accountDto = (await _repository.GetById(id, cancellationToken))?.ToDto();
         if (accountDto is not null)
-            accountDto.Balance = await GetBalance(accountDto);
+            accountDto.Balance = await GetBalance(accountDto, cancellationToken);
         return accountDto;
     }
 
-    public async Task<AccountDto[]> Get(Guid userId)
+    public async Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
-        var accountDtos = (await _repository.Get(a => a.UserId == userId, a => a.ToDto()));
+        var accountDtos = await _repository.Get(
+            a => a.UserId == userId,
+            a => a.ToDto(),
+            cancellationToken: cancellationToken);
         foreach (var accountDto in accountDtos)
-            accountDto.Balance = await GetBalance(accountDto);
+            accountDto.Balance = await GetBalance(accountDto, cancellationToken);
         return accountDtos;
     }
 
-    public async Task<decimal> GetBalance(AccountDto viewModel)
+    public async Task<decimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken)
     {
-        return await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id);
+        return await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id, cancellationToken);
     }
 
-    public async Task<AccountDto> Create(CreateAccountDto command)
+    public async Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken)
     {
         var account = _repository.Add(command.ToModel());
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return account.ToDto();
     }
 
-    public async Task<AccountDto> Update(UpdateAccountDto command)
+    public async Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken)
     {
-        var account = await _repository.GetByIdOrThrow(command.Id);
+        var account = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
 
         account.Title = command.Title;
         account.IsDefault = command.IsDefault;
         account.IsArchived = command.IsArchived;
 
         _repository.Update(account);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return account.ToDto();
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var account = await _repository.GetByIdOrThrow(id);
+        var account = await _repository.GetByIdOrThrow(id, cancellationToken);
         _repository.Delete(account);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 }

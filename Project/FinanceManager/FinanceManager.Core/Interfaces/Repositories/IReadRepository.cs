@@ -5,9 +5,9 @@ namespace FinanceManager.Core.Interfaces.Repositories;
 public interface IReadRepository<T> where T : IdentityModel
 {
 
-    Task<T?> GetById(Guid id, CancellationToken cancellationToken = default);
+    Task<T?> GetById(Guid id, CancellationToken cancellationToken);
 
-    Task<T> GetByIdOrThrow(Guid id, CancellationToken cancellationToken = default);
+    Task<T> GetByIdOrThrow(Guid id, CancellationToken cancellationToken);
 
     Task<TResult[]> Get<TResult>(
         Expression<Func<T, bool>> predicate,

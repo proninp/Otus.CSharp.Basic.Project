@@ -12,7 +12,7 @@ public class TransactionValidator : ITransactionValidator
         _accountValidator = accountValidator;
     }
 
-    public async Task Validate(ITransactionableCommand transactionCommand)
+    public async Task Validate(ITransactionableCommand transactionCommand, CancellationToken cancellationToken)
     {
         if (transactionCommand.Amount <= 0)
             throw new ArgumentException("Операция может быть зарегистрирована только для положительного значения суммы.");
@@ -20,7 +20,7 @@ public class TransactionValidator : ITransactionValidator
         if (transactionCommand.TransactionType is not (TransactionType.Income or TransactionType.Expense))
             throw new ArgumentException("Неизвестный тип транзакциии.");
 
-        if (!(await _accountValidator.AccountExists(transactionCommand.AccountId)))
+        if (!(await _accountValidator.AccountExists(transactionCommand.AccountId, cancellationToken)))
             throw new ArgumentException("В транзакции не указан счет.");
     }
 }

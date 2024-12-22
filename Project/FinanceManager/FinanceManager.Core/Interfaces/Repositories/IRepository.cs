@@ -9,5 +9,5 @@ public interface IRepository<T> : IReadRepository<T> where T : IdentityModel
 
     void Delete(T item);
 
-    Task Delete(Guid id, CancellationToken cancellationToken = default);
+    Task Delete(Guid id, CancellationToken cancellationToken);
 }

@@ -14,40 +14,47 @@ public sealed class TransactionManager : ITransactionManager
     private readonly IRepository<Transaction> _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public TransactionManager(ITransactionValidator transactionValidator, IRepository<Transaction> repository, IUnitOfWork unitOfWork)
+    public TransactionManager(
+        ITransactionValidator transactionValidator,
+        IRepository<Transaction> repository,
+        IUnitOfWork unitOfWork)
     {
         _transactionValidator = transactionValidator;
         _repository = repository;
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<TransactionDto?> GetById(Guid id)
+    public async Task<TransactionDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id))?.ToDto();
+        return (await _repository.GetById(id, cancellationToken))?.ToDto();
     }
 
-    public Task<TransactionDto[]> Get(Guid userId)
+    public Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
-        return _repository.Get(t => t.UserId == userId, t => t.ToDto());
+        return _repository.Get(t => t.UserId == userId, t => t.ToDto(), cancellationToken: cancellationToken);
     }
 
-    public async Task<decimal> GetAccountBalance(Guid userId, Guid accountId)
+    public async Task<decimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken)
     {
-        return (await _repository.Get(t => t.UserId == userId && t.AccountId == accountId, t => t.ToDto())).Sum(t => t.Amount);
+        return (await _repository.Get(
+            t => t.UserId == userId && t.AccountId == accountId,
+            t => t.ToDto(),
+            cancellationToken: cancellationToken))
+            .Sum(t => t.Amount);
     }
 
-    public async Task<TransactionDto> Create(CreateTransactionDto command)
+    public async Task<TransactionDto> Create(CreateTransactionDto command, CancellationToken cancellationToken)
     {
-        await _transactionValidator.Validate(command);
+        await _transactionValidator.Validate(command, cancellationToken);
         var transaction = _repository.Add(command.ToModel());
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return transaction.ToDto();
     }
 
-    public async Task<TransactionDto> Update(UpdateTransactionDto command)
+    public async Task<TransactionDto> Update(UpdateTransactionDto command, CancellationToken cancellationToken)
     {
-        await _transactionValidator.Validate(command);
-        var transaction = await _repository.GetByIdOrThrow(command.Id);
+        await _transactionValidator.Validate(command, cancellationToken);
+        var transaction = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
 
         transaction.AccountId = command.AccountId;
         transaction.CategoryId = command.CategoryId;
@@ -57,14 +64,14 @@ public sealed class TransactionManager : ITransactionManager
         transaction.Description = command.Description;
 
         _repository.Update(transaction);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
         return transaction.ToDto();
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var transaction = await _repository.GetByIdOrThrow(id);
+        var transaction = await _repository.GetByIdOrThrow(id, cancellationToken);
         _repository.Delete(transaction);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.CommitAsync(cancellationToken);
     }
 }

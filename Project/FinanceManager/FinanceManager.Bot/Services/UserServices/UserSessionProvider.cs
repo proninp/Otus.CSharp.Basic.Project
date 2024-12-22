@@ -15,14 +15,13 @@ public class UserSessionProvider : IUserSessionProvider
         _userSessionManager = userSessionManager;
     }
 
-    public async Task<UserSession> GetUserSession(User? from)
+    public async Task<UserSession> GetUserSession(User? from, CancellationToken cancellationToken)
     {
-        if (from is null)
-            throw new ArgumentNullException(nameof(from));
+        ArgumentNullException.ThrowIfNull(from);
 
         if (!_userSessions.TryGetValue(from.Id, out var userSession))
         {
-            userSession = await _userSessionManager.InstantiateSession(from);
+            userSession = await _userSessionManager.InstantiateSession(from, cancellationToken);
             _userSessions.TryAdd(from.Id, userSession);
         }
         return userSession;
