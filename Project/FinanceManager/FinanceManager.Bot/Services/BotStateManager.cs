@@ -17,9 +17,13 @@ public class BotStateManager : IBotStateManager
     {
         var session = await _userSessionProvider.GetUserSession(message.From, cancellationToken);
 
-        var handler = _stateHandlerFactory.GetHandlerAsync(session.UserState);
-        await handler.HandleStateAsync(session, message, cancellationToken);
-
-        throw new NotImplementedException();
+        while (true)
+        {
+            var handler = _stateHandlerFactory.GetHandlerAsync(session.UserState);
+            var nextState = await handler.HandleStateAsync(session, message, cancellationToken);
+            if (nextState is null)
+                break;
+            session.UserState = nextState.Value;
+        }
     }
 }
