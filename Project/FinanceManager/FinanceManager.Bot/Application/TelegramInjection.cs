@@ -28,12 +28,13 @@ public static class TelegramInjection
                 });
 
         services
-            .AddSingleton<IUserSessionProvider, UserSessionProvider>()
+            .AddSingleton<IUserSessionRegistry, UserSessionRegistry>()
+            .AddScoped<IUserSessionProvider, UserSessionProvider>()
+            .AddScoped<IBotStateManager, BotStateManager>()
             .AddScoped<UpdateHandler>()
             .AddScoped<IReceiverService, ReceiverService>()
             .AddScoped<IPollingService, PollingService>()
             .AddScoped<IUserSessionManager, UserSessionManager>()
-            .AddScoped<IBotStateManager, BotStateManager>()
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
             .AddScoped<ChooseCurrencyStateHandler>()
             .AddScoped<CreateAccountStateHandler>()

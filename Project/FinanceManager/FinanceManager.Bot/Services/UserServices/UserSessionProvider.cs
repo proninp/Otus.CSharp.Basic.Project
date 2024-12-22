@@ -1,17 +1,16 @@
-﻿using System.Collections.Concurrent;
-using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.UserServices;
 public class UserSessionProvider : IUserSessionProvider
 {
-    private readonly ConcurrentDictionary<long, UserSession> _userSessions;
+    private readonly IUserSessionRegistry _userSessionRegistry;
     private readonly IUserSessionManager _userSessionManager;
 
-    public UserSessionProvider(IUserSessionManager userSessionManager)
+    public UserSessionProvider(IUserSessionRegistry userSessionRegistry, IUserSessionManager userSessionManager)
     {
-        _userSessions = new();
+        _userSessionRegistry = userSessionRegistry;
         _userSessionManager = userSessionManager;
     }
 
@@ -19,10 +18,10 @@ public class UserSessionProvider : IUserSessionProvider
     {
         ArgumentNullException.ThrowIfNull(from);
 
-        if (!_userSessions.TryGetValue(from.Id, out var userSession))
+        if (!_userSessionRegistry.Sessions.TryGetValue(from.Id, out var userSession))
         {
             userSession = await _userSessionManager.InstantiateSession(from, cancellationToken);
-            _userSessions.TryAdd(from.Id, userSession);
+            _userSessionRegistry.Sessions.TryAdd(from.Id, userSession);
         }
         return userSession;
     }
