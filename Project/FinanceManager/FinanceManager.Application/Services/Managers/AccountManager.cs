@@ -28,6 +28,15 @@ public sealed class AccountManager : IAccountManager
         return accountDto;
     }
 
+    public async Task<AccountDto?> GetDefault(Guid userId, CancellationToken cancellationToken)
+    {
+        return (await _repository.Get(
+            a => a.UserId == userId && a.IsDefault,
+            a => a.ToDto(),
+            cancellationToken: cancellationToken))?
+            .FirstOrDefault();
+    }
+
     public async Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
         var accountDtos = await _repository.Get(

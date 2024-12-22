@@ -7,6 +7,8 @@ public interface IAccountManager
 {
     public Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken);
 
+    public Task<AccountDto?> GetDefault(Guid userId, CancellationToken cancellationToken);
+
     public Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken);
 
     public Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken);
