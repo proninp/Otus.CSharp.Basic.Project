@@ -28,9 +28,6 @@ namespace FinanceManager.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("AccountTypeId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("CurrencyId")
                         .HasColumnType("uuid");
 
@@ -48,55 +45,11 @@ namespace FinanceManager.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountTypeId");
-
                     b.HasIndex("CurrencyId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Accounts");
-                });
-
-            modelBuilder.Entity("FinanceManager.Core.Models.AccountType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AccountTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("4cc558fe-dd9b-4d32-94aa-a5e6e23d2c4a"),
-                            Name = "Cash"
-                        },
-                        new
-                        {
-                            Id = new Guid("54710f77-071d-4a28-8435-35daa663c37e"),
-                            Name = "Debit/credit card"
-                        },
-                        new
-                        {
-                            Id = new Guid("a54bcdd4-7d89-4117-a3c9-d669020f1441"),
-                            Name = "Checking"
-                        },
-                        new
-                        {
-                            Id = new Guid("f0e8bf12-5f81-4d14-a12c-4aff364d7919"),
-                            Name = "Loan"
-                        },
-                        new
-                        {
-                            Id = new Guid("2d8c5f16-db97-4f21-92ed-673b8d48b251"),
-                            Name = "Deposit"
-                        });
                 });
 
             modelBuilder.Entity("FinanceManager.Core.Models.Category", b =>
@@ -137,6 +90,9 @@ namespace FinanceManager.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Emoji")
+                        .HasColumnType("text");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
@@ -148,45 +104,227 @@ namespace FinanceManager.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ec4f5873-73a6-40ab-bc52-45afd678a7c6"),
-                            CurrencyCode = "RUB",
-                            CurrencySign = "₽",
-                            Title = "Russian Ruble"
+                            Id = new Guid("b6ea691b-6412-4968-bbfc-454b07eeae33"),
+                            CurrencyCode = "AED",
+                            CurrencySign = "د.إ",
+                            Emoji = "🇦🇪",
+                            Title = "United Arab Emirates Dirham"
                         },
                         new
                         {
-                            Id = new Guid("f2cf70b8-df7c-4143-84d6-a7bf24086574"),
-                            CurrencyCode = "BYN",
-                            CurrencySign = "Br",
-                            Title = "Belarusian Ruble"
-                        },
-                        new
-                        {
-                            Id = new Guid("b34cd1a4-22ae-40a6-8144-595e55dea305"),
-                            CurrencyCode = "USD",
+                            Id = new Guid("859482f6-2873-425d-829c-6b2c0436d3fd"),
+                            CurrencyCode = "AUD",
                             CurrencySign = "$",
-                            Title = "United States Dollar"
+                            Emoji = "🇦🇺",
+                            Title = "Australian Dollar"
                         },
                         new
                         {
-                            Id = new Guid("c67b6861-8830-4a77-90d7-432fb22954be"),
+                            Id = new Guid("151be0e9-1b46-41f4-85d2-cc928be02538"),
+                            CurrencyCode = "BRL",
+                            CurrencySign = "R$",
+                            Emoji = "🇧🇷",
+                            Title = "Brazilian Real"
+                        },
+                        new
+                        {
+                            Id = new Guid("b6afe66d-5121-4d3f-bf73-81966a13bae1"),
+                            CurrencyCode = "CAD",
+                            CurrencySign = "$",
+                            Emoji = "🇨🇦",
+                            Title = "Canadian Dollar"
+                        },
+                        new
+                        {
+                            Id = new Guid("91f5a620-7d5c-4a07-9378-2ae34f3118e9"),
+                            CurrencyCode = "CHF",
+                            CurrencySign = "CHF",
+                            Emoji = "🇨🇭",
+                            Title = "Swiss Franc"
+                        },
+                        new
+                        {
+                            Id = new Guid("ad9261a5-0c94-4277-8cd6-37b9add03700"),
+                            CurrencyCode = "CNY",
+                            CurrencySign = "¥",
+                            Emoji = "🇨🇳",
+                            Title = "Chinese Yuan"
+                        },
+                        new
+                        {
+                            Id = new Guid("b91e0e17-a8e6-48dc-8c5a-e0cc4b776226"),
+                            CurrencyCode = "DKK",
+                            CurrencySign = "kr",
+                            Emoji = "🇩🇰",
+                            Title = "Danish Krone"
+                        },
+                        new
+                        {
+                            Id = new Guid("d7b4ea3b-5a9e-47b5-8fc0-6f5b7ffc9209"),
                             CurrencyCode = "EUR",
                             CurrencySign = "€",
+                            Emoji = "🇪🇺",
                             Title = "Euro"
                         },
                         new
                         {
-                            Id = new Guid("18ebc3ff-0664-48e9-8b93-4c68309d6d91"),
+                            Id = new Guid("99e74ad8-4ae1-4ab4-8de0-f7ce3b596866"),
                             CurrencyCode = "GBP",
                             CurrencySign = "£",
+                            Emoji = "🇬🇧",
                             Title = "British Pound Sterling"
                         },
                         new
                         {
-                            Id = new Guid("a9bbb666-1211-40e8-a135-a3778d739d6a"),
+                            Id = new Guid("0e88027d-f0d1-4720-8bfb-cb57d9d406f6"),
+                            CurrencyCode = "HKD",
+                            CurrencySign = "$",
+                            Emoji = "🇭🇰",
+                            Title = "Hong Kong Dollar"
+                        },
+                        new
+                        {
+                            Id = new Guid("1732f57b-f1f1-42ab-9ee6-6463efa212d8"),
+                            CurrencyCode = "HUF",
+                            CurrencySign = "Ft",
+                            Emoji = "🇭🇺",
+                            Title = "Hungarian Forint"
+                        },
+                        new
+                        {
+                            Id = new Guid("0e5ffadf-6827-4fe3-8de7-8c26e322cc70"),
+                            CurrencyCode = "IDR",
+                            CurrencySign = "Rp",
+                            Emoji = "🇮🇩",
+                            Title = "Indonesian Rupiah"
+                        },
+                        new
+                        {
+                            Id = new Guid("d2898652-3353-4bb5-8abb-46de806db403"),
+                            CurrencyCode = "INR",
+                            CurrencySign = "₹",
+                            Emoji = "🇮🇳",
+                            Title = "Indian Rupee"
+                        },
+                        new
+                        {
+                            Id = new Guid("b9265e4a-d203-4af7-a304-c111f7d3c6af"),
+                            CurrencyCode = "JPY",
+                            CurrencySign = "¥",
+                            Emoji = "🇯🇵",
+                            Title = "Japanese Yen"
+                        },
+                        new
+                        {
+                            Id = new Guid("dc40ff04-9888-4130-a12a-aee7b404bd6b"),
+                            CurrencyCode = "KRW",
+                            CurrencySign = "₩",
+                            Emoji = "🇰🇷",
+                            Title = "South Korean Won"
+                        },
+                        new
+                        {
+                            Id = new Guid("1174bcb4-b2fc-4750-8715-929fab5e18f0"),
+                            CurrencyCode = "MXN",
+                            CurrencySign = "$",
+                            Emoji = "🇲🇽",
+                            Title = "Mexican Peso"
+                        },
+                        new
+                        {
+                            Id = new Guid("b8bf10f0-9e33-41e8-9d07-f8c650a17b85"),
+                            CurrencyCode = "MYR",
+                            CurrencySign = "RM",
+                            Emoji = "🇲🇾",
+                            Title = "Malaysian Ringgit"
+                        },
+                        new
+                        {
+                            Id = new Guid("3974e202-ceca-42d8-83ea-29a4dc73d70c"),
+                            CurrencyCode = "NOK",
+                            CurrencySign = "kr",
+                            Emoji = "🇳🇴",
+                            Title = "Norwegian Krone"
+                        },
+                        new
+                        {
+                            Id = new Guid("1f47bb5c-8898-4387-bdc8-66d60a04ed18"),
+                            CurrencyCode = "NZD",
+                            CurrencySign = "$",
+                            Emoji = "🇳🇿",
+                            Title = "New Zealand Dollar"
+                        },
+                        new
+                        {
+                            Id = new Guid("f268886a-6962-47f8-837c-f5ce77fffa0c"),
+                            CurrencyCode = "PHP",
+                            CurrencySign = "₱",
+                            Emoji = "🇵🇭",
+                            Title = "Philippine Peso"
+                        },
+                        new
+                        {
+                            Id = new Guid("0952a1a0-0f14-4baf-9d34-bc35768e1ded"),
+                            CurrencyCode = "PLN",
+                            CurrencySign = "zł",
+                            Emoji = "🇵🇱",
+                            Title = "Polish Zloty"
+                        },
+                        new
+                        {
+                            Id = new Guid("b87ed1ac-cc12-43d2-94cd-92c4c77b9dce"),
+                            CurrencyCode = "RUB",
+                            CurrencySign = "₽",
+                            Emoji = "🇷🇺",
+                            Title = "Russian Ruble"
+                        },
+                        new
+                        {
+                            Id = new Guid("345665a8-5782-4c69-9d23-b9e89f02b2b0"),
+                            CurrencyCode = "SEK",
+                            CurrencySign = "kr",
+                            Emoji = "🇸🇪",
+                            Title = "Swedish Krona"
+                        },
+                        new
+                        {
+                            Id = new Guid("fcece1e0-56d9-402b-bb87-8cf51c49f355"),
+                            CurrencyCode = "SGD",
+                            CurrencySign = "$",
+                            Emoji = "🇸🇬",
+                            Title = "Singapore Dollar"
+                        },
+                        new
+                        {
+                            Id = new Guid("73858c30-5c2d-46e5-af21-b8bd817069e9"),
+                            CurrencyCode = "THB",
+                            CurrencySign = "฿",
+                            Emoji = "🇹🇭",
+                            Title = "Thai Baht"
+                        },
+                        new
+                        {
+                            Id = new Guid("c8b0a154-c79c-411c-9834-ba765794b4a7"),
                             CurrencyCode = "TRY",
                             CurrencySign = "₺",
+                            Emoji = "🇹🇷",
                             Title = "Turkish Lira"
+                        },
+                        new
+                        {
+                            Id = new Guid("4c0271a4-b456-4238-bcc9-0b8d5d4ef515"),
+                            CurrencyCode = "USD",
+                            CurrencySign = "$",
+                            Emoji = "🇺🇸",
+                            Title = "United States Dollar"
+                        },
+                        new
+                        {
+                            Id = new Guid("c72b9423-eb2a-4044-970b-f04a2d587606"),
+                            CurrencyCode = "ZAR",
+                            CurrencySign = "R",
+                            Emoji = "🇿🇦",
+                            Title = "South African Rand"
                         });
                 });
 
@@ -270,11 +408,17 @@ namespace FinanceManager.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Firstname")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Lastname")
                         .HasColumnType("text");
 
                     b.Property<long>("TelegramId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -283,12 +427,6 @@ namespace FinanceManager.DataAccess.Migrations
 
             modelBuilder.Entity("FinanceManager.Core.Models.Account", b =>
                 {
-                    b.HasOne("FinanceManager.Core.Models.AccountType", "AccountType")
-                        .WithMany()
-                        .HasForeignKey("AccountTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FinanceManager.Core.Models.Currency", "Currency")
                         .WithMany()
                         .HasForeignKey("CurrencyId")
@@ -300,8 +438,6 @@ namespace FinanceManager.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("AccountType");
 
                     b.Navigation("Currency");
                 });

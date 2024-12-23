@@ -35,7 +35,7 @@ public class UpdateHandler(ITelegramBotClient bot, ILogger logger) : IUpdateHand
 
     private async Task OnMessage(Message message)
     {
-        logger.Information("Receive message type: {MessageType}", message.Type);
+        logger.Debug("Receive message type: {MessageType}", message.Type);
         if (message.Text is not { } messageText)
             return;
 
@@ -44,7 +44,7 @@ public class UpdateHandler(ITelegramBotClient bot, ILogger logger) : IUpdateHand
 
         var sentMessage = await bot.SendMessage(message.Chat, echo, parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
 
-        logger.Information("The message was sent with id: {SentMessageId}", sentMessage.Id);
+        logger.Debug("The message was sent with id: {SentMessageId}", sentMessage.Id);
     }
 
     private Task UnknownUpdateHandlerAsync(Update update)

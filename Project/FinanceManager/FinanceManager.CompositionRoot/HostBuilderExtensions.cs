@@ -11,8 +11,7 @@ public static class HostBuilderExtensions
             .ReadFrom.Configuration(configuration)
             .CreateLogger();
 
-        hostBuilder.UseSerilog(Log.Logger);
-        return hostBuilder;
+        return hostBuilder.UseSerilog(Log.Logger);
     }
 
     public static IHostBuilder AddGlobalExceptionHandler(this IHostBuilder hostBuilder)
@@ -20,13 +19,13 @@ public static class HostBuilderExtensions
         AppDomain.CurrentDomain.UnhandledException += (sendet, eventArgs) =>
         {
             var exception = eventArgs.ExceptionObject as Exception;
-            Log.Fatal(exception, "Было перехвачено необработанное исключение в AppDomain");
+            Log.Fatal(exception, "An unhandled exception was caught in the AppDomain");
             Environment.Exit(1);
         };
 
         TaskScheduler.UnobservedTaskException += (sender, eventArgs) =>
         {
-            Log.Fatal(eventArgs.Exception, "Было перехвачено UnobservedTaskException");
+            Log.Fatal(eventArgs.Exception, "An UnobservedTaskException was intercepted");
             eventArgs.SetObserved();
         };
 
