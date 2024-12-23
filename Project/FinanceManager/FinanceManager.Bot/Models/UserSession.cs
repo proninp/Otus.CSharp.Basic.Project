@@ -12,6 +12,8 @@ public class UserSession
 
     public UserState UserState { get; set; }
 
+    public UserState SubState { get; set; }
+
     public object? ContextData { get; set; }
 }
 

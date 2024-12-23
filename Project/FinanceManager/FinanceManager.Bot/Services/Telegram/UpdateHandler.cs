@@ -1,21 +1,29 @@
-﻿using Serilog;
+﻿using FinanceManager.Bot.Services.Interfaces;
+using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.Telegram;
-public class UpdateHandler(ITelegramBotClient bot, ILogger logger) : IUpdateHandler
+public class UpdateHandler : IUpdateHandler
 {
+    private readonly IBotStateManager _botStateManager;
+    private readonly ILogger _logger;
+
+    public UpdateHandler(IBotStateManager botStateManager, ILogger logger)
+    {
+        _botStateManager = botStateManager;
+        _logger = logger;
+    }
+
     public async Task HandleErrorAsync(
         ITelegramBotClient botClient,
         Exception exception,
         HandleErrorSource source,
         CancellationToken cancellationToken)
     {
-        logger.Information("HandleError: {Exception}", exception);
+        _logger.Information("HandleError: {Exception}", exception);
 
         if (exception is RequestException)
             await Task.Delay(TimeSpan.FromSeconds(2), cancellationToken);
@@ -27,29 +35,24 @@ public class UpdateHandler(ITelegramBotClient bot, ILogger logger) : IUpdateHand
 
         await (update switch
         {
-            { Message: { } message } => OnMessage(message),
-            { EditedMessage: { } message } => OnMessage(message),
+            { Message: { } message } => OnMessage(botClient, message, cancellationToken),
+            { EditedMessage: { } message } => OnMessage(botClient, message, cancellationToken),
             _ => UnknownUpdateHandlerAsync(update)
         });
     }
 
-    private async Task OnMessage(Message message)
+    private async Task OnMessage(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
-        logger.Debug("Receive message type: {MessageType}", message.Type);
+        _logger.Debug("Receive message type: {MessageType}", message.Type);
         if (message.Text is not { } messageText)
             return;
 
-        
-        var echo = $"Yout message: {messageText}";
-
-        var sentMessage = await bot.SendMessage(message.Chat, echo, parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
-
-        logger.Debug("The message was sent with id: {SentMessageId}", sentMessage.Id);
+        await _botStateManager.HandleMessageAsync(botClient, message, cancellationToken);
     }
 
     private Task UnknownUpdateHandlerAsync(Update update)
     {
-        logger.Information("Unknown update type: {UpdateType}", update.Type);
+        _logger.Information("Unknown update type: {UpdateType}", update.Type);
         return Task.CompletedTask;
     }
 }

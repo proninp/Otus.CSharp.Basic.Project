@@ -11,25 +11,22 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class StartStateHandler : IStateHandler
 {
-    private readonly ITelegramBotClient _botClient;
     private readonly IAccountManager _accountManager;
-    private readonly ILogger _logger;
 
-    public StartStateHandler(ITelegramBotClient botClient, IAccountManager accountManager, ILogger logger)
+    public StartStateHandler(IAccountManager accountManager)
     {
-        _botClient = botClient;
         _accountManager = accountManager;
-        _logger = logger;
     }
 
-    public async Task<UserState?> HandleStateAsync(UserSession userSession, Message message, CancellationToken cancellationToken)
+    public async Task<UserState?> HandleStateAsync(
+        UserSession userSession, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
         var defaultAccount = await _accountManager.GetDefault(userSession.Id, cancellationToken);
 
         // If there is no default account, switch to the account creation context
         if (defaultAccount is null)
         {
-            var sentMessage = await _botClient.SendMessage(
+            var sentMessage = await botClient.SendMessage(
                 message.Chat, $"Hi, {userSession.UserName}! Let's set you up.",
                 parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
             return UserState.AddAccount;
