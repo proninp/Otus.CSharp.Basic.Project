@@ -3,5 +3,5 @@
 namespace FinanceManager.Bot.Services.Interfaces;
 public interface IStateHandlerFactory
 {
-    IStateHandler GetHandlerAsync(UserState userState);
+    IStateHandler GetHandler(UserState userState);
 }

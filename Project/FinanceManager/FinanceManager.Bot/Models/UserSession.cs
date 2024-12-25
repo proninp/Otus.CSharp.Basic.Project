@@ -12,7 +12,7 @@ public class UserSession
 
     public UserState UserState { get; set; }
 
-    public UserState SubState { get; set; }
+    public UserSubState SubState { get; set; }
 
     public object? ContextData { get; set; }
 }
@@ -38,7 +38,9 @@ public static class UserSessionExtensions
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            UserState = UserState.Default
+            UserState = UserState.Default,
+            SubState = UserSubState.Default,
+
         };
     }
 }
