@@ -37,6 +37,18 @@ public sealed class AccountManager : IAccountManager
             .FirstOrDefault();
     }
 
+    public async Task<AccountDto?> GetByName(Guid userId, string accountTitle, bool isIncludeBalance, CancellationToken cancellationToken)
+    {
+        var accountDto = (await _repository.Get(
+            a => a.UserId == userId && a.Title == accountTitle,
+            a => a.ToDto(),
+            cancellationToken: cancellationToken))?
+            .FirstOrDefault();
+        if (isIncludeBalance && accountDto is not null)
+            accountDto.Balance = await GetBalance(accountDto, cancellationToken);
+        return accountDto;
+    }
+
     public async Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
         var accountDtos = await _repository.Get(
