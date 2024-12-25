@@ -1,8 +1,8 @@
 ﻿namespace FinanceManager.Bot.Enums;
 public enum UserState
 {
-    Start,
     Default,
+    Start,
     AddAccount,
     DeleteAccount,
     AddCategory,
@@ -13,8 +13,6 @@ public enum UserState
     DeleteIncome,
     AddTransfer,
     DeleteTransfer,
-    ChooseCurrency,
-    SetInitialBalance,
     History,
     Settings
 }
