@@ -26,7 +26,7 @@ public class Repository<T> : ReadRepository<T>, IRepository<T> where T : Identit
         _context.Remove(item);
     }
 
-    public async Task Delete(Guid id, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var item = await _dbSet.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         if (item is not null)

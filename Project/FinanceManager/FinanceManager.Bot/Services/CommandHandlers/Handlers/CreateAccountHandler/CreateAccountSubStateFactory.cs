@@ -19,6 +19,6 @@ public class CreateAccountSubStateFactory : ISubStateHandlerFactory
         UserSubState.ChooseAccountName => _serviceProvider.GetRequiredService<ChooseAccountNameSubStateHandler>(),
         UserSubState.ChooseCurrency => _serviceProvider.GetRequiredService<ChooseCurrencySubStateHandler>(),
         UserSubState.SetAccountInitialBalance => _serviceProvider.GetRequiredService<SetAccountBalanceSubStateHandler>(),
-        _ => throw new InvalidOperationException($"There is no handler for the state {userSubState}")
+        _ => throw new InvalidOperationException($"There is no substate handler for the substate {userSubState}")
     };
 }
