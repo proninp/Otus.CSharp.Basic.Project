@@ -15,6 +15,13 @@ public class UserSession
     public UserSubState SubState { get; set; }
 
     public object? ContextData { get; set; }
+
+    public void ResetState()
+    {
+        UserState = UserState.Default;
+        SubState = UserSubState.Default;
+        ContextData = null;
+    }
 }
 
 public static class UserSessionExtensions

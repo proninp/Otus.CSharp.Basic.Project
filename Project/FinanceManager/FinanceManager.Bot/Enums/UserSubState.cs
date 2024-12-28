@@ -5,4 +5,5 @@ public enum UserSubState
     ChooseAccountName,
     ChooseCurrency,
     SetAccountInitialBalance,
+    Complete
 }
