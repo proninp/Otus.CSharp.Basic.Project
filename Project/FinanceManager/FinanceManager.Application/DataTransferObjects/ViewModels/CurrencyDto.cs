@@ -9,6 +9,8 @@ public sealed class CurrencyDto : IdentityDtoBase
     public string CurrencyCode { get; init; }
 
     public string CurrencySign { get; init; }
+
+    public string? Emoji { get; init; }
 }
 public static class CurrencyMappings
 {
@@ -19,7 +21,8 @@ public static class CurrencyMappings
             Id = currency.Id,
             Title = currency.Title,
             CurrencyCode = currency.CurrencyCode,
-            CurrencySign = currency.CurrencySign
+            CurrencySign = currency.CurrencySign,
+            Emoji = currency.Emoji,
         };
     }
 }

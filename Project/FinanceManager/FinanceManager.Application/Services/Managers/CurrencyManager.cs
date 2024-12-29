@@ -4,7 +4,7 @@ using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.Services.Managers;
-public sealed class CurrencyManager : IReadOnlyManager<CurrencyDto>
+public sealed class CurrencyManager : ICurrencyManager
 {
     private readonly IRepository<Currency> _repository;
 
