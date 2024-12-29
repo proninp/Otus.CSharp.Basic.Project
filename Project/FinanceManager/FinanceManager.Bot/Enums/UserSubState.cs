@@ -3,6 +3,7 @@ public enum UserSubState
 {
     Default,
     ChooseAccountName,
+    SendCurrencies,
     ChooseCurrency,
     SetAccountInitialBalance,
     Complete

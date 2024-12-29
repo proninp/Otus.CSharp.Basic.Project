@@ -45,7 +45,7 @@ public static class TelegramInjection
             .AddScoped<DefaultStateHandler>()
             .AddScoped<CreateAccountDefaultSubStateHandler>()
             .AddScoped<ChooseAccountNameSubStateHandler>()
-            .AddScoped<ChooseCurrencySubStateHandler>()
+            .AddScoped<SendCurrenciesSubStateHandler>()
             .AddScoped<SetAccountBalanceSubStateHandler>();
 
         return services;

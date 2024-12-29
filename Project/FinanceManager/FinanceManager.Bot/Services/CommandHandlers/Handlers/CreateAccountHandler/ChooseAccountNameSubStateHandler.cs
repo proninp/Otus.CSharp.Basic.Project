@@ -48,6 +48,6 @@ public class ChooseAccountNameSubStateHandler : ISubStateHandler
         }
         var context = new CreateAccountContext { AccountName = accountTitle };
         session.ContextData = context;
-        return UserSubState.ChooseCurrency;
+        return UserSubState.SendCurrencies;
     }
 }

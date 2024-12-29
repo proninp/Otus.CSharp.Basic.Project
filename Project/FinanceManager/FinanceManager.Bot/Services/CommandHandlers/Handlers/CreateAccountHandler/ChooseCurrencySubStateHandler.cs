@@ -7,7 +7,7 @@ using Telegram.Bot.Types;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
 public class ChooseCurrencySubStateHandler : ISubStateHandler
 {
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    public Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
