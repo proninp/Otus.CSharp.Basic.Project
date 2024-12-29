@@ -38,6 +38,8 @@ public static class TelegramInjection
             .AddScoped<IUserSessionManager, UserSessionManager>()
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
             .AddScoped<ISubStateHandlerFactory, CreateAccountSubStateFactory>()
+            .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
+            .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<CreateAccountStateHandler>()
             .AddScoped<RegisterExpenseStateHandler>()
             .AddScoped<RegisterIncomeStateHandler>()
