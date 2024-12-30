@@ -14,14 +14,13 @@ public class BotStateManager : IBotStateManager
         _stateHandlerFactory = stateHandlerFactory;
     }
 
-    public async Task HandleMessageAsync(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, User? user, CancellationToken cancellationToken)
     {
-        var session = await _userSessionProvider.GetUserSession(message.From, cancellationToken);
-
+        var session = await _userSessionProvider.GetUserSession(user, cancellationToken);
         while (true)
         {
             var handler = _stateHandlerFactory.GetHandler(session.UserState);
-            var nextState = await handler.HandleStateAsync(session, botClient, message, cancellationToken);
+            var nextState = await handler.HandleStateAsync(session, botClient, update, cancellationToken);
             if (nextState is null || nextState == session.UserState)
                 break;
             session.UserState = nextState.Value;

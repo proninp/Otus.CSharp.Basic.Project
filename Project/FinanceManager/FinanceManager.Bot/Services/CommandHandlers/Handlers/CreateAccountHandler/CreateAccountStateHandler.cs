@@ -21,11 +21,11 @@ public class CreateAccountStateHandler : IStateHandler
     public async Task<UserState?> HandleStateAsync(
         UserSession userSession,
         ITelegramBotClient botClient,
-        Message message,
+        Update update,
         CancellationToken cancellationToken)
     {
         var subStateHandler = _subStateHandlerFactory.GetSubStateHandler(userSession.SubState);
-        userSession.SubState = await subStateHandler.HandleAsync(userSession, botClient, message, cancellationToken);
+        userSession.SubState = await subStateHandler.HandleAsync(userSession, botClient, update, cancellationToken);
         if (userSession.SubState == UserSubState.Complete)
         {
             CreateAccount(userSession, cancellationToken);

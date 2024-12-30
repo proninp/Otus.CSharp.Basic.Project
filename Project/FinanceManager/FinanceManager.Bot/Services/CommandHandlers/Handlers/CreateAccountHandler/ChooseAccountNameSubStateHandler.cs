@@ -12,14 +12,19 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHand
 public class ChooseAccountNameSubStateHandler : ISubStateHandler
 {
     private readonly IAccountManager _accountManager;
+    private readonly IUpdateMessageProvider _messageProvider;
 
-    public ChooseAccountNameSubStateHandler(IAccountManager accountManager)
+    public ChooseAccountNameSubStateHandler(IAccountManager accountManager, IUpdateMessageProvider messageProvider)
     {
         _accountManager = accountManager;
+        _messageProvider = messageProvider;
     }
 
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        if (!_messageProvider.GetMessage(update, out var message))
+            return UserSubState.ChooseAccountName;
+
         var accountTitle = message.Text;
         if (string.IsNullOrWhiteSpace(accountTitle) || accountTitle.Length == 0)
         {

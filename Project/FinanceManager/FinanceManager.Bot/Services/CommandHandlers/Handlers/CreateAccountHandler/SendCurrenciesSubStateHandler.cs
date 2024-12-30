@@ -12,20 +12,24 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHand
 public class SendCurrenciesSubStateHandler : ISubStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
+    private readonly IChatProvider _chatProvider;
 
-    public SendCurrenciesSubStateHandler(ICurrencyManager currencyManager)
+    public SendCurrenciesSubStateHandler(ICurrencyManager currencyManager, IChatProvider chatProvider)
     {
         _currencyManager = currencyManager;
+        _chatProvider = chatProvider;
     }
 
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        var chat = _chatProvider.GetChat(update);
+
         var currencies = await _currencyManager.GetAll(cancellationToken);
 
         var inlineKeyboard = CreateInlineKeyboard(currencies);
 
         await botClient.SendMessage(
-               message.Chat, "Choose currency",
+               chat, "Choose currency",
            parseMode: ParseMode.Html, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
         return UserSubState.ChooseCurrency;
     }

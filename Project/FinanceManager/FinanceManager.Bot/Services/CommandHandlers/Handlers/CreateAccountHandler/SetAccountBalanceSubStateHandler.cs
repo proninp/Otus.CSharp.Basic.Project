@@ -10,8 +10,18 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
 public class SetAccountBalanceSubStateHandler : ISubStateHandler
 {
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    private readonly IUpdateMessageProvider _updateMessageProvider;
+
+    public SetAccountBalanceSubStateHandler(IUpdateMessageProvider updateMessageProvider)
     {
+        _updateMessageProvider = updateMessageProvider;
+    }
+
+    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    {
+        if (!_updateMessageProvider.GetMessage(update, out var message))
+            return UserSubState.SetAccountInitialBalance;
+
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {

@@ -2,7 +2,6 @@
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces;
-using Serilog;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -12,15 +11,20 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class StartStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
+    private readonly IUpdateMessageProvider _messageProvider;
 
-    public StartStateHandler(IAccountManager accountManager)
+    public StartStateHandler(IUpdateMessageProvider messageProvider, IAccountManager accountManager)
     {
+        _messageProvider = messageProvider;
         _accountManager = accountManager;
     }
 
     public async Task<UserState?> HandleStateAsync(
-        UserSession userSession, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+        UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        if (!_messageProvider.GetMessage(update, out var message))
+            return userSession.UserState;
+
         var defaultAccount = await _accountManager.GetDefault(userSession.Id, cancellationToken);
 
         // If there is no default account, switch to the account creation context

@@ -8,11 +8,13 @@ using Telegram.Bot.Types;
 namespace FinanceManager.Bot.Services.Telegram;
 public class UpdateHandler : IUpdateHandler
 {
+    private readonly IUpdateValidator _validator;
     private readonly IBotStateManager _botStateManager;
     private readonly ILogger _logger;
 
-    public UpdateHandler(IBotStateManager botStateManager, ILogger logger)
+    public UpdateHandler(IUpdateValidator validator, IBotStateManager botStateManager, ILogger logger)
     {
+        _validator = validator;
         _botStateManager = botStateManager;
         _logger = logger;
     }
@@ -33,26 +35,16 @@ public class UpdateHandler : IUpdateHandler
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        await (update switch
-        {
-            { Message: { } message } => OnMessage(botClient, message, cancellationToken),
-            { EditedMessage: { } message } => OnMessage(botClient, message, cancellationToken),
-            _ => UnknownUpdateHandlerAsync(update)
-        });
-    }
-
-    private async Task OnMessage(ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
-    {
-        _logger.Debug("Receive message type: {MessageType}", message.Type);
-        if (message.Text is not { } messageText)
+        if (!_validator.Validate(update, out var user))
             return;
 
-        await _botStateManager.HandleMessageAsync(botClient, message, cancellationToken);
+        await OnUpdate(botClient, update, user, cancellationToken);        
     }
 
-    private Task UnknownUpdateHandlerAsync(Update update)
+    private async Task OnUpdate(ITelegramBotClient botClient, Update update, User user, CancellationToken cancellationToken)
     {
-        _logger.Information("Unknown update type: {UpdateType}", update.Type);
-        return Task.CompletedTask;
+        _logger.Debug($"Receive an update with type: {update.Type}");
+        
+        await _botStateManager.HandleUpdateAsync(botClient, update, user, cancellationToken);
     }
 }

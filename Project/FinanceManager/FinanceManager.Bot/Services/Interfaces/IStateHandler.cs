@@ -7,7 +7,7 @@ namespace FinanceManager.Bot.Services.Interfaces;
 public interface IStateHandler
 {
     Task<UserState?> HandleStateAsync(
-        UserSession userSession, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken);
+        UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken);
 
     Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken);
 }

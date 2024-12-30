@@ -7,5 +7,5 @@ namespace FinanceManager.Bot.Services.Interfaces;
 public interface ISubStateHandler
 {
     Task<UserSubState> HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken);
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken);
 }

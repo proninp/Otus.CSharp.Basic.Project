@@ -1,12 +1,13 @@
-﻿using FinanceManager.Bot.Services.Interfaces;
-using Telegram.Bot;
+﻿using System.Diagnostics.CodeAnalysis;
+using FinanceManager.Bot.Services.Interfaces;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.CommandHandlers;
 internal class UpdateCallbackQueryProvider : IUpdateCallbackQueryProvider
 {
-    public Task<CallbackQuery> GetCallbackQuery(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public bool GetCallbackQuery(Update update, [NotNullWhen(true)] out CallbackQuery? callbackQuery)
     {
-        throw new NotImplementedException();
+        callbackQuery = update.CallbackQuery;
+        return callbackQuery is not null;
     }
 }

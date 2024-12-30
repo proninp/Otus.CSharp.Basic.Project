@@ -7,7 +7,7 @@ using Telegram.Bot.Types;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class DefaultStateHandler : IStateHandler
 {
-    public Task<UserState?> HandleStateAsync(UserSession userSession, ITelegramBotClient botClient, Message message, CancellationToken cancellationToken)
+    public Task<UserState?> HandleStateAsync(UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
