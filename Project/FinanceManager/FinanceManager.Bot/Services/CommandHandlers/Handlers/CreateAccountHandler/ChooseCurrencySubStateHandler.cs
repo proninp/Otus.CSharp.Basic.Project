@@ -43,7 +43,7 @@ public class ChooseCurrencySubStateHandler : ISubStateHandler
                 var chat = _chatProvider.GetChat(update);
 
                 await botClient.SendMessage(
-                    chat, "Enter a number to set the initial balance",
+                    chat, "Enter a number to set the initial balance:",
                     parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
 
                 return UserSubState.SetAccountInitialBalance;

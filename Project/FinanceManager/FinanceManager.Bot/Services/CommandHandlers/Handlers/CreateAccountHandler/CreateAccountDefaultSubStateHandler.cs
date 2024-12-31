@@ -20,7 +20,7 @@ public class CreateAccountDefaultSubStateHandler : ISubStateHandler
     {
         var chat = _chatProvider.GetChat(update);
         await botClient.SendMessage(
-            chat, $"Please enter the account name.",
+            chat, $"Please enter the account name:",
             parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
         return UserSubState.ChooseAccountName;
     }

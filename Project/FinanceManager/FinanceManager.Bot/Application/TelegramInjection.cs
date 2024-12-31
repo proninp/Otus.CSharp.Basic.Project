@@ -42,14 +42,15 @@ public static class TelegramInjection
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
-            .AddScoped<CreateAccountStateHandler>()
             .AddScoped<RegisterExpenseStateHandler>()
             .AddScoped<RegisterIncomeStateHandler>()
             .AddScoped<StartStateHandler>()
             .AddScoped<DefaultStateHandler>()
+            .AddScoped<CreateAccountStateHandler>()
             .AddScoped<CreateAccountDefaultSubStateHandler>()
             .AddScoped<ChooseAccountNameSubStateHandler>()
             .AddScoped<SendCurrenciesSubStateHandler>()
+            .AddScoped<ChooseCurrencySubStateHandler>()
             .AddScoped<SetAccountBalanceSubStateHandler>();
 
         return services;

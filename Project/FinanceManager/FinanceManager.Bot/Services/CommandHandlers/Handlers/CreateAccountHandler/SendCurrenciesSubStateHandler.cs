@@ -29,7 +29,7 @@ public class SendCurrenciesSubStateHandler : ISubStateHandler
         var inlineKeyboard = CreateInlineKeyboard(currencies);
 
         await botClient.SendMessage(
-               chat, "Choose currency",
+               chat, "Choose currency:",
            parseMode: ParseMode.Html, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
         return UserSubState.ChooseCurrency;
     }
