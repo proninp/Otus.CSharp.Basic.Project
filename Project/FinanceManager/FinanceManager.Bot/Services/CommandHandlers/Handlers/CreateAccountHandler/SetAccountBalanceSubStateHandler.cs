@@ -27,7 +27,7 @@ public class SetAccountBalanceSubStateHandler : ISubStateHandler
         {
             await botClient.SendMessage(
                 message.Chat, $"{Enums.Emoji.Error.GetSymbol()} " +
-                $"Enter a number to set the initial balance.",
+                $"The entered value is not a number. Try again.",
             parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
             return UserSubState.SetAccountInitialBalance;
         }

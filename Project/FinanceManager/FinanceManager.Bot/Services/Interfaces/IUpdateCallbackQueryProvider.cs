@@ -1,7 +1,8 @@
-﻿using Telegram.Bot.Types;
+﻿using System.Diagnostics.CodeAnalysis;
+using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.Interfaces;
 public interface IUpdateCallbackQueryProvider
 {
-    bool GetCallbackQuery(Update update, out CallbackQuery? callbackQuery);
+    bool GetCallbackQuery(Update update, [NotNullWhen(true)] out CallbackQuery? callbackQuery);
 }
