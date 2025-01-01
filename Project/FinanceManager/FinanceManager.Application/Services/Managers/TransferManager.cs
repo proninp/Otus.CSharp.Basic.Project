@@ -20,12 +20,15 @@ public sealed class TransferManager : ITransferManager
 
     public async Task<TransferDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id, cancellationToken))?.ToDto();
+        return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
     public Task<TransferDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
-        return _repository.Get(t => t.UserId == userId, t => t.ToDto(), cancellationToken: cancellationToken);
+        return _repository.GetAsync(
+            t => t.ToDto(),
+            t => t.UserId == userId,
+            cancellationToken: cancellationToken);
     }
 
     public async Task<TransferDto> Create(CreateTransferDto command, CancellationToken cancellationToken)
@@ -37,7 +40,7 @@ public sealed class TransferManager : ITransferManager
 
     public async Task<TransferDto> Update(UpdateTransferDto command, CancellationToken cancellationToken)
     {
-        var transfer = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
+        var transfer = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
         transfer.FromAccountId = command.FromAccountId;
         transfer.ToAccountId = command.ToAccountId;
@@ -53,7 +56,7 @@ public sealed class TransferManager : ITransferManager
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var transfer = await _repository.GetByIdOrThrow(id, cancellationToken);
+        var transfer = await _repository.GetByIdOrThrowAsync(id, cancellationToken: cancellationToken);
         _repository.Delete(transfer);
         await _unitOfWork.CommitAsync(cancellationToken);
     }

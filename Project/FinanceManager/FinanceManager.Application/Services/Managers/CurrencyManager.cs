@@ -15,11 +15,11 @@ public sealed class CurrencyManager : ICurrencyManager
 
     public async Task<CurrencyDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id, cancellationToken))?.ToDto();
+        return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
     public async Task<CurrencyDto[]> GetAll(CancellationToken cancellationToken)
     {
-        return await _repository.Get(_ => true, c => c.ToDto(), cancellationToken: cancellationToken);
+        return await _repository.GetAsync(c => c.ToDto(), cancellationToken: cancellationToken);
     }
 }

@@ -20,14 +20,14 @@ public sealed class UserManager : IUserManager
 
     public async Task<UserDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id, cancellationToken))?.ToDto();
+        return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
     public async Task<UserDto?> GetByTelegramId(long telegramId, CancellationToken cancellationToken)
     {
-        return (await _repository.Get(
-            u => u.TelegramId == telegramId,
+        return (await _repository.GetAsync(
             u => u.ToDto(),
+            u => u.TelegramId == telegramId,
             cancellationToken: cancellationToken))?
             .FirstOrDefault();
     }
@@ -41,7 +41,7 @@ public sealed class UserManager : IUserManager
 
     public async Task<UserDto> Update(UpdateUserDto command, CancellationToken cancellationToken)
     {
-        var user = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
+        var user = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
         user.Username = command.Username;
 
@@ -52,7 +52,7 @@ public sealed class UserManager : IUserManager
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var user = await _repository.GetByIdOrThrow(id, cancellationToken);
+        var user = await _repository.GetByIdOrThrowAsync(id, cancellationToken: cancellationToken);
         _repository.Delete(user);
         await _unitOfWork.CommitAsync(cancellationToken);
     }

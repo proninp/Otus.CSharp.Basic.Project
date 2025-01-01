@@ -22,7 +22,7 @@ public sealed class AccountManager : IAccountManager
 
     public async Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var accountDto = (await _repository.GetById(id, cancellationToken))?.ToDto();
+        var accountDto = (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
         if (accountDto is not null)
             accountDto.Balance = await GetBalance(accountDto, cancellationToken);
         return accountDto;
@@ -30,18 +30,18 @@ public sealed class AccountManager : IAccountManager
 
     public async Task<AccountDto?> GetDefault(Guid userId, CancellationToken cancellationToken)
     {
-        return (await _repository.Get(
-            a => a.UserId == userId && a.IsDefault,
+        return (await _repository.GetAsync(
             a => a.ToDto(),
+            a => a.UserId == userId && a.IsDefault,
             cancellationToken: cancellationToken))?
             .FirstOrDefault();
     }
 
     public async Task<AccountDto?> GetByName(Guid userId, string accountTitle, bool isIncludeBalance, CancellationToken cancellationToken)
     {
-        var accountDto = (await _repository.Get(
-            a => a.UserId == userId && a.Title == accountTitle,
+        var accountDto = (await _repository.GetAsync(
             a => a.ToDto(),
+            a => a.UserId == userId && a.Title == accountTitle,
             cancellationToken: cancellationToken))?
             .FirstOrDefault();
         if (isIncludeBalance && accountDto is not null)
@@ -51,9 +51,9 @@ public sealed class AccountManager : IAccountManager
 
     public async Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
-        var accountDtos = await _repository.Get(
-            a => a.UserId == userId,
+        var accountDtos = await _repository.GetAsync(
             a => a.ToDto(),
+            a => a.UserId == userId,
             cancellationToken: cancellationToken);
         foreach (var accountDto in accountDtos)
             accountDto.Balance = await GetBalance(accountDto, cancellationToken);
@@ -74,7 +74,7 @@ public sealed class AccountManager : IAccountManager
 
     public async Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken)
     {
-        var account = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
+        var account = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
         account.Title = command.Title;
         account.IsDefault = command.IsDefault;
@@ -87,7 +87,7 @@ public sealed class AccountManager : IAccountManager
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var account = await _repository.GetByIdOrThrow(id, cancellationToken);
+        var account = await _repository.GetByIdOrThrowAsync(id, cancellationToken: cancellationToken);
         _repository.Delete(account);
         await _unitOfWork.CommitAsync(cancellationToken);
     }

@@ -26,19 +26,22 @@ public sealed class TransactionManager : ITransactionManager
 
     public async Task<TransactionDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        return (await _repository.GetById(id, cancellationToken))?.ToDto();
+        return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
     public Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken)
     {
-        return _repository.Get(t => t.UserId == userId, t => t.ToDto(), cancellationToken: cancellationToken);
+        return _repository.GetAsync(
+            t => t.ToDto(),
+            t => t.UserId == userId,
+            cancellationToken: cancellationToken);
     }
 
     public async Task<decimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken)
     {
-        return (await _repository.Get(
-            t => t.UserId == userId && t.AccountId == accountId,
+        return (await _repository.GetAsync(
             t => t.ToDto(),
+            t => t.UserId == userId && t.AccountId == accountId,
             cancellationToken: cancellationToken))
             .Sum(t => t.Amount);
     }
@@ -54,7 +57,7 @@ public sealed class TransactionManager : ITransactionManager
     public async Task<TransactionDto> Update(UpdateTransactionDto command, CancellationToken cancellationToken)
     {
         await _transactionValidator.Validate(command, cancellationToken);
-        var transaction = await _repository.GetByIdOrThrow(command.Id, cancellationToken);
+        var transaction = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
         transaction.AccountId = command.AccountId;
         transaction.CategoryId = command.CategoryId;
@@ -70,7 +73,7 @@ public sealed class TransactionManager : ITransactionManager
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var transaction = await _repository.GetByIdOrThrow(id, cancellationToken);
+        var transaction = await _repository.GetByIdOrThrowAsync(id, cancellationToken: cancellationToken);
         _repository.Delete(transaction);
         await _unitOfWork.CommitAsync(cancellationToken);
     }

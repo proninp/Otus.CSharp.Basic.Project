@@ -14,7 +14,7 @@ public class AccountValidator : IAccountValidator
 
     public async Task<bool> AccountExists(Guid accountId, CancellationToken cancellationToken)
     {
-        var account = await _repository.GetById(accountId, cancellationToken);
+        var account = await _repository.GetByIdAsync(accountId, cancellationToken: cancellationToken);
         return account is not null;
     }
 }
