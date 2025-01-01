@@ -20,6 +20,9 @@ public sealed class CurrencyManager : ICurrencyManager
 
     public async Task<CurrencyDto[]> GetAll(CancellationToken cancellationToken)
     {
-        return await _repository.GetAsync(c => c.ToDto(), cancellationToken: cancellationToken);
+        return await _repository.GetAsync(
+            c => c.ToDto(),
+            orderBy: q => q.OrderBy(c => c.CurrencyCode),
+            cancellationToken: cancellationToken);
     }
 }

@@ -5,6 +5,7 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceManager.Application.Services.Managers;
 public sealed class AccountManager : IAccountManager
@@ -22,7 +23,8 @@ public sealed class AccountManager : IAccountManager
 
     public async Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var accountDto = (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
+        var accountDto = (await _repository.GetByIdAsync(
+            id, include: q => q.Include(a => a.Currency), cancellationToken: cancellationToken))?.ToDto();
         if (accountDto is not null)
             accountDto.Balance = await GetBalance(accountDto, cancellationToken);
         return accountDto;
@@ -33,6 +35,7 @@ public sealed class AccountManager : IAccountManager
         return (await _repository.GetAsync(
             a => a.ToDto(),
             a => a.UserId == userId && a.IsDefault,
+            q => q.Include(a => a.Currency),
             cancellationToken: cancellationToken))?
             .FirstOrDefault();
     }
@@ -42,6 +45,7 @@ public sealed class AccountManager : IAccountManager
         var accountDto = (await _repository.GetAsync(
             a => a.ToDto(),
             a => a.UserId == userId && a.Title == accountTitle,
+            q => q.Include(a => a.Currency),
             cancellationToken: cancellationToken))?
             .FirstOrDefault();
         if (isIncludeBalance && accountDto is not null)
@@ -54,6 +58,7 @@ public sealed class AccountManager : IAccountManager
         var accountDtos = await _repository.GetAsync(
             a => a.ToDto(),
             a => a.UserId == userId,
+            q => q.Include(a => a.Currency),
             cancellationToken: cancellationToken);
         foreach (var accountDto in accountDtos)
             accountDto.Balance = await GetBalance(accountDto, cancellationToken);
@@ -65,11 +70,19 @@ public sealed class AccountManager : IAccountManager
         return await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id, cancellationToken);
     }
 
-    public async Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken)
+    public async Task<AccountDto> Create(
+        CreateAccountDto command, bool isIncludeReferencies = false, CancellationToken cancellationToken = default)
     {
         var account = _repository.Add(command.ToModel());
         await _unitOfWork.CommitAsync(cancellationToken);
-        return account.ToDto();
+        
+        if (!isIncludeReferencies)
+            return account.ToDto();
+
+        var accountDto = await GetById(account.Id, cancellationToken);
+        if (accountDto is null)
+            throw new InvalidOperationException($"Account with ID {account.Id} was not found after creation.");
+        return accountDto;
     }
 
     public async Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken)

@@ -31,7 +31,7 @@ public class StartStateHandler : IStateHandler
         if (defaultAccount is null)
         {
             var sentMessage = await botClient.SendMessage(
-                message.Chat, $"Hi, {userSession.UserName}! Let's set you up.",
+                message.Chat, $"Hi, {userSession.UserName}! Let's set you up!",
                 parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
             return UserState.AddAccount;
         }

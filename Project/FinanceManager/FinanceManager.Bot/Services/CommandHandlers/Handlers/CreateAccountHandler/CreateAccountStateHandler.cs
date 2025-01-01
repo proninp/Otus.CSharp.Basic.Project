@@ -65,12 +65,16 @@ public class CreateAccountStateHandler : IStateHandler
             IsDefault = !isDefaultExists,
             IsArchived = false
         };
-        var account = await _accountManager.Create(command, cancellationToken);
+        var account = await _accountManager.Create(command, true, cancellationToken);
+
+        var message = account.Currency is null ?
+            $"The account {account.Title} with initial balance {context.InitialBalance} has been created!" :
+            $"The account {account.Title} with initial balance {context.InitialBalance} {account.Currency.CurrencyCode} {account.Currency.Emoji} has been created!";
 
         var chat = _chatProvider.GetChat(update);
         await botClient.SendMessage(
                 chat, $"{Enums.Emoji.Success.GetSymbol()} " +
-                $"The account {account.Title} with initial balance {context.InitialBalance} has been created.",
-            parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
+                message,
+                parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
     }
 }

@@ -8,6 +8,8 @@ public sealed class AccountDto : IdentityDtoBase
 
     public Guid CurrencyId { get; init; }
 
+    public CurrencyDto? Currency { get; set; }
+
     public string? Title { get; set; }
 
     public decimal Balance { get; set; }
@@ -27,6 +29,7 @@ public static class AccountMappings
             UserId = account.UserId,
             Title = account.Title,
             CurrencyId = account.CurrencyId,
+            Currency = account.Currency.ToDto(),
             IsDefault = account.IsDefault,
             IsArchived = account.IsArchived,
         };
