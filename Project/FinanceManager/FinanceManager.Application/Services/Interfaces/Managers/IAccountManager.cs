@@ -13,8 +13,7 @@ public interface IAccountManager
 
     public Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken);
 
-    public Task<AccountDto> Create(
-        CreateAccountDto command, bool isIncludeReferencies = false, CancellationToken cancellationToken = default);
+    public Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken = default);
 
     public Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken);
 

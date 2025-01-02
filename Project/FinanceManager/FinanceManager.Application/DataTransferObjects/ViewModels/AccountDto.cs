@@ -29,7 +29,7 @@ public static class AccountMappings
             UserId = account.UserId,
             Title = account.Title,
             CurrencyId = account.CurrencyId,
-            Currency = account.Currency.ToDto(),
+            Currency = account.Currency?.ToDto(),
             IsDefault = account.IsDefault,
             IsArchived = account.IsArchived,
         };

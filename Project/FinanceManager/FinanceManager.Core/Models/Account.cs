@@ -13,7 +13,7 @@ public sealed class Account : IdentityModel
 
     public bool IsArchived { get; set; }
 
-    public Currency Currency { get; }
+    public Currency Currency { get; set; }
 
     public Account(Guid userId, Guid currencyId, string? title = null, bool isDefault = false, bool isArchived = false)
     {

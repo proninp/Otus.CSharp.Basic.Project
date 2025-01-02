@@ -13,12 +13,18 @@ public sealed class AccountManager : IAccountManager
     private readonly IRepository<Account> _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ITransactionManager _transactionManager;
+    private readonly ICurrencyManager _currencyManager;
 
-    public AccountManager(IRepository<Account> repository, IUnitOfWork unitOfWork, ITransactionManager transactionManager)
+    public AccountManager(
+        IRepository<Account> repository,
+        IUnitOfWork unitOfWork,
+        ITransactionManager transactionManager,
+        ICurrencyManager currencyManager)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _transactionManager = transactionManager;
+        _currencyManager = currencyManager;
     }
 
     public async Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken)
@@ -70,18 +76,17 @@ public sealed class AccountManager : IAccountManager
         return await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id, cancellationToken);
     }
 
-    public async Task<AccountDto> Create(
-        CreateAccountDto command, bool isIncludeReferencies = false, CancellationToken cancellationToken = default)
+    public async Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken = default)
     {
+        var currency = await _currencyManager.GetById(command.CurrencyId, cancellationToken);
+        if (currency is null)
+            throw new InvalidOperationException($"Currency with ID {command.CurrencyId} was not found in the database.");
+
         var account = _repository.Add(command.ToModel());
         await _unitOfWork.CommitAsync(cancellationToken);
-        
-        if (!isIncludeReferencies)
-            return account.ToDto();
 
-        var accountDto = await GetById(account.Id, cancellationToken);
-        if (accountDto is null)
-            throw new InvalidOperationException($"Account with ID {account.Id} was not found after creation.");
+        var accountDto = account.ToDto();
+        accountDto.Currency = currency;
         return accountDto;
     }
 

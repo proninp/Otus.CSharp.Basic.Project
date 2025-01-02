@@ -65,7 +65,7 @@ public class CreateAccountStateHandler : IStateHandler
             IsDefault = !isDefaultExists,
             IsArchived = false
         };
-        var account = await _accountManager.Create(command, true, cancellationToken);
+        var account = await _accountManager.Create(command, cancellationToken);
 
         var message = account.Currency is null ?
             $"The account {account.Title} with initial balance {context.InitialBalance} has been created!" :
