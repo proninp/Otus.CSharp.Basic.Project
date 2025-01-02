@@ -8,6 +8,8 @@ public sealed class CategoryDto : IdentityDtoBase
 
     public string? Title { get; set; }
 
+    public string? Emoji { get; set; }
+
     public Guid? ParentCategoryId { get; set; }
 }
 
@@ -20,6 +22,7 @@ public static class CategoryMappings
             Id = category.Id,
             UserId = category.UserId,
             Title = category.Title,
+            Emoji = category.Emoji,
             ParentCategoryId = category.ParentCategoryId,
         };
     }

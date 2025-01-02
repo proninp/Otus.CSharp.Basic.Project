@@ -7,8 +7,10 @@ public sealed class CreateCategoryDto
 
     public string? Title { get; set; }
 
+    public string? Emoji { get; set; }
+
     public Guid? ParentCategoryId { get; set; }
 
     public Category ToModel() =>
-        new Category(UsertId, Title, ParentCategoryId);
+        new Category(UsertId, Title, Emoji, ParentCategoryId);
 }

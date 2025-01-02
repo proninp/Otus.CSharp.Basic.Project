@@ -7,5 +7,7 @@ public sealed class UpdateCategoryDto : IdentityDtoBase
 
     public string? Title { get; set; }
 
+    public string? Emoji { get; set; }
+
     public Guid? ParentCategoryId { get; set; }
 }
