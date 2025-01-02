@@ -1,4 +1,4 @@
-﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
+﻿using FinanceManager.Application.Services.Initializers;
 using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Application.Services.Managers;
@@ -31,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<ITransferManager, TransferManager>();
         services.AddScoped<ITransactionValidator, TransactionValidator>();
         services.AddScoped<IAccountValidator, AccountValidator>();
+        services.AddScoped<ICategoriesInitializer, CategoriesInitializer>();
 
         services.AddTelegram(configuration);
 
