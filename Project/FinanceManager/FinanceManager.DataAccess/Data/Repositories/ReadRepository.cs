@@ -87,6 +87,14 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
             .ToArrayAsync(cancellationToken);
     }
 
+    public Task<bool> Exists(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
+    {
+        var query = _dbSet.AsNoTracking();
+        if (predicate is not null)
+            return query.AnyAsync(predicate, cancellationToken);
+        return query.AnyAsync(cancellationToken);
+    }
+
     private IQueryable<T> BuildQueryable(
         Expression<Func<T, bool>>? predicate = null,
         Func<IQueryable<T>, IIncludableQueryable<T, object>>? include = null,

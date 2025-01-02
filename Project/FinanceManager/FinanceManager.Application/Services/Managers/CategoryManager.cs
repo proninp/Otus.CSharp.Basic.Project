@@ -31,6 +31,11 @@ public sealed class CategoryManager : ICategoryManager
             cancellationToken: cancellationToken);
     }
 
+    public Task<bool> Exists(Guid userId, CancellationToken cancellationToken)
+    {
+        return _repository.Exists(c => c.UserId == userId, cancellationToken);
+    }
+
     public async Task<CategoryDto> Create(CreateCategoryDto command, CancellationToken cancellationToken)
     {
         var category = _repository.Add(command.ToModel());

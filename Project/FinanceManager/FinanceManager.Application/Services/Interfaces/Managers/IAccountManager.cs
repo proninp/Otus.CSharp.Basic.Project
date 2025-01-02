@@ -5,19 +5,19 @@ using FinanceManager.Application.DataTransferObjects.ViewModels;
 namespace FinanceManager.Application.Services.Interfaces.Managers;
 public interface IAccountManager
 {
-    public Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken);
+    Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken);
 
-    public Task<AccountDto?> GetDefault(Guid userId, CancellationToken cancellationToken);
+    Task<AccountDto?> GetDefault(Guid userId, CancellationToken cancellationToken);
 
-    public Task<AccountDto?> GetByName(Guid userId, string accountName, bool isIncludeBalance, CancellationToken cancellationToken);
+    Task<AccountDto?> GetByName(Guid userId, string accountName, bool isIncludeBalance, CancellationToken cancellationToken);
 
-    public Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken);
+    Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken);
 
-    public Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken = default);
+    Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken = default);
 
-    public Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken);
+    Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken);
 
-    public Task Delete(Guid id, CancellationToken cancellationToken);
+    Task Delete(Guid id, CancellationToken cancellationToken);
 
-    public Task<decimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken);
+    Task<decimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken);
 }

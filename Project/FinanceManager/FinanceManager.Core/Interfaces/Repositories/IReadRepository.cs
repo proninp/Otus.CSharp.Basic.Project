@@ -35,4 +35,6 @@ public interface IReadRepository<T> where T : IdentityModel
         int pageIndex = 0,
         int pageSize = 20,
         CancellationToken cancellationToken = default);
+    
+    Task<bool> Exists(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
 }
