@@ -1,10 +1,10 @@
 ﻿using FinanceManager.Bot.Enums;
-using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
 
-public class CreateAccountSubStateFactory : ISubStateHandlerFactory
+public class CreateAccountSubStateFactory : IAccountSubStateHandlerFactory
 {
     private readonly IServiceProvider _serviceProvider;
 

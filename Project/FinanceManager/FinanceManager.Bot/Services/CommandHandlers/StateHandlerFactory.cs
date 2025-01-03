@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
-using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceManager.Bot.Services.CommandHandlers;
@@ -16,7 +16,6 @@ public class StateHandlerFactory : IStateHandlerFactory
 
     public IStateHandler GetHandler(UserState userState) => userState switch
     {
-        UserState.Start => _serviceProvider.GetRequiredService<StartStateHandler>(),
         UserState.Default => _serviceProvider.GetRequiredService<DefaultStateHandler>(),
         UserState.AddExpense => _serviceProvider.GetRequiredService<RegisterExpenseStateHandler>(),
         UserState.AddIncome => _serviceProvider.GetRequiredService<RegisterIncomeStateHandler>(),

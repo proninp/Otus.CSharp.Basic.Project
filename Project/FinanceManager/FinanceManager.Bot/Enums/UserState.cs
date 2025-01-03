@@ -2,7 +2,7 @@
 public enum UserState
 {
     Default,
-    Start,
+    Menu,
     AddAccount,
     DeleteAccount,
     AddCategory,

@@ -45,7 +45,7 @@ public static class UserSessionExtensions
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            UserState = UserState.Start,
+            UserState = UserState.Default,
             SubState = UserSubState.Default,
 
         };

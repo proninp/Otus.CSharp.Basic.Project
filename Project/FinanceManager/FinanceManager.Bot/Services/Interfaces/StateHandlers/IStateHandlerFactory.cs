@@ -1,6 +1,6 @@
 ﻿using FinanceManager.Bot.Enums;
 
-namespace FinanceManager.Bot.Services.Interfaces;
+namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
 public interface IStateHandlerFactory
 {
     IStateHandler GetHandler(UserState userState);

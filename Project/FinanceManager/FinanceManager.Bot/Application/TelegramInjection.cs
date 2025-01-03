@@ -3,6 +3,7 @@ using FinanceManager.Bot.Services.CommandHandlers;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
 using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
 using FinanceManager.Bot.Services.UserServices;
@@ -38,13 +39,12 @@ public static class TelegramInjection
             .AddScoped<IPollingService, PollingService>()
             .AddScoped<IUserSessionManager, UserSessionManager>()
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
-            .AddScoped<ISubStateHandlerFactory, CreateAccountSubStateFactory>()
+            .AddScoped<IAccountSubStateHandlerFactory, CreateAccountSubStateFactory>()
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
             .AddScoped<RegisterExpenseStateHandler>()
             .AddScoped<RegisterIncomeStateHandler>()
-            .AddScoped<StartStateHandler>()
             .AddScoped<DefaultStateHandler>()
             .AddScoped<CreateAccountStateHandler>()
             .AddScoped<CreateAccountDefaultSubStateHandler>()
