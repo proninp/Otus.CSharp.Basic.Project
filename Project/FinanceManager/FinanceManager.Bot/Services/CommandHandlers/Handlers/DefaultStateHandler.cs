@@ -28,7 +28,6 @@ public class DefaultStateHandler : IStateHandler
 
         var defaultAccount = await _accountManager.GetDefault(userSession.Id, cancellationToken);
 
-        // If there is no default account, switch to the account creation context
         if (defaultAccount is null)
         {
             var sentMessage = await botClient.SendMessage(
@@ -37,9 +36,7 @@ public class DefaultStateHandler : IStateHandler
             return UserState.AddAccount;
         }
 
-        // If the default account has been created, return to the normal menu
-
-        throw new NotImplementedException();
+        return UserState.Menu;
     }
 
     public Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken)

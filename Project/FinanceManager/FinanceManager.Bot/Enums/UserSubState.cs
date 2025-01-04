@@ -6,5 +6,6 @@ public enum UserSubState
     SendCurrencies,
     ChooseCurrency,
     SetAccountInitialBalance,
+    SelectMenu,
     Complete
 }
