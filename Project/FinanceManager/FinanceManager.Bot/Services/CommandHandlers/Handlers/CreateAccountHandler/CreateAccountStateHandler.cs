@@ -14,13 +14,13 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
 public class CreateAccountStateHandler : IStateHandler
 {
-    private readonly IAccountSubStateHandlerFactory _subStateHandlerFactory;
+    private readonly ICreateAccountSubStateFactory _subStateHandlerFactory;
     private readonly IAccountManager _accountManager;
     private readonly ICategoriesInitializer _categoriesInitializer;
     private readonly IChatProvider _chatProvider;
 
     public CreateAccountStateHandler(
-        IAccountSubStateHandlerFactory subStateHandlerFactory,
+        ICreateAccountSubStateFactory subStateHandlerFactory,
         IAccountManager accountManager,
         IChatProvider chatProvider,
         ICategoriesInitializer categoriesInitializer)

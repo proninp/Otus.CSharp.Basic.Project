@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Bot.Enums;
 
 namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
-public interface IAccountSubStateHandlerFactory
+public interface ICreateAccountSubStateFactory
 {
     ISubStateHandler GetSubStateHandler(UserSubState userSubState);
 }

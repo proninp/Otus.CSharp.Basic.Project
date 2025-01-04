@@ -41,12 +41,12 @@ public class SendCurrenciesSubStateHandler : ISubStateHandler
             .Select(c => InlineKeyboardButton.WithCallbackData($"{c.Emoji} {c.CurrencyCode}", c.Id.ToString()))
             .ToList();
 
-        var keyboardRows = buttons
+        var keyboardButtons = buttons
             .Select((button, index) => new { button, index })
             .GroupBy(x => x.index / 3)
             .Select(g => g.Select(x => x.button).ToArray())
             .ToArray();
 
-        return new InlineKeyboardMarkup(keyboardRows);
+        return new InlineKeyboardMarkup(keyboardButtons);
     }
 }

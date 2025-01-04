@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
 
-public class CreateAccountSubStateFactory : IAccountSubStateHandlerFactory
+public class CreateAccountSubStateFactory : ICreateAccountSubStateFactory
 {
     private readonly IServiceProvider _serviceProvider;
 
