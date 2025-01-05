@@ -9,9 +9,11 @@ public enum Emoji
     Add,
     Remove,
     Expense,
+    ExpenseAmount,
     Income,
     Settings,
-    History
+    History,
+    Calendar
 }
 
 public static class EmojiExtension
@@ -26,9 +28,11 @@ public static class EmojiExtension
         Emoji.Add => "➕",
         Emoji.Remove => "➖",
         Emoji.Expense => "🛒",
+        Emoji.ExpenseAmount => "💸",
         Emoji.Income => "💵",
         Emoji.Settings => "⚙️",
         Emoji.History => "📖",
+        Emoji.Calendar => "🗓",
         _ => string.Empty
     };
 }

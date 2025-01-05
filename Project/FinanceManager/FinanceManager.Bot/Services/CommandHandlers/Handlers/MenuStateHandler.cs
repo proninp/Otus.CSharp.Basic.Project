@@ -19,7 +19,8 @@ public class MenuStateHandler : IStateHandler
         _updateCallbackQueryProvider = updateCallbackQueryProvider;
     }
 
-    public async Task<UserState?> HandleStateAsync(UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task<UserState?> HandleStateAsync(
+        UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         switch (userSession.SubState)
         {

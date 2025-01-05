@@ -7,5 +7,7 @@ public enum UserSubState
     ChooseCurrency,
     SetAccountInitialBalance,
     SelectMenu,
+    SetExpenseDate,
+    SetExpenseAmount,
     Complete
 }
