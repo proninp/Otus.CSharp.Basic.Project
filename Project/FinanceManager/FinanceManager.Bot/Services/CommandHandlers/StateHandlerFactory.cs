@@ -1,7 +1,6 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
-using FinanceManager.Bot.Services.CommandHandlers.Handlers.MenuHandler;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Microsoft.Extensions.DependencyInjection;
 

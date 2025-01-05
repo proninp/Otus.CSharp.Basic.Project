@@ -8,6 +8,8 @@ public enum Emoji
     Money,
     Add,
     Remove,
+    Expense,
+    Income,
     Settings,
     History
 }
@@ -23,6 +25,8 @@ public static class EmojiExtension
         Emoji.Money => "💰",
         Emoji.Add => "➕",
         Emoji.Remove => "➖",
+        Emoji.Expense => "🛒",
+        Emoji.Income => "💵",
         Emoji.Settings => "⚙️",
         Emoji.History => "📖",
         _ => string.Empty

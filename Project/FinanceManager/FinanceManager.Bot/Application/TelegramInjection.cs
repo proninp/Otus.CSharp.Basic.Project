@@ -2,7 +2,6 @@
 using FinanceManager.Bot.Services.CommandHandlers;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers.CreateAccountHandler;
-using FinanceManager.Bot.Services.CommandHandlers.Handlers.MenuHandler;
 using FinanceManager.Bot.Services.Interfaces;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Telegram;
@@ -41,7 +40,6 @@ public static class TelegramInjection
             .AddScoped<IUserSessionManager, UserSessionManager>()
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
             .AddScoped<ICreateAccountSubStateFactory, CreateAccountSubStateFactory>()
-            .AddScoped<IMenuSubStateFactory, MenuSubStateFactory>()
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
@@ -54,8 +52,7 @@ public static class TelegramInjection
             .AddScoped<SendCurrenciesSubStateHandler>()
             .AddScoped<ChooseCurrencySubStateHandler>()
             .AddScoped<SetAccountBalanceSubStateHandler>()
-            .AddScoped<CreateMenuSubStateHandler>()
-            .AddScoped<SelectMenuSubStateHandler>();
+            .AddScoped<MenuStateHandler>();
 
         return services;
     }
