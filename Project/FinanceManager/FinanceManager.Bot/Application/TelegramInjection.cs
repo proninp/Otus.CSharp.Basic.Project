@@ -7,6 +7,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
 using FinanceManager.Bot.Services.UserServices;
+using FinanceManager.Bot.Services.Utils;
 using FinanceManager.Core.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +44,7 @@ public static class TelegramInjection
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
+            .AddScoped<ITransactionDateProvider, TransactionDateProvider>()
             .AddScoped<RegisterExpenseStateHandler>()
             .AddScoped<RegisterIncomeStateHandler>()
             .AddScoped<DefaultStateHandler>()
