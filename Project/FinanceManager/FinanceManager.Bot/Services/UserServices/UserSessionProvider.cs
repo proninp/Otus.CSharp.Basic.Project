@@ -1,5 +1,7 @@
 ﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Interfaces.Managers;
+using FinanceManager.Bot.Services.Interfaces.Providers;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.UserServices;

@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Models;
-using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.UserServices;

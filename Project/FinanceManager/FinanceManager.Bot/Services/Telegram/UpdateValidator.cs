@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Interfaces.Validators;
 using Serilog;
 using Telegram.Bot.Types;
 

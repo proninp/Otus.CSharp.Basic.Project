@@ -16,4 +16,8 @@
     <ProjectReference Include="..\FinanceManager.Core\FinanceManager.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\StateHandlers\Handlers\SubStateHandlers\CreateTransactionHandlers\" />
+  </ItemGroup>
+
 </Project>

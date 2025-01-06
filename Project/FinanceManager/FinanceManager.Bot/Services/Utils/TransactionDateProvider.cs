@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using FinanceManager.Bot.Enums;
-using FinanceManager.Bot.Services.Interfaces;
+using FinanceManager.Bot.Services.Interfaces.Providers;
 
 namespace FinanceManager.Bot.Services.Utils;
 public class TransactionDateProvider : ITransactionDateProvider
@@ -9,7 +9,7 @@ public class TransactionDateProvider : ITransactionDateProvider
     public string GetIncorrectDateText()
     {
         var formats = string.Join(Environment.NewLine, GetDateFormats());
-            
+
         var messageBuilder = new StringBuilder($"{Emoji.Error.GetSymbol()} ");
         messageBuilder
             .AppendLine($"**An incorrect date has been entered.**")

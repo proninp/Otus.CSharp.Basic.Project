@@ -1,4 +1,5 @@
-﻿using FinanceManager.Bot.Services.Interfaces;
+﻿using FinanceManager.Bot.Services.Interfaces.Managers;
+using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
