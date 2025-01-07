@@ -1,6 +1,10 @@
-﻿namespace FinanceManager.Application.DataTransferObjects.ViewModels;
+﻿using System.ComponentModel;
+
+namespace FinanceManager.Application.DataTransferObjects.ViewModels;
 public enum TransactionType
 {
-    Expense = 0,
-    Income = 1
+    [Description("Expense")]
+    Expense,
+    [Description("Income")]
+    Income
 }
