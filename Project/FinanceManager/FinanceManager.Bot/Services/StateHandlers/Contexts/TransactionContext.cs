@@ -4,6 +4,8 @@ using FinanceManager.Bot.Models;
 namespace FinanceManager.Bot.Services.CommandHandlers.Contexts;
 public class TransactionContext
 {
+    public TransactionType TransactionType { get; init; }
+
     public DateOnly Date { get; set; }
 
     public decimal Amount { get; set; }

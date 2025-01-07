@@ -12,6 +12,7 @@ public enum Emoji
     Expense,
     ExpenseAmount,
     Income,
+    IncomeAmount,
     Settings,
     History,
     Calendar
@@ -32,6 +33,7 @@ public static class EmojiExtension
         Emoji.Expense => "🛒",
         Emoji.ExpenseAmount => "💸",
         Emoji.Income => "💵",
+        Emoji.IncomeAmount => "💰",
         Emoji.Settings => "⚙️",
         Emoji.History => "📖",
         Emoji.Calendar => "🗓",
