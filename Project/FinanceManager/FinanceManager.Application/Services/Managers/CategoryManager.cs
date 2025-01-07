@@ -2,6 +2,7 @@
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
+using FinanceManager.Core.Enums;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
@@ -28,6 +29,24 @@ public sealed class CategoryManager : ICategoryManager
         return _repository.GetAsync(
             c => c.ToDto(),
             c => c.UserId == userId,
+            cancellationToken: cancellationToken);
+    }
+
+    public Task<CategoryDto[]> GetExpenses(Guid userId, CancellationToken cancellationToken)
+    {
+        return _repository.GetAsync(
+            c => c.ToDto(),
+            c => c.UserId == userId &&
+            (c.CategoryType == CategoryType.Expense || c.CategoryType == CategoryType.Both),
+            cancellationToken: cancellationToken);
+    }
+
+    public Task<CategoryDto[]> GetIncomes(Guid userId, CancellationToken cancellationToken)
+    {
+        return _repository.GetAsync(
+            c => c.ToDto(),
+            c => c.UserId == userId &&
+            (c.CategoryType == CategoryType.Income || c.CategoryType == CategoryType.Both),
             cancellationToken: cancellationToken);
     }
 

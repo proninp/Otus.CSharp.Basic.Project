@@ -8,7 +8,11 @@ public interface ICategoryManager
     Task<CategoryDto?> GetById(Guid id, CancellationToken cancellationToken);
 
     Task<CategoryDto[]> Get(Guid userId, CancellationToken cancellationToken);
-    
+
+    Task<CategoryDto[]> GetExpenses(Guid userId, CancellationToken cancellationToken);
+
+    Task<CategoryDto[]> GetIncomes(Guid userId, CancellationToken cancellationToken);
+
     Task<bool> Exists(Guid userId, CancellationToken cancellationToken);
 
     Task<CategoryDto> Create(CreateCategoryDto command, CancellationToken cancellationToken);

@@ -1,29 +1,30 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
+using FinanceManager.Core.Enums;
 
 namespace FinanceManager.Application.Services.Initializers;
 public class CategoriesInitializer : ICategoriesInitializer
 {
     private readonly ICategoryManager _categoryManager;
-    private readonly (string Title, string Emoji)[] _defaultCategories = new[]
+    private readonly (CategoryType CategoryType, string Title, string Emoji)[] _defaultCategories = new[]
     {
-        ("Car", "🚗"),
-        ("Cafes and Restaurants", "🍽️"),
-        ("Clothing", "🧥"),
-        ("Deposit Interest", "💰"),
-        ("Education", "🎓"),
-        ("Gasoline", "⛽"),
-        ("Gifts", "🎁"),
-        ("Groceries", "🛒"),
-        ("Health", "🏥"),
-        ("House", "🏠"),
-        ("Mobile Communication", "📱"),
-        ("Personal Expenses", "💪"),
-        ("Salary", "💵"),
-        ("Taxi", "🚕"),
-        ("Trips", "✈️"),
-        ("Utilities", "💡"),
+        (CategoryType.Expense, "Car", "🚗"),
+        (CategoryType.Expense, "Cafes and Restaurants", "🍽️"),
+        (CategoryType.Expense, "Clothing", "🧥"),
+        (CategoryType.Income, "Deposit Interest", "💰"),
+        (CategoryType.Expense, "Education", "🎓"),
+        (CategoryType.Expense, "Gasoline", "⛽"),
+        (CategoryType.Both, "Gifts", "🎁"),
+        (CategoryType.Expense, "Groceries", "🛒"),
+        (CategoryType.Expense, "Health", "🏥"),
+        (CategoryType.Expense, "House", "🏠"),
+        (CategoryType.Expense, "Mobile Communication", "📱"),
+        (CategoryType.Expense, "Personal Expenses", "💪"),
+        (CategoryType.Income, "Salary", "💵"),
+        (CategoryType.Expense, "Taxi", "🚕"),
+        (CategoryType.Expense, "Trips", "✈️"),
+        (CategoryType.Expense, "Utilities", "💡"),
     };
 
     public CategoriesInitializer(ICategoryManager categoryManager)
@@ -40,6 +41,7 @@ public class CategoriesInitializer : ICategoriesInitializer
             .Select(c => new CreateCategoryDto
             {
                 UsertId = userId,
+                CategoryType = c.CategoryType,
                 Title = c.Title,
                 Emoji = c.Emoji,
                 ParentCategoryId = null
