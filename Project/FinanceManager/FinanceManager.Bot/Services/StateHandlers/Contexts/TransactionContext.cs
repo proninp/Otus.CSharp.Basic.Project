@@ -1,4 +1,5 @@
 ﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
+using FinanceManager.Application.Utils;
 using FinanceManager.Bot.Models;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Contexts;
@@ -11,6 +12,8 @@ public class TransactionContext
     public decimal Amount { get; set; }
 
     public CategoryDto? Category { get; set; }
+
+    public string TransactionTypeDescription => TransactionType.GetDescription().ToLower();
 }
 
 public static class TransactionContextExtesion
