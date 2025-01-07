@@ -6,7 +6,7 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.Telegram;
-public class MessageSenderManager : IMessageSenderManager
+public class MessageSenderService : IMessageSenderManager
 {
     public async Task SendMessage(
         ITelegramBotClient botClient, Chat chat, string messageText, CancellationToken cancellationToken)

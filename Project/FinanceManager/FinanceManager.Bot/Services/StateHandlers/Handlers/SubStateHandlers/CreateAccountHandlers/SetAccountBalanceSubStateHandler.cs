@@ -1,21 +1,22 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
 public class SetAccountBalanceSubStateHandler : ISubStateHandler
 {
     private readonly IUpdateMessageProvider _updateMessageProvider;
+    private readonly IMessageSenderManager _messageSender;
 
-    public SetAccountBalanceSubStateHandler(IUpdateMessageProvider updateMessageProvider)
+    public SetAccountBalanceSubStateHandler(IUpdateMessageProvider updateMessageProvider, IMessageSenderManager messageSender)
     {
         _updateMessageProvider = updateMessageProvider;
+        _messageSender = messageSender;
     }
 
     public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -26,10 +27,9 @@ public class SetAccountBalanceSubStateHandler : ISubStateHandler
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {
-            await botClient.SendMessage(
-                message.Chat, $"{Enums.Emoji.Error.GetSymbol()} " +
-                $"The entered value is not a number. Try again.",
-            parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
+            await _messageSender.SendErrorMessage(
+                botClient, message.Chat, "The entered value is not a number. Please try again.", cancellationToken);
+
             return UserSubState.SetAccountInitialBalance;
         }
         var context = session.GetCreateAccountContext();

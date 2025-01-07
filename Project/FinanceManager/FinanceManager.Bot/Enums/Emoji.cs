@@ -1,6 +1,7 @@
 ﻿namespace FinanceManager.Bot.Enums;
 public enum Emoji
 {
+    Greeting,
     Error,
     Success,
     Warning,
@@ -20,6 +21,7 @@ public static class EmojiExtension
 {
     public static string GetSymbol(this Emoji emoji) => emoji switch
     {
+        Emoji.Greeting => "👋",
         Emoji.Error => "❌",
         Emoji.Success => "✅",
         Emoji.Warning => "⚠️",

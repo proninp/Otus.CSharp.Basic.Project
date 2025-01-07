@@ -4,12 +4,11 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class RegisterExpenseStateHandler : IStateHandler
@@ -19,19 +18,22 @@ public class RegisterExpenseStateHandler : IStateHandler
     private readonly ITransactionDateProvider _transactionDateProvider;
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
+    private readonly IMessageSenderService _messageSender;
 
     public RegisterExpenseStateHandler(
         IChatProvider chatProvider,
         IUpdateMessageProvider messageProvider,
         ITransactionDateProvider transactionDateProvider,
         ITransactionManager transactionManager,
-        IAccountManager accountManager)
+        IAccountManager accountManager,
+        IMessageSenderService messageSender)
     {
         _chatProvider = chatProvider;
         _messageProvider = messageProvider;
         _transactionDateProvider = transactionDateProvider;
         _transactionManager = transactionManager;
         _accountManager = accountManager;
+        _messageSender = messageSender;
     }
 
     public async Task<UserState?> HandleStateAsync(
@@ -70,9 +72,11 @@ public class RegisterExpenseStateHandler : IStateHandler
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var chat = _chatProvider.GetChat(update);
-        await SendMessage(botClient, chat,
+        await _messageSender.SendMessage(
+            botClient, chat,
             $"Please enter the date (dd mm yyyy) of the expense {Enums.Emoji.Calendar.GetSymbol()}:",
             cancellationToken);
+
         return UserSubState.SetExpenseDate;
     }
 
@@ -87,14 +91,15 @@ public class RegisterExpenseStateHandler : IStateHandler
         if (!_transactionDateProvider.TryParseDate(dateText, out var date))
         {
             var incorrectDateMessage = _transactionDateProvider.GetIncorrectDateText();
-            await SendMessage(botClient, message.Chat, incorrectDateMessage, cancellationToken);
+            await _messageSender.SendMessage(botClient, message.Chat, incorrectDateMessage, cancellationToken);
 
             return session.SubState;
         }
 
         session.SetData(new TransactionContext { Date = date });
 
-        await SendMessage(botClient, message.Chat,
+        await _messageSender.SendMessage(
+            botClient, message.Chat,
             $"Please enter expense {Enums.Emoji.ExpenseAmount.GetSymbol()} amount:", cancellationToken);
 
         return UserSubState.SetExpenseAmount;
@@ -109,17 +114,17 @@ public class RegisterExpenseStateHandler : IStateHandler
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {
-            var messageText = $"{Enums.Emoji.Error.GetSymbol()} " +
-                "The entered value is not a number. Please try again.";
-            await SendMessage(botClient, message.Chat, messageText, cancellationToken);
+            await _messageSender.SendErrorMessage(
+                botClient, message.Chat,
+                "The entered value is not a number. Please try again.", cancellationToken);
             return session.SubState;
         }
 
         if (amount < 0)
         {
-            var messageText = $"{Enums.Emoji.Error.GetSymbol()} " +
-                "The expense amount must be a non-negative number. Please try again.";
-            await SendMessage(botClient, message.Chat, messageText, cancellationToken);
+            await _messageSender.SendErrorMessage(
+                botClient, message.Chat,
+                "The expense amount must be a non-negative number. Please try again.", cancellationToken);
             return session.SubState;
         }
 
@@ -137,18 +142,18 @@ public class RegisterExpenseStateHandler : IStateHandler
         var context = session.GetTransactionContext();
         if (context.Amount <= 0)
         {
-            var messageText = $"{Enums.Emoji.Error.GetSymbol()} " +
-                "The transaction was not registered because a zero amount was entered.";
-            await SendMessage(botClient, chat, messageText, cancellationToken);
+            await _messageSender.SendErrorMessage(
+                botClient, chat,
+                "The transaction was not registered because a zero amount was entered.", cancellationToken);
             return;
         }
 
         var account = await _accountManager.GetDefault(session.Id, cancellationToken);
         if (account is null)
         {
-            var messageText = $"{Enums.Emoji.Error.GetSymbol()} " +
-                "The operation cannot be performed because you do not have a default account.";
-            await SendMessage(botClient, chat, messageText, cancellationToken);
+            await _messageSender.SendErrorMessage(
+                botClient, chat,
+                "The operation cannot be performed because you do not have a default account.", cancellationToken);
             return;
         }
 
@@ -164,14 +169,5 @@ public class RegisterExpenseStateHandler : IStateHandler
 
         var expense = await _transactionManager.Create(command, cancellationToken);
 
-    }
-
-    private async Task SendMessage(
-        ITelegramBotClient botClient, Chat chat, string messageText, CancellationToken cancellationToken)
-    {
-        await botClient.SendMessage(
-            chat, messageText,
-            parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove(),
-            cancellationToken: cancellationToken);
     }
 }

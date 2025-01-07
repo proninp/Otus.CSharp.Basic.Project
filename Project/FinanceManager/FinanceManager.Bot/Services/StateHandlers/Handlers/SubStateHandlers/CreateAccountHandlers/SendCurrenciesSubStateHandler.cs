@@ -2,11 +2,11 @@
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
@@ -14,24 +14,26 @@ public class SendCurrenciesSubStateHandler : ISubStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IChatProvider _chatProvider;
+    private readonly IMessageSenderManager _messageSender;
 
-    public SendCurrenciesSubStateHandler(ICurrencyManager currencyManager, IChatProvider chatProvider)
+    public SendCurrenciesSubStateHandler(
+        ICurrencyManager currencyManager, IChatProvider chatProvider, IMessageSenderManager messageSenderManager)
     {
         _currencyManager = currencyManager;
         _chatProvider = chatProvider;
+        _messageSender = messageSenderManager;
     }
 
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task<UserSubState> HandleAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var chat = _chatProvider.GetChat(update);
-
         var currencies = await _currencyManager.GetAll(cancellationToken);
-
         var inlineKeyboard = CreateInlineKeyboard(currencies);
 
-        await botClient.SendMessage(
-               chat, "Choose currency:",
-           parseMode: ParseMode.Html, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
+        await _messageSender.SendInlineKeyboardMessage(
+            botClient, chat, "Choose currency:", inlineKeyboard, cancellationToken);
+
         return UserSubState.ChooseCurrency;
     }
 

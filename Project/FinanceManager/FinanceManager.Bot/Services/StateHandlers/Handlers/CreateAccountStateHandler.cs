@@ -4,12 +4,11 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers;
 public class CreateAccountStateHandler : IStateHandler
@@ -18,17 +17,20 @@ public class CreateAccountStateHandler : IStateHandler
     private readonly IAccountManager _accountManager;
     private readonly ICategoriesInitializer _categoriesInitializer;
     private readonly IChatProvider _chatProvider;
+    private readonly IMessageSenderManager _messageSender;
 
     public CreateAccountStateHandler(
         ISubStateFactoryProvider subStateFactoryProvider,
         IAccountManager accountManager,
         IChatProvider chatProvider,
-        ICategoriesInitializer categoriesInitializer)
+        ICategoriesInitializer categoriesInitializer,
+        IMessageSenderManager messageSender)
     {
         _subStateFactoryProvider = subStateFactoryProvider;
         _accountManager = accountManager;
         _chatProvider = chatProvider;
         _categoriesInitializer = categoriesInitializer;
+        _messageSender = messageSender;
     }
 
     public async Task<UserState?> HandleStateAsync(
@@ -85,9 +87,6 @@ public class CreateAccountStateHandler : IStateHandler
             $"{account.Currency.Emoji} has been created!";
 
         var chat = _chatProvider.GetChat(update);
-        await botClient.SendMessage(
-                chat, $"{Enums.Emoji.Success.GetSymbol()} " +
-                message,
-                parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
+        await _messageSender.SendApproveMessage(botClient, chat, message, cancellationToken);
     }
 }

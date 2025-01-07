@@ -36,13 +36,13 @@ public static class TelegramInjection
                 });
 
         services
-            .AddSingleton<IUserSessionRegistry, UserSessionRegistry>()
             .AddScoped<IPollingService, PollingService>()
             .AddScoped<IReceiverService, ReceiverService>()
-            .AddScoped<UpdateHandler>();
+            .AddScoped<UpdateHandler>()
+            .AddScoped<IBotStateManager, BotStateManager>();
 
         services
-            .AddScoped<IBotStateManager, BotStateManager>()
+            .AddSingleton<IUserSessionRegistry, UserSessionRegistry>()
             .AddScoped<IUserSessionManager, UserSessionManager>()
             .AddScoped<IUserSessionProvider, UserSessionProvider>();
 
@@ -51,7 +51,7 @@ public static class TelegramInjection
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
-            .AddScoped<IMessageSenderManager, MessageSenderManager>();
+            .AddScoped<IMessageSenderManager, MessageSenderService>();
 
         services
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>()

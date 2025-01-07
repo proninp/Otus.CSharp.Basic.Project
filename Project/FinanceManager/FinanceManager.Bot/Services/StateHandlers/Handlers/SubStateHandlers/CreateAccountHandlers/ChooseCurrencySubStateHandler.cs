@@ -2,12 +2,11 @@
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
 public class ChooseCurrencySubStateHandler : ISubStateHandler
@@ -15,14 +14,17 @@ public class ChooseCurrencySubStateHandler : ISubStateHandler
     private readonly ICurrencyManager _currencyManager;
     private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
     private readonly IChatProvider _chatProvider;
+    private readonly IMessageSenderManager _messageSender;
 
     public ChooseCurrencySubStateHandler(ICurrencyManager currencyManager,
         IUpdateCallbackQueryProvider updateCallbackQueryProvider,
-        IChatProvider chatProvider)
+        IChatProvider chatProvider,
+        IMessageSenderManager messageSender)
     {
         _currencyManager = currencyManager;
         _updateCallbackQueryProvider = updateCallbackQueryProvider;
         _chatProvider = chatProvider;
+        _messageSender = messageSender;
     }
 
     public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -43,9 +45,8 @@ public class ChooseCurrencySubStateHandler : ISubStateHandler
 
                 var chat = _chatProvider.GetChat(update);
 
-                await botClient.SendMessage(
-                    chat, "Enter a number to set the initial balance:",
-                    parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove());
+                await _messageSender.SendMessage(
+                    botClient, chat, "Enter a number to set the initial balance:", cancellationToken);
 
                 return UserSubState.SetAccountInitialBalance;
             }

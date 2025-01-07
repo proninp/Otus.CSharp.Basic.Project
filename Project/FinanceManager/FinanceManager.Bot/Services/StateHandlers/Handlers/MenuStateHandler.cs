@@ -1,22 +1,25 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class MenuStateHandler : IStateHandler
 {
     private readonly IChatProvider _chatProvider;
-    private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
+    private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
+    private readonly IMessageSenderManager _messageSender;
 
-    public MenuStateHandler(IChatProvider chatProvider, IUpdateCallbackQueryProvider updateCallbackQueryProvider)
+    public MenuStateHandler(
+        IChatProvider chatProvider, IUpdateCallbackQueryProvider callbackQueryProvider, IMessageSenderManager messageSender)
     {
         _chatProvider = chatProvider;
-        _updateCallbackQueryProvider = updateCallbackQueryProvider;
+        _callbackQueryProvider = callbackQueryProvider;
+        _messageSender = messageSender;
     }
 
     public async Task<UserState?> HandleStateAsync(
@@ -53,9 +56,8 @@ public class MenuStateHandler : IStateHandler
 
         var inlineKeyboard = CreateInlineKeyboard();
 
-        await botClient.SendMessage(
-               chat, "Choose an action:",
-           parseMode: ParseMode.Html, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
+        await _messageSender.SendInlineKeyboardMessage(
+            botClient, chat, "Choose an action:", inlineKeyboard, cancellationToken);
 
         return UserSubState.SelectMenu;
     }
@@ -63,7 +65,7 @@ public class MenuStateHandler : IStateHandler
     private UserState HandleMenuSelection(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        if (!_updateCallbackQueryProvider.GetCallbackQuery(update, out var callbackQuery) || callbackQuery.Data is null)
+        if (!_callbackQueryProvider.GetCallbackQuery(update, out var callbackQuery) || callbackQuery.Data is null)
             return session.UserState;
 
         var stateMapping = new Dictionary<string, UserState>
