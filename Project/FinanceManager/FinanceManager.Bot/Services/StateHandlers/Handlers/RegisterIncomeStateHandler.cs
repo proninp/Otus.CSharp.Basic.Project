@@ -16,12 +16,13 @@ public class RegisterIncomeStateHandler : IStateHandler
         _updateCallbackQueryProvider = updateCallbackQueryProvider;
     }
 
-    public Task<UserState?> HandleStateAsync(UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public Task HandleStateAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken)
+    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

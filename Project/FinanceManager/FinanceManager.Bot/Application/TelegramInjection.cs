@@ -8,6 +8,7 @@ using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.StateHandlers.Factories;
 using FinanceManager.Bot.Services.StateHandlers.Handlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
 using FinanceManager.Bot.Services.Telegram.Providers;
@@ -51,13 +52,15 @@ public static class TelegramInjection
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
-            .AddScoped<IMessageSenderManager, MessageSenderService>();
+            .AddScoped<IMessageSenderManager, MessageSenderService>()
+            .AddScoped<ITransactionDateProvider, TransactionDateProvider>();
 
         services
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
             .AddScoped<ISubStateFactoryProvider, SubStateFactoryProvider>()
-            .AddScoped<ISubStateFactory, CreateAccountSubStateFactory>()
-            .AddScoped<ITransactionDateProvider, TransactionDateProvider>();
+            .AddScoped<CreateAccountSubStateFactory>()
+            .AddScoped<AddTransactionSubStateFactory>();
+            
 
         services
             .AddScoped<DefaultStateHandler>()
@@ -72,6 +75,13 @@ public static class TelegramInjection
             .AddScoped<SendCurrenciesSubStateHandler>()
             .AddScoped<ChooseCurrencySubStateHandler>()
             .AddScoped<SetAccountBalanceSubStateHandler>();
+
+        services
+            .AddScoped<SendCategoriesSubStateHandler>()
+            .AddScoped<ChooseCategorySubStateHandler>()
+            .AddScoped<TransactionSetDateSubStateHandler>()
+            .AddScoped<TransactionSetAmountSubStateHandler>()
+            .AddScoped<TransactionRegistrationSubStateHandler>();
 
         return services;
     }

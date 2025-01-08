@@ -22,34 +22,27 @@ public class MenuStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task<UserState?> HandleStateAsync(
-        UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleStateAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        switch (userSession.SubState)
+        switch (session.SubState)
         {
-            case UserSubState.Default:
-                userSession.SubState = await HandleDefaultSubState(userSession, botClient, update, cancellationToken);
+            case WorkflowSubState.Default:
+                await HandleDefaultSubState(session, botClient, update, cancellationToken);
                 break;
 
-            case UserSubState.SelectMenu:
-                var nextState = HandleMenuSelection(userSession, botClient, update, cancellationToken);
-                if (nextState != userSession.UserState)
-                {
-                    userSession.ResetState();
-                    return nextState;
-                }
+            case WorkflowSubState.SelectMenu:
+                HandleMenuSelection(session, botClient, update, cancellationToken);
                 break;
         }
-
-        return userSession.UserState;
     }
 
-    public Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken)
+    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    private async Task<UserSubState> HandleDefaultSubState(
+    private async Task HandleDefaultSubState(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var chat = _chatProvider.GetChat(update);
@@ -59,27 +52,30 @@ public class MenuStateHandler : IStateHandler
         await _messageSender.SendInlineKeyboardMessage(
             botClient, chat, "Choose an action:", inlineKeyboard, cancellationToken);
 
-        return UserSubState.SelectMenu;
+        session.Wait(WorkflowSubState.SelectMenu);
     }
 
-    private UserState HandleMenuSelection(
+    private void HandleMenuSelection(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_callbackQueryProvider.GetCallbackQuery(update, out var callbackQuery) || callbackQuery.Data is null)
-            return session.UserState;
-
-        var stateMapping = new Dictionary<string, UserState>
         {
-            { nameof(RegisterExpenseStateHandler), UserState.AddExpense },
-            { nameof(RegisterIncomeStateHandler), UserState.AddIncome },
-            { nameof(HistoryStateHandler), UserState.History },
-            { nameof(SettingsStateHandler), UserState.Settings }
+            session.ResetState();
+            return;
+        }
+
+        var stateMapping = new Dictionary<string, WorkflowState>
+        {
+            { nameof(RegisterExpenseStateHandler), WorkflowState.AddExpense },
+            { nameof(RegisterIncomeStateHandler), WorkflowState.AddIncome },
+            { nameof(HistoryStateHandler), WorkflowState.History },
+            { nameof(SettingsStateHandler), WorkflowState.Settings }
         };
 
-        if (stateMapping.TryGetValue(callbackQuery.Data, out var newState))
-            return newState;
+        if (!stateMapping.TryGetValue(callbackQuery.Data, out var newState))
+            newState = session.State;
 
-        return session.UserState;
+        session.Continue(newState);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard()

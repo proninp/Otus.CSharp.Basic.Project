@@ -22,27 +22,29 @@ public class DefaultStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task<UserState?> HandleStateAsync(
-        UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleStateAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_messageProvider.GetMessage(update, out var message))
-            return userSession.UserState;
+            return;
 
-        var defaultAccount = await _accountManager.GetDefault(userSession.Id, cancellationToken);
+        var defaultAccount = await _accountManager.GetDefault(session.Id, cancellationToken);
 
         if (defaultAccount is null)
         {
-            var messageText = $"Hi, {userSession.UserName}! {Enums.Emoji.Greeting.GetSymbol()}" +
+            var messageText = $"Hi, {session.UserName}! {Emoji.Greeting.GetSymbol()}" +
                 $"{Environment.NewLine}Let's set you up!";
             await _messageSender.SendMessage(botClient, message.Chat, messageText, cancellationToken);
 
-            return UserState.AddAccount;
+            session.Continue(WorkflowState.AddAccount);
         }
-
-        return UserState.Menu;
+        else
+        {
+            session.Continue(WorkflowState.Menu);
+        }
     }
 
-    public Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken)
+    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

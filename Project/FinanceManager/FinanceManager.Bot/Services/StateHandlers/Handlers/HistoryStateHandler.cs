@@ -1,5 +1,4 @@
-﻿using FinanceManager.Bot.Enums;
-using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -7,12 +6,13 @@ using Telegram.Bot.Types;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class HistoryStateHandler : IStateHandler
 {
-    public Task<UserState?> HandleStateAsync(UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public Task HandleStateAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken)
+    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

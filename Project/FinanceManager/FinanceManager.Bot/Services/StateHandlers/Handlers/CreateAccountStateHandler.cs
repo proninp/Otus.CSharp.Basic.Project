@@ -33,47 +33,43 @@ public class CreateAccountStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task<UserState?> HandleStateAsync(
-        UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleStateAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var subStateHandlerFactory = _subStateFactoryProvider.GetSubStateFactory(userSession.UserState);
-        var subStateHandler = subStateHandlerFactory.GetSubStateHandler(userSession.SubState);
+        var subStateHandlerFactory = _subStateFactoryProvider.GetSubStateFactory(session.State);
+        var subStateHandler = subStateHandlerFactory.GetSubStateHandler(session.SubState);
 
-        userSession.SubState = await subStateHandler.HandleAsync(userSession, botClient, update, cancellationToken);
+        await subStateHandler.HandleAsync(session, botClient, update, cancellationToken);
 
-        if (userSession.SubState == UserSubState.SendCurrencies)
-            return await HandleStateAsync(userSession, botClient, update, cancellationToken);
-
-        if (userSession.SubState == UserSubState.Complete)
-            await Complete(userSession, botClient, update, cancellationToken);
-
-        return userSession.UserState;
+        if (session.SubState == WorkflowSubState.Complete)
+            await Complete(session, botClient, update, cancellationToken);
     }
 
-    public Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken)
+    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    private async Task Complete(UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    private async Task Complete(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        await CreateAccount(userSession, botClient, update, cancellationToken);
-        await _categoriesInitializer.InitializeDefaults(userSession.Id, cancellationToken);
-        userSession.ResetState();
+        await CreateAccount(session, botClient, update, cancellationToken);
+        await _categoriesInitializer.InitializeDefaults(session.Id, cancellationToken);
+        session.ResetState();
     }
 
     private async Task CreateAccount(
-        UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var context = userSession.GetCreateAccountContext();
+        var context = session.GetCreateAccountContext();
         ArgumentNullException.ThrowIfNull(context.Currency, nameof(context.Currency));
 
-        var defaultAccount = await _accountManager.GetDefault(userSession.Id, cancellationToken);
+        var defaultAccount = await _accountManager.GetDefault(session.Id, cancellationToken);
         var isDefaultExists = defaultAccount is not null;
 
         var command = new CreateAccountDto
         {
-            UserId = userSession.Id,
+            UserId = session.Id,
             CurrencyId = context.Currency.Id,
             Title = context.AccountName,
             IsDefault = !isDefaultExists,
