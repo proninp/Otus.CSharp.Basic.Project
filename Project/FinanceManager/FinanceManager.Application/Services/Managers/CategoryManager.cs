@@ -29,6 +29,7 @@ public sealed class CategoryManager : ICategoryManager
         return _repository.GetAsync(
             c => c.ToDto(),
             c => c.UserId == userId,
+            orderBy: q => q.OrderBy(c => c.Title),
             cancellationToken: cancellationToken);
     }
 
@@ -38,6 +39,7 @@ public sealed class CategoryManager : ICategoryManager
             c => c.ToDto(),
             c => c.UserId == userId &&
             (c.CategoryType == CategoryType.Expense || c.CategoryType == CategoryType.Both),
+            orderBy: q => q.OrderBy(c => c.Title),
             cancellationToken: cancellationToken);
     }
 
@@ -47,6 +49,7 @@ public sealed class CategoryManager : ICategoryManager
             c => c.ToDto(),
             c => c.UserId == userId &&
             (c.CategoryType == CategoryType.Income || c.CategoryType == CategoryType.Both),
+            orderBy: q => q.OrderBy(c => c.Title),
             cancellationToken: cancellationToken);
     }
 
