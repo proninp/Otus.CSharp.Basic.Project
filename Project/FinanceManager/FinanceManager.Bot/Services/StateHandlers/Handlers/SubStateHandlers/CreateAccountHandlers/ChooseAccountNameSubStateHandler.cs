@@ -23,10 +23,13 @@ public class ChooseAccountNameSubStateHandler : ISubStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_messageProvider.GetMessage(update, out var message))
-            return UserSubState.ChooseAccountName;
+        {
+            session.Wait();
+            return;
+        }
 
         var accountTitle = message.Text;
         if (string.IsNullOrWhiteSpace(accountTitle) || accountTitle.Length == 0)
@@ -34,14 +37,16 @@ public class ChooseAccountNameSubStateHandler : ISubStateHandler
             await _messageSender.SendErrorMessage(botClient, message.Chat,
                 "The account name must contain at least one non-whitespace character.", cancellationToken);
 
-            return UserSubState.ChooseAccountName;
+            session.Wait();
+            return;
         }
         if (!char.IsLetterOrDigit(accountTitle[0]))
         {
             await _messageSender.SendErrorMessage(botClient, message.Chat,
                 "The account name must start with a number or letter. Enter a different account name.", cancellationToken);
 
-            return UserSubState.ChooseAccountName;
+            session.Wait();
+            return;
         }
         var existingAccount = await _accountManager.GetByName(session.Id, accountTitle, false, cancellationToken);
         if (existingAccount is not null)
@@ -49,10 +54,12 @@ public class ChooseAccountNameSubStateHandler : ISubStateHandler
             await _messageSender.SendErrorMessage(botClient, message.Chat,
                 "An account with that name already exists. Enter a different name.", cancellationToken);
 
-            return UserSubState.ChooseAccountName;
+            session.Wait();
+            return;
         }
+
         var context = new CreateAccountContext { AccountName = accountTitle };
         session.ContextData = context;
-        return UserSubState.SendCurrencies;
+        session.Continue(WorkflowSubState.SendCurrencies);
     }
 }

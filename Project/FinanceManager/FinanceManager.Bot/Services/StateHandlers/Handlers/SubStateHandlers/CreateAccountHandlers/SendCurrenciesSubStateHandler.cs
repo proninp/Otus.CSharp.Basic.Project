@@ -24,7 +24,7 @@ public class SendCurrenciesSubStateHandler : ISubStateHandler
         _messageSender = messageSenderManager;
     }
 
-    public async Task<UserSubState> HandleAsync(
+    public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var chat = _chatProvider.GetChat(update);
@@ -34,7 +34,7 @@ public class SendCurrenciesSubStateHandler : ISubStateHandler
         await _messageSender.SendInlineKeyboardMessage(
             botClient, chat, "Choose currency:", inlineKeyboard, cancellationToken);
 
-        return UserSubState.ChooseCurrency;
+        session.Wait(WorkflowSubState.ChooseCurrency);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(CurrencyDto[] currencies)

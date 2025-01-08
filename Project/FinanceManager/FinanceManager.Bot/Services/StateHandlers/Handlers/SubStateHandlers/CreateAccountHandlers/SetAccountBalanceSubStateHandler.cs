@@ -19,10 +19,14 @@ public class SetAccountBalanceSubStateHandler : ISubStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_updateMessageProvider.GetMessage(update, out var message))
-            return UserSubState.SetAccountInitialBalance;
+        {
+            session.Wait();
+            return;
+        }
 
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
@@ -30,11 +34,12 @@ public class SetAccountBalanceSubStateHandler : ISubStateHandler
             await _messageSender.SendErrorMessage(
                 botClient, message.Chat, "The entered value is not a number. Please try again.", cancellationToken);
 
-            return UserSubState.SetAccountInitialBalance;
+            session.Wait();
+            return;
         }
+        
         var context = session.GetCreateAccountContext();
         context.InitialBalance = amount;
-        session.ContextData = context;
-        return UserSubState.Complete;
+        session.SubState = WorkflowSubState.Complete;
     }
 }

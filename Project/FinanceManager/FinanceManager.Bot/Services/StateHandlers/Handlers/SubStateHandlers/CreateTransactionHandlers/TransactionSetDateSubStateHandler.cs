@@ -9,13 +9,13 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class TransactionSetDateStateHandler : ISubStateHandler
+public class TransactionSetDateSubStateHandler : ISubStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly ITransactionDateProvider _transactionDateProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public TransactionSetDateStateHandler(
+    public TransactionSetDateSubStateHandler(
         IUpdateMessageProvider messageProvider,
         ITransactionDateProvider transactionDateProvider,
         IMessageSenderManager messageSender)
@@ -25,11 +25,14 @@ public class TransactionSetDateStateHandler : ISubStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task<UserSubState> HandleAsync(
+    public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_messageProvider.GetMessage(update, out var message))
-            return session.SubState;
+        {
+            session.Wait();
+            return;
+        }
 
         var dateText = message.Text;
 
@@ -38,12 +41,12 @@ public class TransactionSetDateStateHandler : ISubStateHandler
             var incorrectDateMessage = _transactionDateProvider.GetIncorrectDateText();
             await _messageSender.SendMessage(botClient, message.Chat, incorrectDateMessage, cancellationToken);
 
-            return session.SubState;
+            session.Wait();
+            return;
         }
 
         var context = session.GetTransactionContext();
         context.Date = date;
-        session.SetData(context);
 
         var emoji = context.TransactionType switch
         {
@@ -55,6 +58,6 @@ public class TransactionSetDateStateHandler : ISubStateHandler
         await _messageSender.SendMessage(
             botClient, message.Chat, $"Please enter {context.TransactionTypeDescription} {emoji} amount:", cancellationToken);
 
-        return UserSubState.SetExpenseAmount;
+        session.Wait(WorkflowSubState.SetTransactionAmount);
     }
 }

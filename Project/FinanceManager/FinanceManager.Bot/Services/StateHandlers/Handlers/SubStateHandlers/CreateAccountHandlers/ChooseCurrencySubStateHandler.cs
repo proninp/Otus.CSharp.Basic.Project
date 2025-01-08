@@ -27,30 +27,39 @@ public class ChooseCurrencySubStateHandler : ISubStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task<UserSubState> HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var currentSate = session.SubState;
+        var previousState = WorkflowSubState.SendCurrencies;
         if (!_updateCallbackQueryProvider.GetCallbackQuery(update, out var callbackQuery))
-            return currentSate;
+        {
+            session.Continue(previousState);
+            return;
+        }
 
         var currencyId = callbackQuery.Data;
-        if (!string.IsNullOrEmpty(currencyId))
+        if (string.IsNullOrEmpty(currencyId))
         {
-            var currency = await _currencyManager.GetById(new Guid(currencyId), cancellationToken);
-            if (currency is not null)
-            {
-                var context = session.GetCreateAccountContext();
-                context.Currency = currency;
-                session.ContextData = context;
-
-                var chat = _chatProvider.GetChat(update);
-
-                await _messageSender.SendMessage(
-                    botClient, chat, "Enter a number to set the initial balance:", cancellationToken);
-
-                return UserSubState.SetAccountInitialBalance;
-            }
+            session.Continue(previousState);
+            return;
         }
-        return currentSate;
+
+        var currency = await _currencyManager.GetById(new Guid(currencyId), cancellationToken);
+        if (currency is null)
+        {
+            session.Continue(previousState);
+            return;
+        }
+
+        var context = session.GetCreateAccountContext();
+        context.Currency = currency;
+        session.ContextData = context;
+
+        var chat = _chatProvider.GetChat(update);
+
+        await _messageSender.SendMessage(
+            botClient, chat, "Enter a number to set the initial balance:", cancellationToken);
+
+        session.Wait(WorkflowSubState.SetAccountInitialBalance);
     }
 }
