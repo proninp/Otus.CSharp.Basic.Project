@@ -1,5 +1,5 @@
 ﻿namespace FinanceManager.Bot.Enums;
-public enum UserState
+public enum WorkflowState
 {
     Default,
     Menu,

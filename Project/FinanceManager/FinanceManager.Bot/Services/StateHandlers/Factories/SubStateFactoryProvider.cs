@@ -12,10 +12,10 @@ public class SubStateFactoryProvider : ISubStateFactoryProvider
         _serviceProvider = serviceProvider;
     }
 
-    public ISubStateFactory GetSubStateFactory(UserState state) => state switch
+    public ISubStateFactory GetSubStateFactory(WorkflowState state) => state switch
     {
-        UserState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountSubStateFactory>(),
-        UserState.AddExpense => _serviceProvider.GetRequiredService<AddExpenseSubStateFactory>(),
+        WorkflowState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountSubStateFactory>(),
+        WorkflowState.AddExpense => _serviceProvider.GetRequiredService<AddTransactionSubStateFactory>(),
         _ => throw new InvalidOperationException($"There is no substate factory provider for the state {state}")
     };
 }

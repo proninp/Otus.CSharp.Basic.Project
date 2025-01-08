@@ -10,16 +10,52 @@ public class UserSession
 
     public string? UserName { get; set; }
 
-    public UserState UserState { get; set; }
-
-    public UserSubState SubState { get; set; }
+    public UserState UserState { get; set; } = new();
 
     public object? ContextData { get; set; }
 
-    public void ResetState()
+    public WorkflowState State
     {
-        UserState = UserState.Default;
-        SubState = UserSubState.Default;
+        get => UserState.State;
+        set => UserState.State = value;
+    }
+
+    public WorkflowSubState SubState
+    {
+        get => UserState.SubState;
+        set => UserState.SubState = value;
+    }
+
+    public void ResetState() 
+    {
+        UserState.Reset();
+        ContextData = null;
+    }
+
+    public bool IsContinue() =>
+        UserState.IsContinue();
+
+    public void Wait() =>
+        UserState.Wait();
+
+    public void Wait(WorkflowSubState subState) =>
+        UserState.Wait(subState);
+
+    public void Wait(WorkflowState state) 
+    {
+        UserState.Wait(state);
+        ContextData = null;
+    }
+
+    public void Continue() =>
+        UserState.Continue();
+
+    public void Continue(WorkflowSubState subState) =>
+        UserState.Continue(subState);
+
+    public void Continue(WorkflowState state)
+    {
+        UserState.Continue(state);
         ContextData = null;
     }
 }
@@ -45,9 +81,7 @@ public static class UserSessionExtensions
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            UserState = UserState.Default,
-            SubState = UserSubState.Default,
-
+            UserState = new UserState(),
         };
     }
 }

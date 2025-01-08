@@ -1,4 +1,5 @@
 ﻿using FinanceManager.Bot.Enums;
+using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers;
@@ -14,13 +15,13 @@ public class StateHandlerFactory : IStateHandlerFactory
         _serviceProvider = serviceProvider;
     }
 
-    public IStateHandler GetHandler(UserState userState) => userState switch
+    public IStateHandler GetHandler(UserState userState) => userState.State switch
     {
-        UserState.Default => _serviceProvider.GetRequiredService<DefaultStateHandler>(),
-        UserState.Menu => _serviceProvider.GetRequiredService<MenuStateHandler>(),
-        UserState.AddExpense => _serviceProvider.GetRequiredService<RegisterExpenseStateHandler>(),
-        UserState.AddIncome => _serviceProvider.GetRequiredService<RegisterIncomeStateHandler>(),
-        UserState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountStateHandler>(),
+        WorkflowState.Default => _serviceProvider.GetRequiredService<DefaultStateHandler>(),
+        WorkflowState.Menu => _serviceProvider.GetRequiredService<MenuStateHandler>(),
+        WorkflowState.AddExpense => _serviceProvider.GetRequiredService<RegisterExpenseStateHandler>(),
+        WorkflowState.AddIncome => _serviceProvider.GetRequiredService<RegisterIncomeStateHandler>(),
+        WorkflowState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountStateHandler>(),
         _ => throw new InvalidOperationException($"There is no handler for the state {userState}")
     };
 }

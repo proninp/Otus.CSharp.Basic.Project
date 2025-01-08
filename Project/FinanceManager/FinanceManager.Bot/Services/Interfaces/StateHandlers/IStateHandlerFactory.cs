@@ -1,4 +1,4 @@
-﻿using FinanceManager.Bot.Enums;
+﻿using FinanceManager.Bot.Models;
 
 namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
 public interface IStateHandlerFactory

@@ -1,5 +1,5 @@
 ﻿namespace FinanceManager.Bot.Enums;
-public enum UserSubState
+public enum WorkflowSubState
 {
     Default,
     ChooseAccountName,
@@ -7,7 +7,9 @@ public enum UserSubState
     ChooseCurrency,
     SetAccountInitialBalance,
     SelectMenu,
-    SetExpenseDate,
-    SetExpenseAmount,
+    SetTransactionDate,
+    SetTransactionAmount,
+    ChooseTransactionCategory,
+    RegisterTransaction,
     Complete
 }

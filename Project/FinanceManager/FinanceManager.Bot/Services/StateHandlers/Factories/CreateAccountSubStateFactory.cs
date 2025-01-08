@@ -14,13 +14,13 @@ public class CreateAccountSubStateFactory : ISubStateFactory
         _serviceProvider = serviceProvider;
     }
 
-    public ISubStateHandler GetSubStateHandler(UserSubState userSubState) => userSubState switch
+    public ISubStateHandler GetSubStateHandler(WorkflowSubState userSubState) => userSubState switch
     {
-        UserSubState.Default => _serviceProvider.GetRequiredService<CreateAccountDefaultSubStateHandler>(),
-        UserSubState.ChooseAccountName => _serviceProvider.GetRequiredService<ChooseAccountNameSubStateHandler>(),
-        UserSubState.SendCurrencies => _serviceProvider.GetRequiredService<SendCurrenciesSubStateHandler>(),
-        UserSubState.ChooseCurrency => _serviceProvider.GetRequiredService<ChooseCurrencySubStateHandler>(),
-        UserSubState.SetAccountInitialBalance => _serviceProvider.GetRequiredService<SetAccountBalanceSubStateHandler>(),
+        WorkflowSubState.Default => _serviceProvider.GetRequiredService<CreateAccountDefaultSubStateHandler>(),
+        WorkflowSubState.ChooseAccountName => _serviceProvider.GetRequiredService<ChooseAccountNameSubStateHandler>(),
+        WorkflowSubState.SendCurrencies => _serviceProvider.GetRequiredService<SendCurrenciesSubStateHandler>(),
+        WorkflowSubState.ChooseCurrency => _serviceProvider.GetRequiredService<ChooseCurrencySubStateHandler>(),
+        WorkflowSubState.SetAccountInitialBalance => _serviceProvider.GetRequiredService<SetAccountBalanceSubStateHandler>(),
         _ => throw new InvalidOperationException($"There is no substate handler for the substate {userSubState}")
     };
 }
