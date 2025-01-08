@@ -9,13 +9,15 @@ public enum Emoji
     Money,
     Add,
     Remove,
+    Category,
     Expense,
     ExpenseAmount,
     Income,
     IncomeAmount,
     Settings,
     History,
-    Calendar
+    Calendar,
+    Skip
 }
 
 public static class EmojiExtension
@@ -30,6 +32,7 @@ public static class EmojiExtension
         Emoji.Money => "💰",
         Emoji.Add => "➕",
         Emoji.Remove => "➖",
+        Emoji.Category => "📊",
         Emoji.Expense => "🛒",
         Emoji.ExpenseAmount => "💸",
         Emoji.Income => "💵",
@@ -37,6 +40,7 @@ public static class EmojiExtension
         Emoji.Settings => "⚙️",
         Emoji.History => "📖",
         Emoji.Calendar => "🗓",
+        Emoji.Skip => "➡️",
         _ => string.Empty
     };
 }
