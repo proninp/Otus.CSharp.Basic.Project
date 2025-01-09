@@ -79,6 +79,7 @@ public static class TelegramInjection
         services
             .AddScoped<SendCategoriesSubStateHandler>()
             .AddScoped<ChooseCategorySubStateHandler>()
+            .AddScoped<TransactionSendDateSelectionSubStateHandler>()
             .AddScoped<TransactionSetDateSubStateHandler>()
             .AddScoped<TransactionSetAmountSubStateHandler>()
             .AddScoped<TransactionRegistrationSubStateHandler>();

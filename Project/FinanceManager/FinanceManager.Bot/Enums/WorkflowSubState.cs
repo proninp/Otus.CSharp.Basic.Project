@@ -7,6 +7,7 @@ public enum WorkflowSubState
     ChooseCurrency,
     SetAccountInitialBalance,
     SelectMenu,
+    SendTransactionDateSelection,
     SetTransactionDate,
     SetTransactionAmount,
     ChooseTransactionCategory,

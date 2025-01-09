@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
+﻿using System.Threading;
+using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
@@ -12,15 +13,21 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.Cr
 public class TransactionSetDateSubStateHandler : ISubStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
+    private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
+    private readonly IChatProvider _chatProvider;
     private readonly ITransactionDateProvider _transactionDateProvider;
     private readonly IMessageSenderManager _messageSender;
 
     public TransactionSetDateSubStateHandler(
         IUpdateMessageProvider messageProvider,
+        IUpdateCallbackQueryProvider callbackQueryProvider,
+        IChatProvider chatProvider,
         ITransactionDateProvider transactionDateProvider,
         IMessageSenderManager messageSender)
     {
         _messageProvider = messageProvider;
+        _callbackQueryProvider = callbackQueryProvider;
+        _chatProvider = chatProvider;
         _transactionDateProvider = transactionDateProvider;
         _messageSender = messageSender;
     }
@@ -28,18 +35,18 @@ public class TransactionSetDateSubStateHandler : ISubStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        if (!_messageProvider.GetMessage(update, out var message))
+        if (!GetUpdateText(update, out var dateText))
         {
             session.Wait();
             return;
         }
 
-        var dateText = message.Text;
+        var chat = _chatProvider.GetChat(update);
 
         if (!_transactionDateProvider.TryParseDate(dateText, out var date))
         {
             var incorrectDateMessage = _transactionDateProvider.GetIncorrectDateText();
-            await _messageSender.SendMessage(botClient, message.Chat, incorrectDateMessage, cancellationToken);
+            await _messageSender.SendMessage(botClient, chat, incorrectDateMessage, cancellationToken);
 
             session.Wait();
             return;
@@ -56,8 +63,23 @@ public class TransactionSetDateSubStateHandler : ISubStateHandler
         };
 
         await _messageSender.SendMessage(
-            botClient, message.Chat, $"Please enter {context.TransactionTypeDescription} {emoji} amount:", cancellationToken);
+            botClient, chat, $"Please enter {context.TransactionTypeDescription} {emoji} amount:", cancellationToken);
 
         session.Wait(WorkflowSubState.SetTransactionAmount);
+    }
+
+    private bool GetUpdateText(Update update, out string? dateText)
+    {
+        dateText = null;
+        if (_callbackQueryProvider.GetCallbackQuery(update, out var callbackQuery))
+        {
+            dateText = callbackQuery.Data;
+        }
+        else
+        {
+            if (_messageProvider.GetMessage(update, out var message))
+                dateText = message?.Text;
+        }
+        return dateText is not null;
     }
 }

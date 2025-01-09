@@ -15,11 +15,18 @@ public class AddTransactionSubStateFactory : ISubStateFactory
 
     public ISubStateHandler GetSubStateHandler(WorkflowSubState userSubState) => userSubState switch
     {
-        WorkflowSubState.Default => _serviceProvider.GetRequiredService<SendCategoriesSubStateHandler>(),
-        WorkflowSubState.ChooseTransactionCategory => _serviceProvider.GetRequiredService<ChooseCategorySubStateHandler>(),
-        WorkflowSubState.SetTransactionDate => _serviceProvider.GetRequiredService<TransactionSetDateSubStateHandler>(),
-        WorkflowSubState.SetTransactionAmount => _serviceProvider.GetRequiredService<TransactionSetAmountSubStateHandler>(),
-        WorkflowSubState.RegisterTransaction => _serviceProvider.GetRequiredService<TransactionRegistrationSubStateHandler>(),
+        WorkflowSubState.Default =>
+            _serviceProvider.GetRequiredService<SendCategoriesSubStateHandler>(),
+        WorkflowSubState.ChooseTransactionCategory =>
+            _serviceProvider.GetRequiredService<ChooseCategorySubStateHandler>(),
+        WorkflowSubState.SendTransactionDateSelection =>
+            _serviceProvider.GetRequiredService<TransactionSendDateSelectionSubStateHandler>(),
+        WorkflowSubState.SetTransactionDate =>
+            _serviceProvider.GetRequiredService<TransactionSetDateSubStateHandler>(),
+        WorkflowSubState.SetTransactionAmount =>
+            _serviceProvider.GetRequiredService<TransactionSetAmountSubStateHandler>(),
+        WorkflowSubState.RegisterTransaction =>
+            _serviceProvider.GetRequiredService<TransactionRegistrationSubStateHandler>(),
         _ => throw new InvalidOperationException($"There is no substate handler for the substate {userSubState}")
     };
 }
