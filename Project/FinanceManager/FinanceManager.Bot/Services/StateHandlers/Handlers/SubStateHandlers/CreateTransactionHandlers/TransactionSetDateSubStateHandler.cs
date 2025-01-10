@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using FinanceManager.Application.DataTransferObjects.ViewModels;
+﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;

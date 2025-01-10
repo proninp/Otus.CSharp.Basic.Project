@@ -87,6 +87,7 @@ public sealed class AccountManager : IAccountManager
 
         var accountDto = account.ToDto();
         accountDto.Currency = currency;
+
         return accountDto;
     }
 
