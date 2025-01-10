@@ -63,7 +63,12 @@ public class TransactionRegistrationSubStateHandler : ISubStateHandler
         };
 
         var transaction = await _transactionManager.Create(command, cancellationToken);
-        await _messageSender.SendApproveMessage(
-                botClient, chat, "The transaction was successfully registered", cancellationToken);
+        var balance = await _accountManager.GetBalance(account, cancellationToken);
+
+        var message = "The transaction was successfully registered" +
+            $"{Environment.NewLine}Current balance: " +
+            $"{balance} {account.Currency.CurrencyCode} {account.Currency.Emoji}";
+
+        await _messageSender.SendApproveMessage(botClient, chat, message, cancellationToken);
     }
 }

@@ -1,29 +1,20 @@
-﻿using FinanceManager.Bot.Enums;
+﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Bot.Models;
-using FinanceManager.Bot.Services.Interfaces.Providers;
+using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
-public class RegisterIncomeStateHandler : IStateHandler
+public class RegisterIncomeStateHandler : RegisterTransactionStateHandler
 {
+    public RegisterIncomeStateHandler(ISubStateFactoryProvider subStateFactoryProvider)
+        : base(subStateFactoryProvider) { }
 
-    private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
-
-    public RegisterIncomeStateHandler(IUpdateCallbackQueryProvider updateCallbackQueryProvider)
+    private protected override void AddExpenseContext(UserSession session)
     {
-        _updateCallbackQueryProvider = updateCallbackQueryProvider;
-    }
-
-    public Task HandleStateAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        if (session.ContextData is null)
+        {
+            session.SetData(new TransactionContext { TransactionType = TransactionType.Income });
+        }
     }
 }

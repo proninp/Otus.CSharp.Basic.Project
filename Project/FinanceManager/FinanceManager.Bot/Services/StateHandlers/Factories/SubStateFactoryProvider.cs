@@ -16,6 +16,7 @@ public class SubStateFactoryProvider : ISubStateFactoryProvider
     {
         WorkflowState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountSubStateFactory>(),
         WorkflowState.AddExpense => _serviceProvider.GetRequiredService<AddTransactionSubStateFactory>(),
+        WorkflowState.AddIncome => _serviceProvider.GetRequiredService<AddTransactionSubStateFactory>(),
         _ => throw new InvalidOperationException($"There is no substate factory provider for the state {state}")
     };
 }
