@@ -1,6 +1,8 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
+using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
+using FinanceManager.Application.Services.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
@@ -15,6 +17,7 @@ public class CreateAccountStateHandler : IStateHandler
 {
     private readonly ISubStateFactoryProvider _subStateFactoryProvider;
     private readonly IAccountManager _accountManager;
+    private readonly ITransactionManager _transactionManager;
     private readonly ICategoriesInitializer _categoriesInitializer;
     private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
@@ -22,12 +25,14 @@ public class CreateAccountStateHandler : IStateHandler
     public CreateAccountStateHandler(
         ISubStateFactoryProvider subStateFactoryProvider,
         IAccountManager accountManager,
+        ITransactionManager transactionManager,
         IChatProvider chatProvider,
         ICategoriesInitializer categoriesInitializer,
         IMessageSenderManager messageSender)
     {
         _subStateFactoryProvider = subStateFactoryProvider;
         _accountManager = accountManager;
+        _transactionManager = transactionManager;
         _chatProvider = chatProvider;
         _categoriesInitializer = categoriesInitializer;
         _messageSender = messageSender;
@@ -67,7 +72,7 @@ public class CreateAccountStateHandler : IStateHandler
         var defaultAccount = await _accountManager.GetDefault(session.Id, cancellationToken);
         var isDefaultExists = defaultAccount is not null;
 
-        var command = new CreateAccountDto
+        var accountCommand = new CreateAccountDto
         {
             UserId = session.Id,
             CurrencyId = context.Currency.Id,
@@ -75,7 +80,20 @@ public class CreateAccountStateHandler : IStateHandler
             IsDefault = !isDefaultExists,
             IsArchived = false
         };
-        var account = await _accountManager.Create(command, cancellationToken);
+        var account = await _accountManager.Create(accountCommand, cancellationToken);
+
+        var command = new CreateTransactionDto
+        {
+            UserId = session.Id,
+            AccountId = account.Id,
+            Amount = context.InitialBalance,
+            CategoryId = null,
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            TransactionType = TransactionType.Income,
+            Description = "Initial balance"
+        };
+
+        var transaction = await _transactionManager.Create(command, cancellationToken);
 
         var message = account.Currency is null ?
             $"The account {account.Title} with initial balance {context.InitialBalance} has been created!" :
