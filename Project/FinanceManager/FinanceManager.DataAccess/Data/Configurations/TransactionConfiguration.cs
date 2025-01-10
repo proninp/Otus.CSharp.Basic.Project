@@ -20,6 +20,6 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         builder.HasOne(t => t.Category)
             .WithMany()
             .HasForeignKey(t => t.CategoryId)
-            .IsRequired();
+            .IsRequired(false);
     }
 }
