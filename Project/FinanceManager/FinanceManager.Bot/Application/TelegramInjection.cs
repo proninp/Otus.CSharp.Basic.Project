@@ -8,6 +8,7 @@ using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.StateHandlers.Factories;
 using FinanceManager.Bot.Services.StateHandlers.Handlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
@@ -61,20 +62,22 @@ public static class TelegramInjection
             .AddScoped<CreateAccountSubStateFactory>()
             .AddScoped<AddTransactionSubStateFactory>();
             
-
         services
             .AddScoped<DefaultStateHandler>()
             .AddScoped<MenuStateHandler>()
-            .AddScoped<CreateAccountStateHandler>()
+            .AddScoped<StateHandler>()
             .AddScoped<RegisterExpenseStateHandler>()
-            .AddScoped<RegisterIncomeStateHandler>();
+            .AddScoped<RegisterIncomeStateHandler>()
+            .AddScoped<HistoryStateHandler>()
+            .AddScoped<SettingsStateHandler>();
 
         services
             .AddScoped<CreateAccountDefaultSubStateHandler>()
             .AddScoped<ChooseAccountNameSubStateHandler>()
             .AddScoped<SendCurrenciesSubStateHandler>()
             .AddScoped<ChooseCurrencySubStateHandler>()
-            .AddScoped<SetAccountBalanceSubStateHandler>();
+            .AddScoped<SetAccountBalanceSubStateHandler>()
+            .AddScoped<CreateAccountCompleteSubStateHandler>();
 
         services
             .AddScoped<SendCategoriesSubStateHandler>()

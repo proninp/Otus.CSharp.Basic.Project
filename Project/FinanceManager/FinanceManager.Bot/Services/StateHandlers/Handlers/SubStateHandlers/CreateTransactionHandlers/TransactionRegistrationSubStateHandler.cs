@@ -1,39 +1,33 @@
 ﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
-using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.Abstractions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class TransactionRegistrationSubStateHandler : ISubStateHandler
+public class TransactionRegistrationSubStateHandler : CompleteSubStateHandler
 {
-    private readonly IChatProvider _chatProvider;
-    private readonly IMessageSenderManager _messageSender;
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
 
     public TransactionRegistrationSubStateHandler(
         IChatProvider chatProvider,
-        IMessageSenderManager messageSender,
+        IMessageSenderManager messageSenderManager,
         IAccountManager accountManager,
         ITransactionManager transactionManager)
+        : base(chatProvider, messageSenderManager)
     {
-        _chatProvider = chatProvider;
-        _messageSender = messageSender;
         _accountManager = accountManager;
         _transactionManager = transactionManager;
     }
 
-    public async Task HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    private protected override async Task HandleCompleteAsync(
+        UserSession session, ITelegramBotClient botClient, Update update, Chat chat, CancellationToken cancellationToken)
     {
-        session.SubState = WorkflowSubState.Complete;
-        var chat = _chatProvider.GetChat(update);
-
         var context = session.GetTransactionContext();
         if (context.Amount <= 0)
         {
@@ -65,9 +59,10 @@ public class TransactionRegistrationSubStateHandler : ISubStateHandler
         var transaction = await _transactionManager.Create(command, cancellationToken);
         var balance = await _accountManager.GetBalance(account, cancellationToken);
 
-        var message = "The transaction was successfully registered" +
-            $"{Environment.NewLine}Current balance: " +
-            $"{balance} {account.Currency.CurrencyCode} {account.Currency.Emoji}";
+        var message = $"The transaction was successfully registered{Environment.NewLine}" +
+            $"Current balance: {balance}";
+        if (account.Currency is not null)
+            message += $" {account.Currency.CurrencyCode} {account.Currency.Emoji}";
 
         await _messageSender.SendApproveMessage(botClient, chat, message, cancellationToken);
     }

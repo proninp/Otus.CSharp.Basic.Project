@@ -1,4 +1,5 @@
 ﻿using FinanceManager.Bot.Enums;
+using FinanceManager.Bot.Exceptions;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
@@ -21,7 +22,9 @@ public class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.Menu => _serviceProvider.GetRequiredService<MenuStateHandler>(),
         WorkflowState.AddExpense => _serviceProvider.GetRequiredService<RegisterExpenseStateHandler>(),
         WorkflowState.AddIncome => _serviceProvider.GetRequiredService<RegisterIncomeStateHandler>(),
-        WorkflowState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountStateHandler>(),
-        _ => throw new InvalidOperationException($"There is no handler for the state {userState}")
+        WorkflowState.AddAccount => _serviceProvider.GetRequiredService<StateHandler>(),
+        WorkflowState.History => _serviceProvider.GetRequiredService<HistoryStateHandler>(),
+        WorkflowState.Settings => _serviceProvider.GetRequiredService<SettingsStateHandler>(),
+        _ => throw new StateHandlerNotFoundException(userState.State)
     };
 }
