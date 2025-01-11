@@ -40,6 +40,7 @@ public class SetAccountBalanceSubStateHandler : ISubStateHandler
         
         var context = session.GetCreateAccountContext();
         context.InitialBalance = amount;
-        session.SubState = WorkflowSubState.Complete;
+
+        session.Continue(WorkflowSubState.Complete);
     }
 }

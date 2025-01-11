@@ -50,6 +50,9 @@ public class UserSession
     public void Continue() =>
         UserState.Continue();
 
+    public void ContinueWithDefault() =>
+        UserState.Continue(WorkflowState.Default);
+
     public void Continue(WorkflowSubState subState) =>
         UserState.Continue(subState);
 

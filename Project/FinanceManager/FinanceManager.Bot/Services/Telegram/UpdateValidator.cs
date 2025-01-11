@@ -18,6 +18,7 @@ public class UpdateValidator : IUpdateValidator
         user = update switch
         {
             { Message: { Text: var text, From: var from } } when !string.IsNullOrEmpty(text) => from,
+            { EditedMessage: { Text: var text, From: var from } } when !string.IsNullOrEmpty(text) => from,
             { CallbackQuery: { Data: var data, From: var from } } when !string.IsNullOrEmpty(data) => from,
             _ => null
         };
@@ -30,7 +31,7 @@ public class UpdateValidator : IUpdateValidator
 
     private bool UnknownTypeUpdate(Update update)
     {
-        _logger.Information("Unknown update type: {UpdateType}", update.Type);
+        _logger.Information($"Unknown update type: {update.Type}");
         return false;
     }
 }
