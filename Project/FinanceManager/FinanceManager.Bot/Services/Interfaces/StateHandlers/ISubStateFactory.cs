@@ -1,7 +1,7 @@
-﻿using FinanceManager.Bot.Enums;
+﻿using FinanceManager.Bot.Models;
 
 namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
 public interface ISubStateFactory
 {
-    ISubStateHandler GetSubStateHandler(WorkflowSubState userSubState);
+    ISubStateHandler GetSubStateHandler(UserState userState);
 }

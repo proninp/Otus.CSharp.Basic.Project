@@ -1,4 +1,6 @@
 ﻿using FinanceManager.Bot.Enums;
+using FinanceManager.Bot.Exceptions;
+using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,11 +14,11 @@ public class SubStateFactoryProvider : ISubStateFactoryProvider
         _serviceProvider = serviceProvider;
     }
 
-    public ISubStateFactory GetSubStateFactory(WorkflowState state) => state switch
+    public ISubStateFactory GetSubStateFactory(UserState userState) => userState.State switch
     {
         WorkflowState.AddAccount => _serviceProvider.GetRequiredService<CreateAccountSubStateFactory>(),
         WorkflowState.AddExpense => _serviceProvider.GetRequiredService<AddTransactionSubStateFactory>(),
         WorkflowState.AddIncome => _serviceProvider.GetRequiredService<AddTransactionSubStateFactory>(),
-        _ => throw new InvalidOperationException($"There is no substate factory provider for the state {state}")
+        _ => throw new SubStateFactoryProviderNotFoundException(userState.State)
     };
 }
