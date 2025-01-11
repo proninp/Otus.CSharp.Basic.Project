@@ -1,7 +1,8 @@
-﻿using Telegram.Bot.Types;
+﻿using System.Diagnostics.CodeAnalysis;
+using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.Interfaces.Providers;
 public interface IChatProvider
 {
-    Chat GetChat(Update update);
+    bool GetChat(Update update, [NotNullWhen(true)] out Chat? chat);
 }

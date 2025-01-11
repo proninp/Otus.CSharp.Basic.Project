@@ -9,6 +9,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
+
 public class TransactionSetDateSubStateHandler : ISubStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
@@ -34,13 +35,14 @@ public class TransactionSetDateSubStateHandler : ISubStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        if (!_chatProvider.GetChat(update, out var chat))
+            return;
+
         if (!GetUpdateText(update, out var dateText))
         {
             session.Wait();
             return;
         }
-
-        var chat = _chatProvider.GetChat(update);
 
         if (!_transactionDateProvider.TryParseDate(dateText, out var date))
         {

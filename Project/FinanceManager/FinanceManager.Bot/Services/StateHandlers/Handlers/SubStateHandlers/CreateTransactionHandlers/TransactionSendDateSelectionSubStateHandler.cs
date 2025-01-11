@@ -24,7 +24,9 @@ public class TransactionSendDateSelectionSubStateHandler : ISubStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var chat = _chatProvider.GetChat(update);
+        if (!_chatProvider.GetChat(update, out var chat))
+            return;
+
         var context = session.GetTransactionContext();
 
         var inlineKeyboard = CreateInlineKeyboard();

@@ -1,18 +1,19 @@
-﻿using FinanceManager.Bot.Services.Interfaces.Providers;
+﻿using System.Diagnostics.CodeAnalysis;
+using FinanceManager.Bot.Services.Interfaces.Providers;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.Telegram.Providers;
 public class ChatProvider : IChatProvider
 {
-    public Chat GetChat(Update update)
+    public bool GetChat(Update update, [NotNullWhen(true)] out Chat? chat)
     {
-        var chat = update switch
+        chat = update switch
         {
             { Message: { Chat: var messageChat } } => messageChat,
+            { EditedMessage: { Chat: var editMessageChat} } => editMessageChat,
             { CallbackQuery: { Message: { Chat: var callbackChat } } } => callbackChat,
             _ => null
         };
-        ArgumentNullException.ThrowIfNull(chat, nameof(chat));
-        return chat;
+        return chat is not null;
     }
 }

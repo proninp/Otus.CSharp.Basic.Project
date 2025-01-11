@@ -27,7 +27,9 @@ public class SendCurrenciesSubStateHandler : ISubStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var chat = _chatProvider.GetChat(update);
+        if (!_chatProvider.GetChat(update, out var chat))
+            return;
+
         var currencies = await _currencyManager.GetAll(cancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(currencies);
 

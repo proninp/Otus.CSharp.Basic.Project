@@ -11,13 +11,13 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class DefaultStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
-    private readonly IUpdateMessageProvider _messageProvider;
+    private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
     public DefaultStateHandler(
-        IUpdateMessageProvider messageProvider, IAccountManager accountManager, IMessageSenderManager messageSender)
+        IChatProvider chatProvider, IAccountManager accountManager, IMessageSenderManager messageSender)
     {
-        _messageProvider = messageProvider;
+        _chatProvider = chatProvider;
         _accountManager = accountManager;
         _messageSender = messageSender;
     }
@@ -25,7 +25,7 @@ public class DefaultStateHandler : IStateHandler
     public async Task HandleStateAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        if (!_messageProvider.GetMessage(update, out var message))
+        if (!_chatProvider.GetChat(update, out var chat))
             return;
 
         var defaultAccount = await _accountManager.GetDefault(session.Id, cancellationToken);
@@ -34,7 +34,7 @@ public class DefaultStateHandler : IStateHandler
         {
             var messageText = $"Hi, {session.UserName}! {Emoji.Greeting.GetSymbol()}" +
                 $"{Environment.NewLine}Let's set you up!";
-            await _messageSender.SendMessage(botClient, message.Chat, messageText, cancellationToken);
+            await _messageSender.SendMessage(botClient, chat, messageText, cancellationToken);
 
             session.Continue(WorkflowState.AddAccount);
         }

@@ -37,6 +37,9 @@ public class ChooseCurrencySubStateHandler : ISubStateHandler
             return;
         }
 
+        if (!_chatProvider.GetChat(update, out var chat))
+            return;
+
         var currencyId = callbackQuery.Data;
         if (string.IsNullOrEmpty(currencyId))
         {
@@ -54,8 +57,6 @@ public class ChooseCurrencySubStateHandler : ISubStateHandler
         var context = session.GetCreateAccountContext();
         context.Currency = currency;
         session.ContextData = context;
-
-        var chat = _chatProvider.GetChat(update);
 
         await _messageSender.SendMessage(
             botClient, chat, "Enter a number to set the initial balance:", cancellationToken);

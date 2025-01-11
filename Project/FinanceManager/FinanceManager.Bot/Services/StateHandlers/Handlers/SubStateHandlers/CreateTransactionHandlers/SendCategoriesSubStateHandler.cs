@@ -29,7 +29,9 @@ public class SendCategoriesSubStateHandler : ISubStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var chat = _chatProvider.GetChat(update);
+        if (!_chatProvider.GetChat(update, out var chat))
+            return;
+
         var context = session.GetTransactionContext();
 
         var categories = await (context.TransactionType switch
@@ -60,7 +62,7 @@ public class SendCategoriesSubStateHandler : ISubStateHandler
 
         var keyboardButtons = buttons
             .Select((button, index) => new { button, index })
-            .GroupBy(x => x.index / 3)
+            .GroupBy(x => x.index / 2)
             .Select(g => g.Select(x => x.button).ToArray())
             .ToArray();
 

@@ -21,7 +21,8 @@ public class CreateAccountDefaultSubStateHandler : ISubStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var chat = _chatProvider.GetChat(update);
+        if (!_chatProvider.GetChat(update, out var chat))
+            return;
         await _messageSender.SendMessage(botClient, chat, "Please enter the account name:", cancellationToken);
         session.Wait(WorkflowSubState.ChooseAccountName);
     }
