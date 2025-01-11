@@ -72,7 +72,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
         int pageSize = 20,
         CancellationToken cancellationToken = default)
     {
-        if (pageIndex < 1)
+        if (pageIndex < 0)
             throw new ArgumentException("The page index must be greater than or equal to 0");
         if (pageSize < 1)
             throw new ArgumentException("The page size must be greater than or equal to 1");
@@ -93,6 +93,14 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
         if (predicate is not null)
             return query.AnyAsync(predicate, cancellationToken);
         return query.AnyAsync(cancellationToken);
+    }
+
+    public Task<long> Count(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
+    {
+        if (predicate is null)
+            return _dbSet.LongCountAsync(cancellationToken);
+
+        return _dbSet.LongCountAsync(predicate, cancellationToken);
     }
 
     private IQueryable<T> BuildQueryable(

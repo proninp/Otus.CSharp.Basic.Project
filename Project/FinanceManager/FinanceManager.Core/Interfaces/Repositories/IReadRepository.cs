@@ -37,4 +37,6 @@ public interface IReadRepository<T> where T : IdentityModel
         CancellationToken cancellationToken = default);
     
     Task<bool> Exists(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
+
+    Task<long> Count(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
 }

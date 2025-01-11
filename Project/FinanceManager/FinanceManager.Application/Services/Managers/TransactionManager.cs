@@ -46,6 +46,16 @@ public sealed class TransactionManager : ITransactionManager
             .Sum(t => t.Amount);
     }
 
+    public Task<bool> Exists(Guid userId, Guid accountId, CancellationToken cancellationToken)
+    {
+        return _repository.Exists(t => t.UserId == userId && t.AccountId == accountId, cancellationToken);
+    }
+
+    public Task<long> GetCount(Guid userId, Guid accountId, CancellationToken cancellationToken)
+    {
+        return _repository.Count(t => t.UserId == userId && t.AccountId == accountId, cancellationToken);
+    }
+
     public async Task<TransactionDto> Create(CreateTransactionDto command, CancellationToken cancellationToken)
     {
         await _transactionValidator.Validate(command, cancellationToken);

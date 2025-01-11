@@ -11,6 +11,10 @@ public interface ITransactionManager
 
     Task<decimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken);
 
+    Task<bool> Exists(Guid userId, Guid accountId, CancellationToken cancellationToken);
+
+    Task<long> GetCount(Guid userId, Guid accountId, CancellationToken cancellationToken);
+
     Task<TransactionDto> Create(CreateTransactionDto command, CancellationToken cancellationToken);
 
     Task<TransactionDto> Update(UpdateTransactionDto command, CancellationToken cancellationToken);
