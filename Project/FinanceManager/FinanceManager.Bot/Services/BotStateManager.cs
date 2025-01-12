@@ -23,7 +23,7 @@ public class BotStateManager : IBotStateManager
         do
         {
             var handler = _stateHandlerFactory.GetHandler(session.UserState);
-            await handler.HandleStateAsync(session, botClient, update, cancellationToken);
+            await handler.HandleAsync(session, botClient, update, cancellationToken);
 
         } while (session.IsContinue());
     }

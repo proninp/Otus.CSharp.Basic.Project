@@ -22,7 +22,7 @@ public class MenuStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task HandleStateAsync(
+    public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         switch (session.SubState)

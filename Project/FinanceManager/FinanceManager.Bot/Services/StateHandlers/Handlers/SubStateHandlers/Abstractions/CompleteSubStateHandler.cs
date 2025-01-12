@@ -6,7 +6,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.Abstractions;
-public abstract class CompleteSubStateHandler : ISubStateHandler
+public abstract class CompleteSubStateHandler : IStateHandler
 {
     private protected readonly IChatProvider _chatProvider;
     private protected readonly IMessageSenderManager _messageSender;

@@ -10,7 +10,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-public class SendCurrenciesSubStateHandler : ISubStateHandler
+public class SendCurrenciesSubStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IChatProvider _chatProvider;

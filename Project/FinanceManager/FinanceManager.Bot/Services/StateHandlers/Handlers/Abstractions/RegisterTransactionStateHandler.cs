@@ -14,16 +14,11 @@ public abstract class RegisterTransactionStateHandler : IStateHandler
         _stateHandler = stateHandler;
     }
 
-    public async Task HandleStateAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         AddExpenseContext(session);
 
-        await _stateHandler.HandleStateAsync(session, botClient, update, cancellationToken);
-    }
-
-    public Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        await _stateHandler.HandleAsync(session, botClient, update, cancellationToken);
     }
 
     private protected abstract void AddExpenseContext(UserSession session);

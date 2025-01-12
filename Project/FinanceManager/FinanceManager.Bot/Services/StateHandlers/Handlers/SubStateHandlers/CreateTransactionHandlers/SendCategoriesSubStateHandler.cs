@@ -12,7 +12,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class SendCategoriesSubStateHandler : ISubStateHandler
+public class SendCategoriesSubStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
     private readonly IChatProvider _chatProvider;

@@ -10,7 +10,7 @@ using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
 
-public class TransactionSetDateSubStateHandler : ISubStateHandler
+public class TransactionSetDateSubStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;

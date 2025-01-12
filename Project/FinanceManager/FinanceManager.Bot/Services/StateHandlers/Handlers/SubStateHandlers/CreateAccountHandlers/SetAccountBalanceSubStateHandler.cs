@@ -8,7 +8,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-public class SetAccountBalanceSubStateHandler : ISubStateHandler
+public class SetAccountBalanceSubStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _updateMessageProvider;
     private readonly IMessageSenderManager _messageSender;

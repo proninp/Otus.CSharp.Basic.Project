@@ -9,7 +9,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-public class ChooseCurrencySubStateHandler : ISubStateHandler
+public class ChooseCurrencySubStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;

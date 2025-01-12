@@ -9,7 +9,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class TransactionSendDateSelectionSubStateHandler : ISubStateHandler
+public class TransactionSendDateSelectionSubStateHandler : IStateHandler
 {
     private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;

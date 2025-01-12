@@ -5,8 +5,6 @@ using Telegram.Bot.Types;
 namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
 public interface IStateHandler
 {
-    Task HandleStateAsync(
+    Task HandleAsync(
         UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken);
-
-    Task RollBackAsync(UserSession userSession, CancellationToken cancellationToken);
 }
