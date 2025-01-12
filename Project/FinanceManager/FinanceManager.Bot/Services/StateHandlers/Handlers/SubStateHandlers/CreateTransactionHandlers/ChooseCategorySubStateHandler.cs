@@ -9,7 +9,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class ChooseCategorySubStateHandler : ISubStateHandler
+public class ChooseCategorySubStateHandler : IStateHandler
 {
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
     private readonly ICategoryManager _categoryManager;

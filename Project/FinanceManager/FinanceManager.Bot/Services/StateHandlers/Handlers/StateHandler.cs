@@ -14,7 +14,7 @@ public class StateHandler : IStateHandler
         _subStateFactoryProvider = subStateFactoryProvider;
     }
 
-    public async Task HandleStateAsync(UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(UserSession userSession, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         var subStateHandlerFactory = _subStateFactoryProvider.GetSubStateFactory(userSession.UserState);
         var subStateHandler = subStateHandlerFactory.GetSubStateHandler(userSession.UserState);

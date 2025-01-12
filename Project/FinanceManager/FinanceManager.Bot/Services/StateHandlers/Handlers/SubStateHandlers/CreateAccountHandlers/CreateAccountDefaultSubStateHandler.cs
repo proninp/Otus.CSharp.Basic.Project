@@ -7,7 +7,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-public class CreateAccountDefaultSubStateHandler : ISubStateHandler
+public class CreateAccountDefaultSubStateHandler : IStateHandler
 {
     private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;

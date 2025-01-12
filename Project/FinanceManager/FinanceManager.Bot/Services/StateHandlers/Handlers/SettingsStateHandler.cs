@@ -18,7 +18,7 @@ public class SettingsStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task HandleStateAsync(
+    public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_chatProvider.GetChat(update, out var chat))

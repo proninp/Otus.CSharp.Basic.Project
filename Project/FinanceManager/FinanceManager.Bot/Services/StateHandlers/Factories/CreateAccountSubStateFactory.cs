@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Factories;
 
+
 public class CreateAccountSubStateFactory : ISubStateFactory
 {
     private readonly IServiceProvider _serviceProvider;
@@ -17,7 +18,7 @@ public class CreateAccountSubStateFactory : ISubStateFactory
         _serviceProvider = serviceProvider;
     }
 
-    public ISubStateHandler GetSubStateHandler(UserState userState) => userState.SubState switch
+    public IStateHandler GetSubStateHandler(UserState userState) => userState.SubState switch
     {
         WorkflowSubState.Default => _serviceProvider.GetRequiredService<CreateAccountDefaultSubStateHandler>(),
         WorkflowSubState.ChooseAccountName => _serviceProvider.GetRequiredService<ChooseAccountNameSubStateHandler>(),

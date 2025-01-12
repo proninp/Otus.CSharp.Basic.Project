@@ -1,4 +1,5 @@
-﻿using FinanceManager.Bot.Services;
+﻿using FinanceManager.Bot.Enums;
+using FinanceManager.Bot.Services;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.Interfaces;
 using FinanceManager.Bot.Services.Interfaces.Managers;
@@ -19,6 +20,7 @@ using FinanceManager.Core.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Stateless;
 using Telegram.Bot;
 
 namespace FinanceManager.Bot.Application;
@@ -86,6 +88,9 @@ public static class TelegramInjection
             .AddScoped<TransactionSetDateSubStateHandler>()
             .AddScoped<TransactionSetAmountSubStateHandler>()
             .AddScoped<TransactionRegistrationSubStateHandler>();
+
+        services
+            .AddScoped(sp => new StateMachine<BotState, BotTrigger>(BotState.Default));
 
         return services;
     }

@@ -15,7 +15,7 @@ public class AddTransactionSubStateFactory : ISubStateFactory
         _serviceProvider = serviceProvider;
     }
 
-    public ISubStateHandler GetSubStateHandler(UserState userState) => userState.SubState switch
+    public IStateHandler GetSubStateHandler(UserState userState) => userState.SubState switch
     {
         WorkflowSubState.Default =>
             _serviceProvider.GetRequiredService<SendCategoriesSubStateHandler>(),

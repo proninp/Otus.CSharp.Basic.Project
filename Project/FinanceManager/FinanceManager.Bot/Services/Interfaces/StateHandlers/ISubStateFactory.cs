@@ -3,5 +3,5 @@
 namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
 public interface ISubStateFactory
 {
-    ISubStateHandler GetSubStateHandler(UserState userState);
+    IStateHandler GetSubStateHandler(UserState userState);
 }
