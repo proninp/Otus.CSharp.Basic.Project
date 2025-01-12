@@ -5,7 +5,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.Abstractions;
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 public abstract class CompleteSubStateHandler : IStateHandler
 {
     private protected readonly IChatProvider _chatProvider;
@@ -39,7 +39,7 @@ public abstract class CompleteSubStateHandler : IStateHandler
         }
         finally
         {
-            session.ResetState();
+            session.Reset();
         }
     }
 

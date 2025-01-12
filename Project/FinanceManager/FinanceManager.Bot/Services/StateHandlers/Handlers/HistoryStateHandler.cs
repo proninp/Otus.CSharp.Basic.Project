@@ -60,9 +60,4 @@ public class HistoryStateHandler : IStateHandler
 
         throw new NotImplementedException();
     }
-
-    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
 }

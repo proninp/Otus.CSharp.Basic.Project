@@ -8,13 +8,13 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class ChooseCategorySubStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
+public class ChooseCategoryStateHandler : IStateHandler
 {
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
     private readonly ICategoryManager _categoryManager;
 
-    public ChooseCategorySubStateHandler(
+    public ChooseCategoryStateHandler(
         IUpdateCallbackQueryProvider callbackQueryProvider,
         ICategoryManager categoryManager)
     {
@@ -25,7 +25,7 @@ public class ChooseCategorySubStateHandler : IStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var previousState = WorkflowSubState.Default;
+        var previousState = WorkflowState.SendTransactionCategories;
         if (!_callbackQueryProvider.GetCallbackQuery(update, out var callbackQuery))
         {
             session.Continue(previousState);
@@ -55,6 +55,6 @@ public class ChooseCategorySubStateHandler : IStateHandler
         var context = session.GetTransactionContext();
         context.Category = category;
 
-        session.Continue(WorkflowSubState.SendTransactionDateSelection);
+        session.Continue(WorkflowState.SendTransactionDateSelection);
     }
 }

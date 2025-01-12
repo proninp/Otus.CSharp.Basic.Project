@@ -8,15 +8,15 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-public class ChooseCurrencySubStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
+public class ChooseCurrencyStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
     private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public ChooseCurrencySubStateHandler(ICurrencyManager currencyManager,
+    public ChooseCurrencyStateHandler(ICurrencyManager currencyManager,
         IUpdateCallbackQueryProvider updateCallbackQueryProvider,
         IChatProvider chatProvider,
         IMessageSenderManager messageSender)
@@ -30,7 +30,7 @@ public class ChooseCurrencySubStateHandler : IStateHandler
     public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        var previousState = WorkflowSubState.SendCurrencies;
+        var previousState = WorkflowState.SendCurrencies;
         if (!_updateCallbackQueryProvider.GetCallbackQuery(update, out var callbackQuery))
         {
             session.Continue(previousState);
@@ -61,6 +61,6 @@ public class ChooseCurrencySubStateHandler : IStateHandler
         await _messageSender.SendMessage(
             botClient, chat, "Enter a number to set the initial balance:", cancellationToken);
 
-        session.Wait(WorkflowSubState.SetAccountInitialBalance);
+        session.Wait(WorkflowState.SetAccountInitialBalance);
     }
 }

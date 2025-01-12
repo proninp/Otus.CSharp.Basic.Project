@@ -2,8 +2,16 @@
 public enum WorkflowState
 {
     Default,
-    Menu,
+    CreateMenu,
+    SelectMenu,
     AddAccount,
+    CreateAccountStart,
+    ChooseAccountName,
+    SendCurrencies,
+    ChooseCurrency,
+    SetAccountInitialBalance,
+    CreateAccountEnd,
+
     DeleteAccount,
     AddCategory,
     DeleteCategory,
@@ -11,6 +19,14 @@ public enum WorkflowState
     DeleteExpense,
     AddIncome,
     DeleteIncome,
+    
+    SendTransactionDateSelection,
+    SetTransactionDate,
+    SetTransactionAmount,
+    SendTransactionCategories,
+    ChooseTransactionCategory,
+    RegisterTransaction,
+
     AddTransfer,
     DeleteTransfer,
     History,

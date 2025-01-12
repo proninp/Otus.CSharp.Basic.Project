@@ -26,11 +26,6 @@ public class SettingsStateHandler : IStateHandler
 
         await _messageSender.SendMessage(
             botClient, chat, $"The settings feature is under development {Emoji.Rocket.GetSymbol()}", cancellationToken);
-        session.Continue(WorkflowState.Menu);
-    }
-
-    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
+        session.Continue(WorkflowState.CreateMenu);
     }
 }

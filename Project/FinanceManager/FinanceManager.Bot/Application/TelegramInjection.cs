@@ -6,10 +6,9 @@ using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.StateHandlers.Factories;
-using FinanceManager.Bot.Services.StateHandlers.Handlers;
-using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandlers;
-using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
 using FinanceManager.Bot.Services.Telegram.Providers;
@@ -57,35 +56,32 @@ public static class TelegramInjection
             .AddScoped<ITransactionDateProvider, TransactionDateProvider>();
 
         services
-            .AddScoped<IStateHandlerFactory, StateHandlerFactory>()
-            .AddScoped<ISubStateFactoryProvider, SubStateFactoryProvider>()
-            .AddScoped<CreateAccountSubStateFactory>()
-            .AddScoped<AddTransactionSubStateFactory>();
-            
+            .AddScoped<IStateHandlerFactory, StateHandlerFactory>();
+
         services
             .AddScoped<DefaultStateHandler>()
-            .AddScoped<MenuStateHandler>()
-            .AddScoped<StateHandler>()
-            .AddScoped<RegisterExpenseStateHandler>()
-            .AddScoped<RegisterIncomeStateHandler>()
+            .AddScoped<CreateMenuStateHandler>()
+            .AddScoped<SelectMenuStateHandler>()
+            .AddScoped<RegisterExpenseStartStateHandler>()
+            .AddScoped<RegisterIncomeStartStateHandler>()
             .AddScoped<HistoryStateHandler>()
             .AddScoped<SettingsStateHandler>();
 
         services
-            .AddScoped<CreateAccountDefaultSubStateHandler>()
-            .AddScoped<ChooseAccountNameSubStateHandler>()
-            .AddScoped<SendCurrenciesSubStateHandler>()
-            .AddScoped<ChooseCurrencySubStateHandler>()
-            .AddScoped<SetAccountBalanceSubStateHandler>()
-            .AddScoped<CreateAccountCompleteSubStateHandler>();
+            .AddScoped<CreateAccountStartStateHandler>()
+            .AddScoped<ChooseAccountNameStateHandler>()
+            .AddScoped<SendCurrenciesStateHandler>()
+            .AddScoped<ChooseCurrencyStateHandler>()
+            .AddScoped<SetAccountBalanceStateHandler>()
+            .AddScoped<CreateAccountEndStateHandler>();
 
         services
-            .AddScoped<SendCategoriesSubStateHandler>()
-            .AddScoped<ChooseCategorySubStateHandler>()
-            .AddScoped<TransactionSendDateSelectionSubStateHandler>()
-            .AddScoped<TransactionSetDateSubStateHandler>()
-            .AddScoped<TransactionSetAmountSubStateHandler>()
-            .AddScoped<TransactionRegistrationSubStateHandler>();
+            .AddScoped<SendCategoriesStateHandler>()
+            .AddScoped<ChooseCategoryStateHandler>()
+            .AddScoped<TransactionDateSelectionStateHandler>()
+            .AddScoped<TransactionSetDateStateHandler>()
+            .AddScoped<TransactionSetAmountStateHandler>()
+            .AddScoped<TransactionRegistrationStateHandler>();
 
         return services;
     }

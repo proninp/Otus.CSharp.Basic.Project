@@ -6,18 +6,18 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
-using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.Abstractions;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandlers;
-public class CreateAccountCompleteSubStateHandler : CompleteSubStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
+public class CreateAccountEndStateHandler : CompleteSubStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
     private readonly ICategoriesInitializer _categoriesInitializer;
 
-    public CreateAccountCompleteSubStateHandler(
+    public CreateAccountEndStateHandler(
         IAccountManager accountManager,
         ITransactionManager transactionManager,
         ICategoriesInitializer categoriesInitializer,

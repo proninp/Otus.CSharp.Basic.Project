@@ -36,16 +36,11 @@ public class DefaultStateHandler : IStateHandler
                 $"{Environment.NewLine}Let's set you up!";
             await _messageSender.SendMessage(botClient, chat, messageText, cancellationToken);
 
-            session.Continue(WorkflowState.AddAccount);
+            session.Continue(WorkflowState.CreateAccountStart);
         }
         else
         {
-            session.Continue(WorkflowState.Menu);
+            session.Continue(WorkflowState.CreateMenu);
         }
-    }
-
-    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 }

@@ -9,14 +9,14 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-public class SendCurrenciesSubStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
+public class SendCurrenciesStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public SendCurrenciesSubStateHandler(
+    public SendCurrenciesStateHandler(
         ICurrencyManager currencyManager, IChatProvider chatProvider, IMessageSenderManager messageSenderManager)
     {
         _currencyManager = currencyManager;
@@ -36,7 +36,7 @@ public class SendCurrenciesSubStateHandler : IStateHandler
         await _messageSender.SendInlineKeyboardMessage(
             botClient, chat, "Choose currency:", inlineKeyboard, cancellationToken);
 
-        session.Wait(WorkflowSubState.ChooseCurrency);
+        session.Wait(WorkflowState.ChooseCurrency);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(CurrencyDto[] currencies)

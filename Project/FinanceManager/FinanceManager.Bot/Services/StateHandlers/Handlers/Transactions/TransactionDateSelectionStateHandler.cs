@@ -8,13 +8,13 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class TransactionSendDateSelectionSubStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
+public class TransactionDateSelectionStateHandler : IStateHandler
 {
     private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public TransactionSendDateSelectionSubStateHandler(
+    public TransactionDateSelectionStateHandler(
         IChatProvider chatProvider, IMessageSenderManager messageSender)
     {
         _chatProvider = chatProvider;
@@ -38,7 +38,7 @@ public class TransactionSendDateSelectionSubStateHandler : IStateHandler
              "You can enter date in <code>dd</code>, <code>dd.mm</code> or <code>dd.mm.yyyy</code> formats:",
             inlineKeyboard, cancellationToken);
 
-        session.Wait(WorkflowSubState.SetTransactionDate);
+        session.Wait(WorkflowState.SetTransactionDate);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard()

@@ -1,7 +1,7 @@
-﻿using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Enums;
 
 namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
 public interface IStateHandlerFactory
 {
-    IStateHandler GetHandler(UserState userState);
+    IStateHandler GetHandler(WorkflowState state);
 }

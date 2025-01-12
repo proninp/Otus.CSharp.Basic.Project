@@ -4,17 +4,17 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
-using FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.Abstractions;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class TransactionRegistrationSubStateHandler : CompleteSubStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
+public class TransactionRegistrationStateHandler : CompleteSubStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
 
-    public TransactionRegistrationSubStateHandler(
+    public TransactionRegistrationStateHandler(
         IChatProvider chatProvider,
         IMessageSenderManager messageSenderManager,
         IAccountManager accountManager,
