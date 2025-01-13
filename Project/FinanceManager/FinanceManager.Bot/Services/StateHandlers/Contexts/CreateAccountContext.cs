@@ -17,9 +17,9 @@ public static class CreateAccountContextExtesion
     public static CreateAccountContext GetCreateAccountContext(this UserSession session)
     {
         CreateAccountContext? createAccountContext;
-        if (session.ContextData is null)
+        if (session.WorkflowContext is null)
             throw new StateContextNullException(session.State, nameof(createAccountContext));
-        createAccountContext = session.ContextData as CreateAccountContext;
+        createAccountContext = session.WorkflowContext as CreateAccountContext;
         if (createAccountContext is null)
             throw new InvalidCastException(nameof(createAccountContext));
         return createAccountContext;

@@ -5,13 +5,10 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
-using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
-public class CreateAccountEndStateHandler : CompleteSubStateHandler
+public class CreateAccountEndStateHandler : CompleteStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
@@ -21,45 +18,42 @@ public class CreateAccountEndStateHandler : CompleteSubStateHandler
         IAccountManager accountManager,
         ITransactionManager transactionManager,
         ICategoriesInitializer categoriesInitializer,
-        IChatProvider chatProvider,
         IMessageSenderManager messageSender)
-        : base(chatProvider, messageSender)
+        : base(messageSender)
     {
         _accountManager = accountManager;
         _transactionManager = transactionManager;
         _categoriesInitializer = categoriesInitializer;
     }
 
-    private protected override async Task HandleCompleteAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, Chat chat, CancellationToken cancellationToken)
+    private protected override async Task HandleCompleteAsync(BotUpdateContext updateContext)
     {
-        await CreateAccount(session, botClient, update, chat, cancellationToken);
-        await _categoriesInitializer.InitializeDefaults(session.Id, cancellationToken);
+        await CreateAccount(updateContext);
+        await _categoriesInitializer.InitializeDefaults(updateContext.Session.Id, updateContext.CancellationToken);
     }
 
-    private async Task CreateAccount(
-        UserSession session, ITelegramBotClient botClient, Update update, Chat chat, CancellationToken cancellationToken)
+    private async Task CreateAccount(BotUpdateContext updateContext)
     {
-        var context = session.GetCreateAccountContext();
+        var context = updateContext.Session.GetCreateAccountContext();
         ArgumentNullException.ThrowIfNull(context.Currency, nameof(context.Currency));
 
-        var defaultAccount = await _accountManager.GetDefault(session.Id, cancellationToken);
+        var defaultAccount = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
         var isDefaultExists = defaultAccount is not null;
 
         var accountCommand = new CreateAccountDto
         {
-            UserId = session.Id,
+            UserId = updateContext.Session.Id,
             CurrencyId = context.Currency.Id,
             Title = context.AccountName,
             IsDefault = !isDefaultExists,
             IsArchived = false
         };
 
-        var account = await _accountManager.Create(accountCommand, cancellationToken);
+        var account = await _accountManager.Create(accountCommand, updateContext.CancellationToken);
 
         var command = new CreateTransactionDto
         {
-            UserId = session.Id,
+            UserId = updateContext.Session.Id,
             AccountId = account.Id,
             Amount = context.InitialBalance,
             CategoryId = null,
@@ -68,13 +62,13 @@ public class CreateAccountEndStateHandler : CompleteSubStateHandler
             Description = "Initial balance"
         };
 
-        var transaction = await _transactionManager.Create(command, cancellationToken);
+        var transaction = await _transactionManager.Create(command, updateContext.CancellationToken);
 
         var message = account.Currency is null ?
             $"The account {account.Title} with initial balance {context.InitialBalance} has been created!" :
             $"The account {account.Title} with initial balance {context.InitialBalance} {account.Currency.CurrencyCode} " +
             $"{account.Currency.Emoji} has been created!";
 
-        await _messageSender.SendApproveMessage(botClient, chat, message, cancellationToken);
+        await _messageSender.SendApproveMessage(updateContext, message);
     }
 }

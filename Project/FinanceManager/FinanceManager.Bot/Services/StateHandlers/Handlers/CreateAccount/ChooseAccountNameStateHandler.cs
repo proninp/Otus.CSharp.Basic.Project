@@ -5,8 +5,6 @@ using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class ChooseAccountNameStateHandler : IStateHandler
@@ -23,43 +21,43 @@ public class ChooseAccountNameStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_messageProvider.GetMessage(update, out var message))
+        if (!_messageProvider.GetMessage(updateContext.Update, out var message))
         {
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
 
         var accountTitle = message.Text;
         if (string.IsNullOrWhiteSpace(accountTitle) || accountTitle.Length == 0)
         {
-            await _messageSender.SendErrorMessage(botClient, message.Chat,
-                "The account name must contain at least one non-whitespace character.", cancellationToken);
+            await _messageSender.SendErrorMessage(updateContext,
+                "The account name must contain at least one non-whitespace character.");
 
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
         if (!char.IsLetterOrDigit(accountTitle[0]))
         {
-            await _messageSender.SendErrorMessage(botClient, message.Chat,
-                "The account name must start with a number or letter. Enter a different account name.", cancellationToken);
+            await _messageSender.SendErrorMessage(updateContext,
+                "The account name must start with a number or letter. Enter a different account name.");
 
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
-        var existingAccount = await _accountManager.GetByName(session.Id, accountTitle, false, cancellationToken);
+        var existingAccount = await _accountManager.GetByName(updateContext.Session.Id, accountTitle, false, updateContext.CancellationToken);
         if (existingAccount is not null)
         {
-            await _messageSender.SendErrorMessage(botClient, message.Chat,
-                "An account with that name already exists. Enter a different name.", cancellationToken);
+            await _messageSender.SendErrorMessage(updateContext,
+                "An account with that name already exists. Enter a different name.");
 
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
 
         var context = new CreateAccountContext { AccountName = accountTitle };
-        session.SetData(context);
-        session.Continue(WorkflowState.SendCurrencies);
+        updateContext.Session.SetData(context);
+        updateContext.Session.Continue(WorkflowState.SendCurrencies);
     }
 }

@@ -2,43 +2,32 @@
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
-using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionDateSelectionStateHandler : IStateHandler
 {
-    private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public TransactionDateSelectionStateHandler(
-        IChatProvider chatProvider, IMessageSenderManager messageSender)
+    public TransactionDateSelectionStateHandler(IMessageSenderManager messageSender)
     {
-        _chatProvider = chatProvider;
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_chatProvider.GetChat(update, out var chat))
-            return;
-
-        var context = session.GetTransactionContext();
+        var context = updateContext.Session.GetTransactionContext();
 
         var inlineKeyboard = CreateInlineKeyboard();
 
-        await _messageSender.SendInlineKeyboardMessage(
-            botClient, chat,
+        await _messageSender.SendInlineKeyboardMessage(updateContext,
              $"Please choose or enter the date of the {context.TransactionTypeDescription} {Emoji.Calendar.GetSymbol()}" +
              $"{Environment.NewLine}" +
              "You can enter date in <code>dd</code>, <code>dd.mm</code> or <code>dd.mm.yyyy</code> formats:",
-            inlineKeyboard, cancellationToken);
+            inlineKeyboard);
 
-        session.Wait(WorkflowState.SetTransactionDate);
+        updateContext.Session.Wait(WorkflowState.SetTransactionDate);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard()

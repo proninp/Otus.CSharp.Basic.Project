@@ -5,7 +5,6 @@ using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
@@ -14,46 +13,39 @@ public class TransactionSetDateStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
-    private readonly IChatProvider _chatProvider;
     private readonly ITransactionDateProvider _transactionDateProvider;
     private readonly IMessageSenderManager _messageSender;
 
     public TransactionSetDateStateHandler(
         IUpdateMessageProvider messageProvider,
         IUpdateCallbackQueryProvider callbackQueryProvider,
-        IChatProvider chatProvider,
         ITransactionDateProvider transactionDateProvider,
         IMessageSenderManager messageSender)
     {
         _messageProvider = messageProvider;
         _callbackQueryProvider = callbackQueryProvider;
-        _chatProvider = chatProvider;
         _transactionDateProvider = transactionDateProvider;
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_chatProvider.GetChat(update, out var chat))
-            return;
-
-        if (!GetUpdateText(update, out var dateText))
+        if (!GetUpdateText(updateContext.Update, out var dateText))
         {
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
 
         if (!_transactionDateProvider.TryParseDate(dateText, out var date))
         {
             var incorrectDateMessage = _transactionDateProvider.GetIncorrectDateText();
-            await _messageSender.SendMessage(botClient, chat, incorrectDateMessage, cancellationToken);
+            await _messageSender.SendMessage(updateContext, incorrectDateMessage);
 
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
 
-        var context = session.GetTransactionContext();
+        var context = updateContext.Session.GetTransactionContext();
         context.Date = date;
 
         var emoji = context.TransactionType switch
@@ -63,10 +55,9 @@ public class TransactionSetDateStateHandler : IStateHandler
             _ => string.Empty
         };
 
-        await _messageSender.SendMessage(
-            botClient, chat, $"Please enter {context.TransactionTypeDescription} {emoji} amount:", cancellationToken);
+        await _messageSender.SendMessage(updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
 
-        session.Wait(WorkflowState.SetTransactionAmount);
+        updateContext.Session.Wait(WorkflowState.SetTransactionAmount);
     }
 
     private bool GetUpdateText(Update update, out string? dateText)

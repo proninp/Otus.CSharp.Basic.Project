@@ -21,9 +21,9 @@ public static class TransactionContextExtesion
     public static TransactionContext GetTransactionContext(this UserSession session)
     {
         TransactionContext? transactionContext;
-        if (session.ContextData is null)
+        if (session.WorkflowContext is null)
             throw new ArgumentNullException(nameof(transactionContext));
-        transactionContext = session.ContextData as TransactionContext;
+        transactionContext = session.WorkflowContext as TransactionContext;
         if (transactionContext is null)
             throw new InvalidCastException(nameof(transactionContext));
         return transactionContext;

@@ -2,35 +2,26 @@
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
-using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 public class CreateMenuStateHandler : IStateHandler
 {
-    private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public CreateMenuStateHandler(IChatProvider chatProvider, IMessageSenderManager messageSender)
+    public CreateMenuStateHandler(IMessageSenderManager messageSender)
     {
-        _chatProvider = chatProvider;
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_chatProvider.GetChat(update, out var chat))
-            return;
-
         var inlineKeyboard = CreateInlineKeyboard();
 
-        await _messageSender.SendInlineKeyboardMessage(
-            botClient, chat, "Choose an action:", inlineKeyboard, cancellationToken);
+        await _messageSender.SendInlineKeyboardMessage(updateContext, "Choose an action:", inlineKeyboard);
 
-        session.Wait(WorkflowState.SelectMenu);
+        updateContext.Session.Wait(WorkflowState.SelectMenu);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard()

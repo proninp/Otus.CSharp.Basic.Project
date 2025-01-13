@@ -2,8 +2,6 @@
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 public class SelectMenuStateHandler : IStateHandler
@@ -15,9 +13,9 @@ public class SelectMenuStateHandler : IStateHandler
         _callbackQueryProvider = callbackQueryProvider;
     }
 
-    public Task HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (_callbackQueryProvider.GetCallbackQuery(update, out var callbackQuery) && callbackQuery.Data is not null)
+        if (_callbackQueryProvider.GetCallbackQuery(updateContext.Update, out var callbackQuery) && callbackQuery.Data is not null)
         {
             var stateMapping = new Dictionary<string, WorkflowState>
             {
@@ -28,13 +26,13 @@ public class SelectMenuStateHandler : IStateHandler
             };
 
             if (!stateMapping.TryGetValue(callbackQuery.Data, out var newState))
-                newState = session.State;
+                newState = updateContext.Session.State;
 
-            session.Continue(newState);
+            updateContext.Session.Continue(newState, true);
         }
         else
         {
-            session.Reset();
+            updateContext.Session.Reset();
         }
 
         return Task.CompletedTask;

@@ -8,7 +8,7 @@ public class RegisterIncomeStartStateHandler : RegisterTransactionStateHandler
 {
     private protected override void AddExpenseContext(UserSession session)
     {
-        if (session.ContextData is null)
+        if (session.WorkflowContext is null)
         {
             session.SetData(new TransactionContext { TransactionType = TransactionType.Income });
         }

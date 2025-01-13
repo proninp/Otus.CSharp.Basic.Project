@@ -5,8 +5,6 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class ChooseCategoryStateHandler : IStateHandler
@@ -22,13 +20,12 @@ public class ChooseCategoryStateHandler : IStateHandler
         _categoryManager = categoryManager;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
         var previousState = WorkflowState.SendTransactionCategories;
-        if (!_callbackQueryProvider.GetCallbackQuery(update, out var callbackQuery))
+        if (!_callbackQueryProvider.GetCallbackQuery(updateContext.Update, out var callbackQuery))
         {
-            session.Continue(previousState);
+            updateContext.Session.Continue(previousState);
             return;
         }
 
@@ -36,7 +33,7 @@ public class ChooseCategoryStateHandler : IStateHandler
 
         if (string.IsNullOrEmpty(categoryId))
         {
-            session.Continue(previousState);
+            updateContext.Session.Continue(previousState);
             return;
         }
 
@@ -44,17 +41,17 @@ public class ChooseCategoryStateHandler : IStateHandler
 
         if (categoryId != Guid.Empty.ToString())
         {
-            category = await _categoryManager.GetById(new Guid(categoryId), cancellationToken);
+            category = await _categoryManager.GetById(new Guid(categoryId), updateContext.CancellationToken);
             if (category is null)
             {
-                session.Continue(previousState);
+                updateContext.Session.Continue(previousState);
                 return;
             }
         }
 
-        var context = session.GetTransactionContext();
+        var context = updateContext.Session.GetTransactionContext();
         context.Category = category;
 
-        session.Continue(WorkflowState.SendTransactionDateSelection);
+        updateContext.Session.Continue(WorkflowState.SendTransactionDateSelection);
     }
 }

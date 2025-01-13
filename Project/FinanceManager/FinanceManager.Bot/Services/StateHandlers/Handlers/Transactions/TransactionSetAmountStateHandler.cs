@@ -4,8 +4,6 @@ using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionSetAmountStateHandler : IStateHandler
@@ -19,38 +17,34 @@ public class TransactionSetAmountStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_messageProvider.GetMessage(update, out var message))
+        if (!_messageProvider.GetMessage(updateContext.Update, out var message))
         {
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
-
 
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {
-            await _messageSender.SendErrorMessage(
-                botClient, message.Chat,
-                "The entered value is not a number. Please try again.", cancellationToken);
-            session.Wait();
+            await _messageSender.SendErrorMessage(updateContext,
+                "The entered value is not a number. Please try again.");
+            updateContext.Session.Wait();
             return;
         }
 
         if (amount < 0)
         {
-            await _messageSender.SendErrorMessage(
-                botClient, message.Chat,
-                "The expense amount must be a non-negative number. Please try again.", cancellationToken);
-            session.Wait();
+            await _messageSender.SendErrorMessage(updateContext,
+                "The expense amount must be a non-negative number. Please try again.");
+            updateContext.Session.Wait();
             return;
         }
 
-        var context = session.GetTransactionContext();
+        var context = updateContext.Session.GetTransactionContext();
         context.Amount = amount;
 
-        session.Continue(WorkflowState.RegisterTransaction);
+        updateContext.Session.Continue(WorkflowState.RegisterTransaction);
     }
 }

@@ -3,40 +3,30 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
-using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class SendCurrenciesStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
-    private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
     public SendCurrenciesStateHandler(
-        ICurrencyManager currencyManager, IChatProvider chatProvider, IMessageSenderManager messageSenderManager)
+        ICurrencyManager currencyManager, IMessageSenderManager messageSenderManager)
     {
         _currencyManager = currencyManager;
-        _chatProvider = chatProvider;
         _messageSender = messageSenderManager;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_chatProvider.GetChat(update, out var chat))
-            return;
-
-        var currencies = await _currencyManager.GetAll(cancellationToken);
+        var currencies = await _currencyManager.GetAll(updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(currencies);
 
-        await _messageSender.SendInlineKeyboardMessage(
-            botClient, chat, "Choose currency:", inlineKeyboard, cancellationToken);
+        await _messageSender.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
 
-        session.Wait(WorkflowState.ChooseCurrency);
+        updateContext.Session.Wait(WorkflowState.ChooseCurrency);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(CurrencyDto[] currencies)

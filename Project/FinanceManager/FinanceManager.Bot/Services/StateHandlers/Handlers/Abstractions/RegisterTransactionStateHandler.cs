@@ -1,17 +1,15 @@
 ﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 public abstract class RegisterTransactionStateHandler : IStateHandler
 {
-    public Task HandleAsync(UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public Task HandleAsync(BotUpdateContext updateContext)
     {
-        AddExpenseContext(session);
-        
-        session.Continue(Enums.WorkflowState.SendTransactionCategories);
+        AddExpenseContext(updateContext.Session);
+
+        updateContext.Session.Continue(Enums.WorkflowState.SendTransactionCategories);
         return Task.CompletedTask;
     }
 

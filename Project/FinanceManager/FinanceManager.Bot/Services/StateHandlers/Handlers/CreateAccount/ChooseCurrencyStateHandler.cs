@@ -5,62 +5,52 @@ using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class ChooseCurrencyStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
-    private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
     public ChooseCurrencyStateHandler(ICurrencyManager currencyManager,
         IUpdateCallbackQueryProvider updateCallbackQueryProvider,
-        IChatProvider chatProvider,
         IMessageSenderManager messageSender)
     {
         _currencyManager = currencyManager;
         _updateCallbackQueryProvider = updateCallbackQueryProvider;
-        _chatProvider = chatProvider;
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
         var previousState = WorkflowState.SendCurrencies;
-        if (!_updateCallbackQueryProvider.GetCallbackQuery(update, out var callbackQuery))
+        if (!_updateCallbackQueryProvider.GetCallbackQuery(updateContext.Update, out var callbackQuery))
         {
-            session.Continue(previousState);
+            updateContext.Session.Continue(previousState);
             return;
         }
-
-        if (!_chatProvider.GetChat(update, out var chat))
-            return;
 
         var currencyId = callbackQuery.Data;
         if (string.IsNullOrEmpty(currencyId))
         {
-            session.Continue(previousState);
+            updateContext.Session.Continue(previousState);
             return;
         }
 
-        var currency = await _currencyManager.GetById(new Guid(currencyId), cancellationToken);
+        var currency = await _currencyManager.GetById(new Guid(currencyId), updateContext.CancellationToken);
         if (currency is null)
         {
-            session.Continue(previousState);
+            updateContext.Session.Continue(previousState);
             return;
         }
 
-        var context = session.GetCreateAccountContext();
+        var context = updateContext.Session.GetCreateAccountContext();
         context.Currency = currency;
-        session.ContextData = context;
+        updateContext.Session.WorkflowContext = context;
 
-        await _messageSender.SendMessage(
-            botClient, chat, "Enter a number to set the initial balance:", cancellationToken);
+        await _messageSender.SendMessage(updateContext, "Enter a number to set the initial balance:");
 
-        session.Wait(WorkflowState.SetAccountInitialBalance);
+        updateContext.Session.Wait(WorkflowState.SetAccountInitialBalance);
     }
 }

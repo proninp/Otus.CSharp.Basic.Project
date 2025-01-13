@@ -1,30 +1,21 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
-using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class CreateAccountStartStateHandler : IStateHandler
 {
-    private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public CreateAccountStartStateHandler(IChatProvider chatProvider, IMessageSenderManager messageSender)
+    public CreateAccountStartStateHandler(IMessageSenderManager messageSender)
     {
-        _chatProvider = chatProvider;
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_chatProvider.GetChat(update, out var chat))
-            return;
-
-        await _messageSender.SendMessage(botClient, chat, "Please enter the account name:", cancellationToken);
-        session.Wait(WorkflowState.ChooseAccountName);
+        await _messageSender.SendMessage(updateContext, "Please enter the account name:");
+        updateContext.Session.Wait(WorkflowState.ChooseAccountName);
     }
 }

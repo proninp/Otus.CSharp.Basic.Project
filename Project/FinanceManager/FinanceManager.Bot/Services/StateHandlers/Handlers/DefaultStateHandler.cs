@@ -2,45 +2,35 @@
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
-using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class DefaultStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
-    private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public DefaultStateHandler(
-        IChatProvider chatProvider, IAccountManager accountManager, IMessageSenderManager messageSender)
+    public DefaultStateHandler(IAccountManager accountManager, IMessageSenderManager messageSender)
     {
-        _chatProvider = chatProvider;
         _accountManager = accountManager;
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_chatProvider.GetChat(update, out var chat))
-            return;
-
-        var defaultAccount = await _accountManager.GetDefault(session.Id, cancellationToken);
+        var defaultAccount = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
 
         if (defaultAccount is null)
         {
-            var messageText = $"Hi, {session.UserName}! {Emoji.Greeting.GetSymbol()}" +
+            var messageText = $"Hi, {updateContext.Session.UserName}! {Emoji.Greeting.GetSymbol()}" +
                 $"{Environment.NewLine}Let's set you up!";
-            await _messageSender.SendMessage(botClient, chat, messageText, cancellationToken);
+            await _messageSender.SendMessage(updateContext, messageText);
 
-            session.Continue(WorkflowState.CreateAccountStart);
+            updateContext.Session.Continue(WorkflowState.CreateAccountStart, true);
         }
         else
         {
-            session.Continue(WorkflowState.CreateMenu);
+            updateContext.Session.Continue(WorkflowState.CreateMenu, true);
         }
     }
 }

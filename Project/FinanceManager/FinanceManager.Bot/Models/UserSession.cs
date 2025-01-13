@@ -14,13 +14,13 @@ public class UserSession
 
     public WorkflowState State { get; set; }
 
-    public object? ContextData { get; set; }
+    public object? WorkflowContext { get; set; }
 
     public void Reset() 
     {
         State = WorkflowState.Default;
         _waitForUserInput = false;
-        ContextData = null;
+        WorkflowContext = null;
     }
 
     public bool IsContinue()
@@ -42,7 +42,7 @@ public class UserSession
     public void Continue(WorkflowState state, bool isClearContext = false)
     {
         if (isClearContext)
-            ContextData = null;
+            WorkflowContext = null;
         State = state;
         _waitForUserInput = false;
     }
@@ -53,13 +53,13 @@ public static class UserSessionExtensions
     public static void SetData<T>(this UserSession session, T context)
         where T : class
     {
-        session.ContextData = context;
+        session.WorkflowContext = context;
     }
 
     public static T? GetData<T>(this UserSession session, string key)
         where T : class
     {
-        return session.ContextData is not null ? (session.ContextData as T) : default;
+        return session.WorkflowContext is not null ? (session.WorkflowContext as T) : default;
     }
 
     public static UserSession ToUserSession(this UserDto userDto)

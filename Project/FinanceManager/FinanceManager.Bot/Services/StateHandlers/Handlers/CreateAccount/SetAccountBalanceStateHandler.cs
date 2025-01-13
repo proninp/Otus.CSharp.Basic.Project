@@ -4,8 +4,6 @@ using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class SetAccountBalanceStateHandler : IStateHandler
@@ -19,28 +17,27 @@ public class SetAccountBalanceStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task HandleAsync(
-        UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!_updateMessageProvider.GetMessage(update, out var message))
+        if (!_updateMessageProvider.GetMessage(updateContext.Update, out var message))
         {
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
 
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {
-            await _messageSender.SendErrorMessage(
-                botClient, message.Chat, "The entered value is not a number. Please try again.", cancellationToken);
+            await _messageSender.SendErrorMessage(updateContext,
+                "The entered value is not a number. Please try again.");
 
-            session.Wait();
+            updateContext.Session.Wait();
             return;
         }
 
-        var context = session.GetCreateAccountContext();
+        var context = updateContext.Session.GetCreateAccountContext();
         context.InitialBalance = amount;
 
-        session.Continue(WorkflowState.CreateAccountEnd);
+        updateContext.Session.Continue(WorkflowState.CreateAccountEnd);
     }
 }

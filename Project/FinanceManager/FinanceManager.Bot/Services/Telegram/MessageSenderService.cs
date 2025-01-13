@@ -1,42 +1,38 @@
 ﻿using FinanceManager.Bot.Enums;
+using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.Telegram;
 public class MessageSenderService : IMessageSenderManager
 {
-    public async Task SendMessage(
-        ITelegramBotClient botClient, Chat chat, string messageText, CancellationToken cancellationToken)
+    public async Task SendMessage(BotUpdateContext updateContext, string messageText)
     {
-        await botClient.SendMessage(
-            chat, messageText,
+        await updateContext.BotClient.SendMessage(
+            updateContext.Chat, messageText,
             parseMode: ParseMode.Html, replyMarkup: new ReplyKeyboardRemove(),
-            cancellationToken: cancellationToken);
+            cancellationToken: updateContext.CancellationToken);
     }
 
-    public async Task SendErrorMessage(
-        ITelegramBotClient botClient, Chat chat, string messageText, CancellationToken cancellationToken)
+    public async Task SendErrorMessage(BotUpdateContext updateContext, string messageText)
     {
         messageText = $"{Enums.Emoji.Error.GetSymbol()} " + messageText;
-        await SendMessage(botClient, chat, messageText, cancellationToken);
+        await SendMessage(updateContext, messageText);
     }
 
-    public async Task SendApproveMessage(
-        ITelegramBotClient botClient, Chat chat, string messageText, CancellationToken cancellationToken)
+    public async Task SendApproveMessage(BotUpdateContext updateContext, string messageText)
     {
         messageText = $"{Enums.Emoji.Success.GetSymbol()} " + messageText;
-        await SendMessage(botClient, chat, messageText, cancellationToken);
+        await SendMessage(updateContext, messageText);
     }
 
     public async Task SendInlineKeyboardMessage(
-        ITelegramBotClient botClient, Chat chat, string messageText,
-        IReplyMarkup inlineKeyboard, CancellationToken cancellationToken)
+        BotUpdateContext updateContext, string messageText, IReplyMarkup inlineKeyboard)
     {
-        await botClient.SendMessage(
-            chat, messageText,
-            parseMode: ParseMode.Html, replyMarkup: inlineKeyboard, cancellationToken: cancellationToken);
+        await updateContext.BotClient.SendMessage(
+            updateContext.Chat, messageText,
+            parseMode: ParseMode.Html, replyMarkup: inlineKeyboard, cancellationToken: updateContext.CancellationToken);
     }
 }
