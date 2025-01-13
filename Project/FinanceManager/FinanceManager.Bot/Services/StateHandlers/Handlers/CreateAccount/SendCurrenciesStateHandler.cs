@@ -10,10 +10,10 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class SendCurrenciesStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
     public SendCurrenciesStateHandler(
-        ICurrencyManager currencyManager, IMessageSenderManager messageSenderManager)
+        ICurrencyManager currencyManager, IMessageManager messageSenderManager)
     {
         _currencyManager = currencyManager;
         _messageSender = messageSenderManager;

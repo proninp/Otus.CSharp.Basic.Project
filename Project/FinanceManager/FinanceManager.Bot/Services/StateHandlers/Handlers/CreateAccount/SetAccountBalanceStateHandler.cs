@@ -9,9 +9,9 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class SetAccountBalanceStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _updateMessageProvider;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
-    public SetAccountBalanceStateHandler(IUpdateMessageProvider updateMessageProvider, IMessageSenderManager messageSender)
+    public SetAccountBalanceStateHandler(IUpdateMessageProvider updateMessageProvider, IMessageManager messageSender)
     {
         _updateMessageProvider = updateMessageProvider;
         _messageSender = messageSender;

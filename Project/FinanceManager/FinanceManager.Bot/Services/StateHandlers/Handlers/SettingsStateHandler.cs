@@ -6,9 +6,9 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class SettingsStateHandler : IStateHandler
 {
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
-    public SettingsStateHandler(IMessageSenderManager messageSender)
+    public SettingsStateHandler(IMessageManager messageSender)
     {
         _messageSender = messageSender;
     }

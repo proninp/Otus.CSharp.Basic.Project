@@ -12,10 +12,10 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class SendCategoriesStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
     public SendCategoriesStateHandler(
-        ICategoryManager categoryManager, IMessageSenderManager messageSender)
+        ICategoryManager categoryManager, IMessageManager messageSender)
     {
         _categoryManager = categoryManager;
         _messageSender = messageSender;

@@ -8,9 +8,9 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionDateSelectionStateHandler : IStateHandler
 {
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
-    public TransactionDateSelectionStateHandler(IMessageSenderManager messageSender)
+    public TransactionDateSelectionStateHandler(IMessageManager messageSender)
     {
         _messageSender = messageSender;
     }

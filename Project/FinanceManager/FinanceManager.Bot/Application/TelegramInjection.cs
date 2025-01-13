@@ -52,7 +52,7 @@ public static class TelegramInjection
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
-            .AddScoped<IMessageSenderManager, MessageSenderService>()
+            .AddScoped<IMessageManager, MessageService>()
             .AddScoped<ITransactionDateProvider, TransactionDateProvider>();
 
         services

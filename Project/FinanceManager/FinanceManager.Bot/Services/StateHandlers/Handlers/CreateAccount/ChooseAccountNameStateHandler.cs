@@ -11,10 +11,10 @@ public class ChooseAccountNameStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IUpdateMessageProvider _messageProvider;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
     public ChooseAccountNameStateHandler(
-        IAccountManager accountManager, IUpdateMessageProvider messageProvider, IMessageSenderManager messageSender)
+        IAccountManager accountManager, IUpdateMessageProvider messageProvider, IMessageManager messageSender)
     {
         _accountManager = accountManager;
         _messageProvider = messageProvider;

@@ -14,13 +14,13 @@ public class TransactionSetDateStateHandler : IStateHandler
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
     private readonly ITransactionDateProvider _transactionDateProvider;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
     public TransactionSetDateStateHandler(
         IUpdateMessageProvider messageProvider,
         IUpdateCallbackQueryProvider callbackQueryProvider,
         ITransactionDateProvider transactionDateProvider,
-        IMessageSenderManager messageSender)
+        IMessageManager messageSender)
     {
         _messageProvider = messageProvider;
         _callbackQueryProvider = callbackQueryProvider;

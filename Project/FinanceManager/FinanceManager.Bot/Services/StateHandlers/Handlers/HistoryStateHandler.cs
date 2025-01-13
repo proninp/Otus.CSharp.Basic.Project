@@ -9,13 +9,13 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class HistoryStateHandler : IStateHandler
 {
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
     private readonly ITransactionManager _transactionManager;
     private readonly IAccountManager _accountManager;
 
     public HistoryStateHandler(
         IUpdateCallbackQueryProvider callbackQueryProvider,
-        IMessageSenderManager messageSender,
+        IMessageManager messageSender,
         ITransactionManager transactionManager,
         IAccountManager accountManager)
     {

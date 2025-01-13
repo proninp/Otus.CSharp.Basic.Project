@@ -9,9 +9,9 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionSetAmountStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
-    public TransactionSetAmountStateHandler(IUpdateMessageProvider messageProvider, IMessageSenderManager messageSender)
+    public TransactionSetAmountStateHandler(IUpdateMessageProvider messageProvider, IMessageManager messageSender)
     {
         _messageProvider = messageProvider;
         _messageSender = messageSender;

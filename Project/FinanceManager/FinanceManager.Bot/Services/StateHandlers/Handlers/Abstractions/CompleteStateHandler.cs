@@ -5,9 +5,9 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 public abstract class CompleteStateHandler : IStateHandler
 {
-    private protected readonly IMessageSenderManager _messageSender;
+    private protected readonly IMessageManager _messageSender;
 
-    protected CompleteStateHandler(IMessageSenderManager messageSender)
+    protected CompleteStateHandler(IMessageManager messageSender)
     {
         _messageSender = messageSender;
     }

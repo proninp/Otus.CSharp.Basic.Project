@@ -12,7 +12,7 @@ public class TransactionRegistrationStateHandler : CompleteStateHandler
     private readonly ITransactionManager _transactionManager;
 
     public TransactionRegistrationStateHandler(
-        IMessageSenderManager messageSenderManager,
+        IMessageManager messageSenderManager,
         IAccountManager accountManager,
         ITransactionManager transactionManager)
         : base(messageSenderManager)

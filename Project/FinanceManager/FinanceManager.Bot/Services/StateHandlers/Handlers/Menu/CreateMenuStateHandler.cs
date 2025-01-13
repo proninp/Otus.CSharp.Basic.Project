@@ -8,9 +8,9 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 public class CreateMenuStateHandler : IStateHandler
 {
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
-    public CreateMenuStateHandler(IMessageSenderManager messageSender)
+    public CreateMenuStateHandler(IMessageManager messageSender)
     {
         _messageSender = messageSender;
     }

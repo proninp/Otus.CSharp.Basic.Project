@@ -8,9 +8,9 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class DefaultStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
-    public DefaultStateHandler(IAccountManager accountManager, IMessageSenderManager messageSender)
+    public DefaultStateHandler(IAccountManager accountManager, IMessageManager messageSender)
     {
         _accountManager = accountManager;
         _messageSender = messageSender;

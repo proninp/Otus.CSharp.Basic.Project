@@ -11,11 +11,11 @@ public class ChooseCurrencyStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
     public ChooseCurrencyStateHandler(ICurrencyManager currencyManager,
         IUpdateCallbackQueryProvider updateCallbackQueryProvider,
-        IMessageSenderManager messageSender)
+        IMessageManager messageSender)
     {
         _currencyManager = currencyManager;
         _updateCallbackQueryProvider = updateCallbackQueryProvider;

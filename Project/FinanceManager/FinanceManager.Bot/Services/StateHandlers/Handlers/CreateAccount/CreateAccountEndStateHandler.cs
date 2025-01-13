@@ -18,7 +18,7 @@ public class CreateAccountEndStateHandler : CompleteStateHandler
         IAccountManager accountManager,
         ITransactionManager transactionManager,
         ICategoriesInitializer categoriesInitializer,
-        IMessageSenderManager messageSender)
+        IMessageManager messageSender)
         : base(messageSender)
     {
         _accountManager = accountManager;

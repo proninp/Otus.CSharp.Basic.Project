@@ -6,9 +6,9 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class CreateAccountStartStateHandler : IStateHandler
 {
-    private readonly IMessageSenderManager _messageSender;
+    private readonly IMessageManager _messageSender;
 
-    public CreateAccountStartStateHandler(IMessageSenderManager messageSender)
+    public CreateAccountStartStateHandler(IMessageManager messageSender)
     {
         _messageSender = messageSender;
     }
