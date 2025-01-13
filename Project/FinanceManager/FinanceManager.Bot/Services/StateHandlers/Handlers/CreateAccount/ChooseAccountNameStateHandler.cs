@@ -8,14 +8,14 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateAccountHandler;
-public class ChooseAccountNameSubStateHandler : ISubStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
+public class ChooseAccountNameStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public ChooseAccountNameSubStateHandler(
+    public ChooseAccountNameStateHandler(
         IAccountManager accountManager, IUpdateMessageProvider messageProvider, IMessageSenderManager messageSender)
     {
         _accountManager = accountManager;
@@ -59,7 +59,7 @@ public class ChooseAccountNameSubStateHandler : ISubStateHandler
         }
 
         var context = new CreateAccountContext { AccountName = accountTitle };
-        session.ContextData = context;
-        session.Continue(WorkflowSubState.SendCurrencies);
+        session.SetData(context);
+        session.Continue(WorkflowState.SendCurrencies);
     }
 }

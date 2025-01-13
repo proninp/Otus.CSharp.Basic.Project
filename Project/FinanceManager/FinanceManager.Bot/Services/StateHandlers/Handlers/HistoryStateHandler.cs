@@ -30,7 +30,7 @@ public class HistoryStateHandler : IStateHandler
         _accountManager = accountManager;
     }
 
-    public async Task HandleStateAsync(
+    public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_chatProvider.GetChat(update, out var chat))
@@ -58,11 +58,6 @@ public class HistoryStateHandler : IStateHandler
         }
 
 
-        throw new NotImplementedException();
-    }
-
-    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
-    {
         throw new NotImplementedException();
     }
 }

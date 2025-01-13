@@ -7,13 +7,13 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class TransactionSetAmountSubStateHandler : ISubStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
+public class TransactionSetAmountStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public TransactionSetAmountSubStateHandler(IUpdateMessageProvider messageProvider, IMessageSenderManager messageSender)
+    public TransactionSetAmountStateHandler(IUpdateMessageProvider messageProvider, IMessageSenderManager messageSender)
     {
         _messageProvider = messageProvider;
         _messageSender = messageSender;
@@ -27,7 +27,7 @@ public class TransactionSetAmountSubStateHandler : ISubStateHandler
             session.Wait();
             return;
         }
-            
+
 
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
@@ -51,6 +51,6 @@ public class TransactionSetAmountSubStateHandler : ISubStateHandler
         var context = session.GetTransactionContext();
         context.Amount = amount;
 
-        session.Continue(WorkflowSubState.RegisterTransaction);
+        session.Continue(WorkflowState.RegisterTransaction);
     }
 }

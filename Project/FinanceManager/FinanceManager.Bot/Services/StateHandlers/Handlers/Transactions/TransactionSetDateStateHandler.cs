@@ -8,9 +8,9 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 
-public class TransactionSetDateSubStateHandler : ISubStateHandler
+public class TransactionSetDateStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
@@ -18,7 +18,7 @@ public class TransactionSetDateSubStateHandler : ISubStateHandler
     private readonly ITransactionDateProvider _transactionDateProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public TransactionSetDateSubStateHandler(
+    public TransactionSetDateStateHandler(
         IUpdateMessageProvider messageProvider,
         IUpdateCallbackQueryProvider callbackQueryProvider,
         IChatProvider chatProvider,
@@ -66,7 +66,7 @@ public class TransactionSetDateSubStateHandler : ISubStateHandler
         await _messageSender.SendMessage(
             botClient, chat, $"Please enter {context.TransactionTypeDescription} {emoji} amount:", cancellationToken);
 
-        session.Wait(WorkflowSubState.SetTransactionAmount);
+        session.Wait(WorkflowState.SetTransactionAmount);
     }
 
     private bool GetUpdateText(Update update, out string? dateText)

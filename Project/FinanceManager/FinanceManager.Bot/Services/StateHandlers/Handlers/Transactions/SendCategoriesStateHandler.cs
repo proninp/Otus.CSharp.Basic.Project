@@ -11,14 +11,14 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.SubStateHandlers.CreateTransactionHandlers;
-public class SendCategoriesSubStateHandler : ISubStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
+public class SendCategoriesStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
     private readonly IChatProvider _chatProvider;
     private readonly IMessageSenderManager _messageSender;
 
-    public SendCategoriesSubStateHandler(
+    public SendCategoriesStateHandler(
         ICategoryManager categoryManager, IChatProvider chatProvider, IMessageSenderManager messageSender)
     {
         _categoryManager = categoryManager;
@@ -49,7 +49,7 @@ public class SendCategoriesSubStateHandler : ISubStateHandler
             $"Please choose the {context.TransactionTypeDescription} category {Emoji.Category.GetSymbol()}:",
             inlineKeyboard, cancellationToken);
 
-        session.Wait(WorkflowSubState.ChooseTransactionCategory);
+        session.Wait(WorkflowState.ChooseTransactionCategory);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(CategoryDto[] categories)

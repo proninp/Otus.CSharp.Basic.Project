@@ -22,7 +22,7 @@ public class DefaultStateHandler : IStateHandler
         _messageSender = messageSender;
     }
 
-    public async Task HandleStateAsync(
+    public async Task HandleAsync(
         UserSession session, ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
         if (!_chatProvider.GetChat(update, out var chat))
@@ -36,16 +36,11 @@ public class DefaultStateHandler : IStateHandler
                 $"{Environment.NewLine}Let's set you up!";
             await _messageSender.SendMessage(botClient, chat, messageText, cancellationToken);
 
-            session.Continue(WorkflowState.AddAccount);
+            session.Continue(WorkflowState.CreateAccountStart);
         }
         else
         {
-            session.Continue(WorkflowState.Menu);
+            session.Continue(WorkflowState.CreateMenu);
         }
-    }
-
-    public Task RollBackAsync(UserSession session, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 }

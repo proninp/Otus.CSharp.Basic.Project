@@ -4,62 +4,47 @@ using FinanceManager.Bot.Enums;
 namespace FinanceManager.Bot.Models;
 public class UserSession
 {
+    private bool _waitForUserInput;
+
     public Guid Id { get; init; }
 
     public long TelegramId { get; init; }
 
     public string? UserName { get; set; }
 
-    public UserState UserState { get; set; } = new();
+    public WorkflowState State { get; set; }
 
     public object? ContextData { get; set; }
 
-    public WorkflowState State
+    public void Reset() 
     {
-        get => UserState.State;
-        set => UserState.State = value;
-    }
-
-    public WorkflowSubState SubState
-    {
-        get => UserState.SubState;
-        set => UserState.SubState = value;
-    }
-
-    public void ResetState() 
-    {
-        UserState.Reset();
+        State = WorkflowState.Default;
+        _waitForUserInput = false;
         ContextData = null;
     }
 
-    public bool IsContinue() =>
-        UserState.IsContinue();
+    public bool IsContinue()
+    {
+        var wait = _waitForUserInput;
+        _waitForUserInput = false;
+        return !wait;
+    }
 
     public void Wait() =>
-        UserState.Wait();
+        _waitForUserInput = true;
 
-    public void Wait(WorkflowSubState subState) =>
-        UserState.Wait(subState);
-
-    public void Wait(WorkflowState state) 
+    public void Wait(WorkflowState state)
     {
-        UserState.Wait(state);
-        ContextData = null;
+        State = state;
+        _waitForUserInput = true;
     }
 
-    public void Continue() =>
-        UserState.Continue();
-
-    public void ContinueWithDefault() =>
-        UserState.Continue(WorkflowState.Default);
-
-    public void Continue(WorkflowSubState subState) =>
-        UserState.Continue(subState);
-
-    public void Continue(WorkflowState state)
+    public void Continue(WorkflowState state, bool isClearContext = false)
     {
-        UserState.Continue(state);
-        ContextData = null;
+        if (isClearContext)
+            ContextData = null;
+        State = state;
+        _waitForUserInput = false;
     }
 }
 
@@ -84,7 +69,7 @@ public static class UserSessionExtensions
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            UserState = new UserState(),
+            State = WorkflowState.Default
         };
     }
 }
