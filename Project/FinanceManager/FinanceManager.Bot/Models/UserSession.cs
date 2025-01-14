@@ -1,5 +1,6 @@
 ﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Bot.Enums;
+using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Models;
 public class UserSession
@@ -15,6 +16,8 @@ public class UserSession
     public WorkflowState State { get; set; }
 
     public object? WorkflowContext { get; set; }
+
+    public Message? LastMessage { get; set; }
 
     public void Reset() 
     {

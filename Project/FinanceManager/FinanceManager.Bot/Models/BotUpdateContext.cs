@@ -14,8 +14,6 @@ public class BotUpdateContext
 
     public CancellationToken CancellationToken { get; init; }
 
-    public Message? LastMessage { get; set; }
-
     public BotUpdateContext(
         UserSession session, ITelegramBotClient botClient, Update update, Chat chat, CancellationToken cancellationToken)
     {
