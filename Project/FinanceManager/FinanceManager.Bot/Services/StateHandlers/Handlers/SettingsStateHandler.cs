@@ -6,16 +6,16 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class SettingsStateHandler : IStateHandler
 {
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
-    public SettingsStateHandler(IMessageManager messageSender)
+    public SettingsStateHandler(IMessageManager messageManager)
     {
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        await _messageSender.SendMessage(updateContext,
+        await _messageManager.SendMessage(updateContext,
             $"The settings feature is under development {Emoji.Rocket.GetSymbol()}");
         updateContext.Session.Continue(WorkflowState.CreateMenu);
     }

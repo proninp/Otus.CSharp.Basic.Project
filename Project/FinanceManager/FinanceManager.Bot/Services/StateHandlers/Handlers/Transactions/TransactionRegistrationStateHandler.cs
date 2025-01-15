@@ -12,10 +12,10 @@ public class TransactionRegistrationStateHandler : CompleteStateHandler
     private readonly ITransactionManager _transactionManager;
 
     public TransactionRegistrationStateHandler(
-        IMessageManager messageSenderManager,
+        IMessageManager messageManager,
         IAccountManager accountManager,
         ITransactionManager transactionManager)
-        : base(messageSenderManager)
+        : base(messageManager)
     {
         _accountManager = accountManager;
         _transactionManager = transactionManager;
@@ -26,7 +26,7 @@ public class TransactionRegistrationStateHandler : CompleteStateHandler
         var context = updateContext.Session.GetTransactionContext();
         if (context.Amount <= 0)
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "The transaction was not registered because a zero amount was entered.");
             return;
         }
@@ -34,7 +34,7 @@ public class TransactionRegistrationStateHandler : CompleteStateHandler
         var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "The operation cannot be performed because you do not have a default account.");
             return;
         }
@@ -57,6 +57,6 @@ public class TransactionRegistrationStateHandler : CompleteStateHandler
         if (account.Currency is not null)
             message += $" {account.Currency.CurrencyCode} {account.Currency.Emoji}";
 
-        await _messageSender.SendApproveMessage(updateContext, message);
+        await _messageManager.SendApproveMessage(updateContext, message);
     }
 }

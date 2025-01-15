@@ -5,11 +5,11 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 public abstract class CompleteStateHandler : IStateHandler
 {
-    private protected readonly IMessageManager _messageSender;
+    private protected readonly IMessageManager _messageManager;
 
-    protected CompleteStateHandler(IMessageManager messageSender)
+    protected CompleteStateHandler(IMessageManager messageManager)
     {
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -20,7 +20,7 @@ public abstract class CompleteStateHandler : IStateHandler
         }
         catch (Exception)
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "An error occurred while performing the action. Please try again later.");
             throw;
         }

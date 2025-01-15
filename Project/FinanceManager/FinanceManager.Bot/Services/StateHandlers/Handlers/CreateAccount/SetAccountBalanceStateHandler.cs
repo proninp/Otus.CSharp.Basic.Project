@@ -9,12 +9,12 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class SetAccountBalanceStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _updateMessageProvider;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
-    public SetAccountBalanceStateHandler(IUpdateMessageProvider updateMessageProvider, IMessageManager messageSender)
+    public SetAccountBalanceStateHandler(IUpdateMessageProvider updateMessageProvider, IMessageManager messageManager)
     {
         _updateMessageProvider = updateMessageProvider;
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -28,7 +28,7 @@ public class SetAccountBalanceStateHandler : IStateHandler
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "The entered value is not a number. Please try again.");
 
             updateContext.Session.Wait();

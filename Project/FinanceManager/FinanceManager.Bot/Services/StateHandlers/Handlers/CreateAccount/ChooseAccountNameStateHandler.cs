@@ -11,14 +11,14 @@ public class ChooseAccountNameStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IUpdateMessageProvider _messageProvider;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
     public ChooseAccountNameStateHandler(
-        IAccountManager accountManager, IUpdateMessageProvider messageProvider, IMessageManager messageSender)
+        IAccountManager accountManager, IUpdateMessageProvider messageProvider, IMessageManager messageManager)
     {
         _accountManager = accountManager;
         _messageProvider = messageProvider;
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -32,7 +32,7 @@ public class ChooseAccountNameStateHandler : IStateHandler
         var accountTitle = message.Text;
         if (string.IsNullOrWhiteSpace(accountTitle) || accountTitle.Length == 0)
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "The account name must contain at least one non-whitespace character.");
 
             updateContext.Session.Wait();
@@ -40,7 +40,7 @@ public class ChooseAccountNameStateHandler : IStateHandler
         }
         if (!char.IsLetterOrDigit(accountTitle[0]))
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "The account name must start with a number or letter. Enter a different account name.");
 
             updateContext.Session.Wait();
@@ -49,7 +49,7 @@ public class ChooseAccountNameStateHandler : IStateHandler
         var existingAccount = await _accountManager.GetByName(updateContext.Session.Id, accountTitle, false, updateContext.CancellationToken);
         if (existingAccount is not null)
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "An account with that name already exists. Enter a different name.");
 
             updateContext.Session.Wait();

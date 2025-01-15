@@ -41,7 +41,7 @@ public class TransactionDateProvider : ITransactionDateProvider
     {
         var delimitersText = string.Join(", ", _separators.Select(c => $"<code>{c}</code>"));
 
-        var messageBuilder = new StringBuilder($"{Emoji.Error.GetSymbol()} ");
+        var messageBuilder = new StringBuilder();
         messageBuilder
             .AppendLine($"<b>An incorrect date has been entered.</b>")
             .AppendLine("You can use the following delimiters to enter the date:")

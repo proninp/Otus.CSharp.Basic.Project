@@ -18,8 +18,8 @@ public class CreateAccountEndStateHandler : CompleteStateHandler
         IAccountManager accountManager,
         ITransactionManager transactionManager,
         ICategoriesInitializer categoriesInitializer,
-        IMessageManager messageSender)
-        : base(messageSender)
+        IMessageManager messageManager)
+        : base(messageManager)
     {
         _accountManager = accountManager;
         _transactionManager = transactionManager;
@@ -69,6 +69,6 @@ public class CreateAccountEndStateHandler : CompleteStateHandler
             $"The account {account.Title} with initial balance {context.InitialBalance} {account.Currency.CurrencyCode} " +
             $"{account.Currency.Emoji} has been created!";
 
-        await _messageSender.SendApproveMessage(updateContext, message);
+        await _messageManager.SendApproveMessage(updateContext, message);
     }
 }

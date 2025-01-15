@@ -6,16 +6,16 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class CreateAccountStartStateHandler : IStateHandler
 {
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
-    public CreateAccountStartStateHandler(IMessageManager messageSender)
+    public CreateAccountStartStateHandler(IMessageManager messageManager)
     {
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        await _messageSender.SendMessage(updateContext, "Please enter the account name:");
+        await _messageManager.SendMessage(updateContext, "Please enter the account name:");
         updateContext.Session.Wait(WorkflowState.ChooseAccountName);
     }
 }

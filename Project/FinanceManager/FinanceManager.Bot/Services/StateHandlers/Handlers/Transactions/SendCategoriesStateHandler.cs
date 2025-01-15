@@ -12,13 +12,13 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class SendCategoriesStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
     public SendCategoriesStateHandler(
-        ICategoryManager categoryManager, IMessageManager messageSender)
+        ICategoryManager categoryManager, IMessageManager messageManager)
     {
         _categoryManager = categoryManager;
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -35,9 +35,10 @@ public class SendCategoriesStateHandler : IStateHandler
 
         var inlineKeyboard = CreateInlineKeyboard(categories);
 
-        await _messageSender.SendInlineKeyboardMessage(updateContext,
-            $"Please choose the {context.TransactionTypeDescription} category {Emoji.Category.GetSymbol()}:",
-            inlineKeyboard);
+        var message = $"Please choose the {context.TransactionTypeDescription} category {Emoji.Category.GetSymbol()}:";
+
+        if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
         updateContext.Session.Wait(WorkflowState.ChooseTransactionCategory);
     }

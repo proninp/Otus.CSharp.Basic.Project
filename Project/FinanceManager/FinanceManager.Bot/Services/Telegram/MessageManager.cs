@@ -6,7 +6,7 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.Telegram;
-public class MessageService : IMessageManager
+public class MessageManager : IMessageManager
 {
     public async Task SendMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true)
     {
@@ -19,7 +19,7 @@ public class MessageService : IMessageManager
             updateContext.Session.LastMessage = message;
     }
 
-    public async Task SendErrorMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true)
+    public async Task SendErrorMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false)
     {
         messageText = $"{Enums.Emoji.Error.GetSymbol()} " + messageText;
         await SendMessage(updateContext, messageText, isSaveMessage);

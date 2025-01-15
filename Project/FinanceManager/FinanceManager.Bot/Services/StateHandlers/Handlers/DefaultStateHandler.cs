@@ -8,12 +8,12 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class DefaultStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
-    public DefaultStateHandler(IAccountManager accountManager, IMessageManager messageSender)
+    public DefaultStateHandler(IAccountManager accountManager, IMessageManager messageManager)
     {
         _accountManager = accountManager;
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -24,7 +24,7 @@ public class DefaultStateHandler : IStateHandler
         {
             var messageText = $"Hi, {updateContext.Session.UserName}! {Emoji.Greeting.GetSymbol()}" +
                 $"{Environment.NewLine}Let's set you up!";
-            await _messageSender.SendMessage(updateContext, messageText);
+            await _messageManager.SendMessage(updateContext, messageText);
 
             updateContext.Session.Continue(WorkflowState.CreateAccountStart, true);
         }

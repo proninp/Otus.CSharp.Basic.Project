@@ -8,11 +8,11 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionDateSelectionStateHandler : IStateHandler
 {
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
-    public TransactionDateSelectionStateHandler(IMessageManager messageSender)
+    public TransactionDateSelectionStateHandler(IMessageManager messageManager)
     {
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -20,25 +20,27 @@ public class TransactionDateSelectionStateHandler : IStateHandler
         var context = updateContext.Session.GetTransactionContext();
 
         var inlineKeyboard = CreateInlineKeyboard();
-
-        await _messageSender.SendInlineKeyboardMessage(updateContext,
-             $"Please choose or enter the date of the {context.TransactionTypeDescription} {Emoji.Calendar.GetSymbol()}" +
+        var message =
+            $"Please choose or enter the date of the {context.TransactionTypeDescription} {Emoji.Calendar.GetSymbol()}" +
              $"{Environment.NewLine}" +
-             "You can enter date in <code>dd</code>, <code>dd.mm</code> or <code>dd.mm.yyyy</code> formats:",
-            inlineKeyboard);
+             "You can enter date in <code>dd</code>, <code>dd.mm</code> or <code>dd.mm.yyyy</code> formats:";
+
+        if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
         updateContext.Session.Wait(WorkflowState.SetTransactionDate);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard()
     {
+        var dateFormat = "dd/MM/yyyy";
         var yesterday = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
         var today = DateOnly.FromDateTime(DateTime.Today);
 
         var buttons = new List<InlineKeyboardButton>()
         {
-            InlineKeyboardButton.WithCallbackData("Yesterday", yesterday.ToString()),
-            InlineKeyboardButton.WithCallbackData("Today", today.ToString()),
+            InlineKeyboardButton.WithCallbackData("Yesterday", yesterday.ToString(dateFormat)),
+            InlineKeyboardButton.WithCallbackData("Today", today.ToString(dateFormat)),
         };
 
         return new InlineKeyboardMarkup(buttons);

@@ -6,7 +6,7 @@ public interface IMessageManager
 {
     Task SendMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true);
 
-    Task SendErrorMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true);
+    Task SendErrorMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false);
 
     Task SendApproveMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true);
 

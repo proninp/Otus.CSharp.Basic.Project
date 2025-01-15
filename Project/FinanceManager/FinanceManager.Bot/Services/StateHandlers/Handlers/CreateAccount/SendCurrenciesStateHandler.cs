@@ -10,13 +10,13 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class SendCurrenciesStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
     public SendCurrenciesStateHandler(
-        ICurrencyManager currencyManager, IMessageManager messageSenderManager)
+        ICurrencyManager currencyManager, IMessageManager messageManager)
     {
         _currencyManager = currencyManager;
-        _messageSender = messageSenderManager;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -24,7 +24,7 @@ public class SendCurrenciesStateHandler : IStateHandler
         var currencies = await _currencyManager.GetAll(updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(currencies);
 
-        await _messageSender.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
+        await _messageManager.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
 
         updateContext.Session.Wait(WorkflowState.ChooseCurrency);
     }

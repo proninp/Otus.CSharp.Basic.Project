@@ -8,18 +8,18 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 public class CreateMenuStateHandler : IStateHandler
 {
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
-    public CreateMenuStateHandler(IMessageManager messageSender)
+    public CreateMenuStateHandler(IMessageManager messageManager)
     {
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
         var inlineKeyboard = CreateInlineKeyboard();
 
-        await _messageSender.SendInlineKeyboardMessage(updateContext, "Choose an action:", inlineKeyboard);
+        await _messageManager.SendInlineKeyboardMessage(updateContext, "Choose an action:", inlineKeyboard);
 
         updateContext.Session.Wait(WorkflowState.SelectMenu);
     }

@@ -9,12 +9,12 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionSetAmountStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
-    public TransactionSetAmountStateHandler(IUpdateMessageProvider messageProvider, IMessageManager messageSender)
+    public TransactionSetAmountStateHandler(IUpdateMessageProvider messageProvider, IMessageManager messageManager)
     {
         _messageProvider = messageProvider;
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -28,7 +28,7 @@ public class TransactionSetAmountStateHandler : IStateHandler
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "The entered value is not a number. Please try again.");
             updateContext.Session.Wait();
             return;
@@ -36,7 +36,7 @@ public class TransactionSetAmountStateHandler : IStateHandler
 
         if (amount < 0)
         {
-            await _messageSender.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessage(updateContext,
                 "The expense amount must be a non-negative number. Please try again.");
             updateContext.Session.Wait();
             return;

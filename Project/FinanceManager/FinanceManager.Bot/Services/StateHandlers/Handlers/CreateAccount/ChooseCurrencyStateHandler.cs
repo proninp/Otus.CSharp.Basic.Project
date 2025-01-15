@@ -11,15 +11,15 @@ public class ChooseCurrencyStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
     public ChooseCurrencyStateHandler(ICurrencyManager currencyManager,
         IUpdateCallbackQueryProvider updateCallbackQueryProvider,
-        IMessageManager messageSender)
+        IMessageManager messageManager)
     {
         _currencyManager = currencyManager;
         _updateCallbackQueryProvider = updateCallbackQueryProvider;
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -49,7 +49,8 @@ public class ChooseCurrencyStateHandler : IStateHandler
         context.Currency = currency;
         updateContext.Session.WorkflowContext = context;
 
-        await _messageSender.SendMessage(updateContext, "Enter a number to set the initial balance:");
+        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.SendMessage(updateContext, "Enter a number to set the initial balance:");
 
         updateContext.Session.Wait(WorkflowState.SetAccountInitialBalance);
     }

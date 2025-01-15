@@ -14,18 +14,18 @@ public class TransactionSetDateStateHandler : IStateHandler
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
     private readonly ITransactionDateProvider _transactionDateProvider;
-    private readonly IMessageManager _messageSender;
+    private readonly IMessageManager _messageManager;
 
     public TransactionSetDateStateHandler(
         IUpdateMessageProvider messageProvider,
         IUpdateCallbackQueryProvider callbackQueryProvider,
         ITransactionDateProvider transactionDateProvider,
-        IMessageManager messageSender)
+        IMessageManager messageManager)
     {
         _messageProvider = messageProvider;
         _callbackQueryProvider = callbackQueryProvider;
         _transactionDateProvider = transactionDateProvider;
-        _messageSender = messageSender;
+        _messageManager = messageManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -39,9 +39,10 @@ public class TransactionSetDateStateHandler : IStateHandler
         if (!_transactionDateProvider.TryParseDate(dateText, out var date))
         {
             var incorrectDateMessage = _transactionDateProvider.GetIncorrectDateText();
-            await _messageSender.SendMessage(updateContext, incorrectDateMessage);
+            await _messageManager.DeleteLastMessage(updateContext);
+            await _messageManager.SendErrorMessage(updateContext, incorrectDateMessage);
 
-            updateContext.Session.Wait();
+            updateContext.Session.Continue(WorkflowState.SendTransactionDateSelection);
             return;
         }
 
@@ -55,7 +56,8 @@ public class TransactionSetDateStateHandler : IStateHandler
             _ => string.Empty
         };
 
-        await _messageSender.SendMessage(updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
+        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.SendMessage(updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
 
         updateContext.Session.Wait(WorkflowState.SetTransactionAmount);
     }
