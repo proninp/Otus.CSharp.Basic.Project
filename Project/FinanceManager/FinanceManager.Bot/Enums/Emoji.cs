@@ -18,7 +18,8 @@ public enum Emoji
     History,
     Calendar,
     Skip,
-    Rocket
+    Rocket,
+    Clock
 }
 
 public static class EmojiExtension
@@ -43,6 +44,7 @@ public static class EmojiExtension
         Emoji.Calendar => "🗓",
         Emoji.Skip => "➡️",
         Emoji.Rocket => "🚀",
+        Emoji.Clock => "🕐",
         _ => string.Empty
     };
 }
