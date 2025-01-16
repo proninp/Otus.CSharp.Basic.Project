@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.Services.Interfaces.Managers;
+﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
+using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
@@ -50,8 +51,56 @@ public class HistoryStateHandler : IStateHandler
             return;
         }
 
-        var messageBuilder = new StringBuilder($"{Emoji.Income} Income:{Environment.NewLine}");
+        var transactions = await _transactionManager.Get(updateContext.Session.Id, updateContext.CancellationToken);
+        var incomes = transactions.Where(t => t.Amount > 0);
+        var expenses = transactions.Where(t => t.Amount < 0);
 
-        throw new NotImplementedException();
+        StringBuilder messageBuilder = new StringBuilder();
+
+        if (incomes.Count() > 0)
+        {
+            var incomesBuilder = new StringBuilder($"{Emoji.Income.GetSymbol()} Incomes:{Environment.NewLine}");
+            incomesBuilder.AppendLine();
+            incomesBuilder.AppendLine(
+                string.Join(Environment.NewLine, incomes.Select(GetTransactionFormattedString)));
+            messageBuilder.AppendLine(incomesBuilder.ToString());
+            messageBuilder.AppendLine();
+        }
+
+        if (expenses.Count() > 0)
+        {
+            var expensesBuilder = new StringBuilder($"{Emoji.Expense.GetSymbol()} Expenses:{Environment.NewLine}");
+            expensesBuilder.AppendLine();
+            expensesBuilder.AppendLine(
+                string.Join(Environment.NewLine, expenses.Select(GetTransactionFormattedString)));
+            messageBuilder.AppendLine(expensesBuilder.ToString());
+        }
+
+        if (! await _messageManager.EditLastMessage(updateContext, messageBuilder.ToString()))
+            await _messageManager.SendMessage(updateContext, messageBuilder.ToString());
+
+        updateContext.Session.Continue(WorkflowState.CreateMenu);
+    }
+
+    private string GetTransactionFormattedString(TransactionDto transaction)
+    {
+        var transactionLine = new StringBuilder($"{Emoji.Clock.GetSymbol()} ");
+        transactionLine.Append($"{transaction.Date}: ");
+        transactionLine.Append($"<b>{Math.Abs(transaction.Amount)}</b> ");
+        transactionLine.Append($"{transaction.Account?.Currency?.CurrencyCode}");
+        if (transaction.Category is not null)
+        {
+            transactionLine.Append(" - ");
+            transactionLine.Append($"{transaction.Category?.Emoji} {transaction.Category?.Title};");
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(transaction.Description))
+            {
+                transactionLine.Append(" - ");
+                transactionLine.Append(transaction.Description);
+            }
+        }
+        return transactionLine.ToString();
     }
 }
