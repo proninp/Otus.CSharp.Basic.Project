@@ -6,6 +6,7 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceManager.Application.Services.Managers;
 public sealed class TransactionManager : ITransactionManager
@@ -34,6 +35,11 @@ public sealed class TransactionManager : ITransactionManager
         return _repository.GetAsync(
             t => t.ToDto(),
             t => t.UserId == userId,
+            include: q => q
+                .Include(t => t.Category)
+                .Include(t => t.Account)
+                .ThenInclude(a => a.Currency),
+            orderBy: q => q.OrderBy(t => t.Date),
             cancellationToken: cancellationToken);
     }
 

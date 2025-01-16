@@ -19,7 +19,7 @@ public sealed class Transaction : IdentityModel
 
     public Account Account { get; set; }
 
-    public Category? Category { get; set; }
+    public Category Category { get; set; }
 
     protected Transaction() { }
 

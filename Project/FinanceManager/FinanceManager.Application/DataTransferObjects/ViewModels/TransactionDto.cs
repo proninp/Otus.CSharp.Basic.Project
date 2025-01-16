@@ -15,6 +15,10 @@ public sealed class TransactionDto : IdentityDtoBase
     public decimal Amount { get; init; }
 
     public string? Description { get; init; }
+
+    public AccountDto? Account { get; set; }
+
+    public CategoryDto? Category { get; set; }
 }
 
 public static class TransactionMappings
@@ -30,6 +34,8 @@ public static class TransactionMappings
             Date = entry.Date,
             Amount = entry.Amount,
             Description = entry.Description,
+            Account = entry.Account?.ToDto(),
+            Category = entry.Category?.ToDto(),
         };
     }
 }
