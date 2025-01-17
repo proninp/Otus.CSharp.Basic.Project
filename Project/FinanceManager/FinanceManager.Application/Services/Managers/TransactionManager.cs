@@ -30,9 +30,9 @@ public sealed class TransactionManager : ITransactionManager
         return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
-    public Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken)
+    public Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken, int pageIndex = 0, int pageSize = 20)
     {
-        return _repository.GetAsync(
+        return _repository.GetPagedAsync(
             t => t.ToDto(),
             t => t.UserId == userId,
             include: q => q
@@ -40,6 +40,8 @@ public sealed class TransactionManager : ITransactionManager
                 .Include(t => t.Account)
                 .ThenInclude(a => a.Currency),
             orderBy: q => q.OrderByDescending(t => t.Date),
+            pageIndex: pageIndex,
+            pageSize: pageSize,
             cancellationToken: cancellationToken);
     }
 

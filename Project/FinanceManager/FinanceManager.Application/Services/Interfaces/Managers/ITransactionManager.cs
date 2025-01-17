@@ -7,7 +7,7 @@ public interface ITransactionManager
 {
     Task<TransactionDto?> GetById(Guid id, CancellationToken cancellationToken);
 
-    Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken);
+    Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken, int pageIndex = 0, int pageSize = 20);
 
     Task<decimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken);
 
