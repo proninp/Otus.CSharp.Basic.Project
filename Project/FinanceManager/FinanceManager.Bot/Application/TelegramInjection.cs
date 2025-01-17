@@ -53,7 +53,8 @@ public static class TelegramInjection
             .AddScoped<IUpdateCallbackQueryProvider, UpdateCallbackQueryProvider>()
             .AddScoped<IChatProvider, ChatProvider>()
             .AddScoped<IMessageManager, MessageManager>()
-            .AddScoped<ITransactionDateProvider, TransactionDateProvider>();
+            .AddScoped<ITransactionDateProvider, TransactionDateProvider>()
+            .AddScoped<IHistoryMessageTextProvider, HistoryMessageTextProvider>();
 
         services
             .AddScoped<IStateHandlerFactory, StateHandlerFactory>();

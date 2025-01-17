@@ -39,7 +39,7 @@ public sealed class TransactionManager : ITransactionManager
                 .Include(t => t.Category)
                 .Include(t => t.Account)
                 .ThenInclude(a => a.Currency),
-            orderBy: q => q.OrderBy(t => t.Date),
+            orderBy: q => q.OrderByDescending(t => t.Date),
             cancellationToken: cancellationToken);
     }
 
