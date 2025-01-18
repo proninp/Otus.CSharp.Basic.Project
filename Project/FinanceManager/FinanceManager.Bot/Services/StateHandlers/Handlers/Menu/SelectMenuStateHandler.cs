@@ -1,5 +1,6 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
@@ -7,13 +8,15 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 public class SelectMenuStateHandler : IStateHandler
 {
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
+    private readonly IMessageManager _messageManager;
 
-    public SelectMenuStateHandler(IUpdateCallbackQueryProvider callbackQueryProvider)
+    public SelectMenuStateHandler(IUpdateCallbackQueryProvider callbackQueryProvider, IMessageManager messageManager)
     {
         _callbackQueryProvider = callbackQueryProvider;
+        _messageManager = messageManager;
     }
 
-    public Task HandleAsync(BotUpdateContext updateContext)
+    public async Task HandleAsync(BotUpdateContext updateContext)
     {
         if (_callbackQueryProvider.GetCallbackQuery(updateContext.Update, out var callbackQuery) && callbackQuery.Data is not null)
         {
@@ -32,9 +35,10 @@ public class SelectMenuStateHandler : IStateHandler
         }
         else
         {
-            updateContext.Session.Reset();
+            await _messageManager.DeleteLastMessage(updateContext);
+            updateContext.Session.Continue(WorkflowState.CreateMenu);
         }
 
-        return Task.CompletedTask;
+        return;
     }
 }
