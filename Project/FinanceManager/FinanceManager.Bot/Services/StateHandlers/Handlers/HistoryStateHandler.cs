@@ -11,56 +11,68 @@ public class HistoryStateHandler : IStateHandler
     private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
     private readonly IMessageManager _messageManager;
     private readonly IHistoryMessageTextProvider _historyMessageTextProvider;
+    private readonly IHistoryContextProvider _contextProvider;
+    private readonly IHistoryInlineKeyBoardProvider _inlineKeyboardProvider;
     private readonly ITransactionManager _transactionManager;
-    private readonly IAccountManager _accountManager;
 
     public HistoryStateHandler(
         IUpdateCallbackQueryProvider callbackQueryProvider,
         IMessageManager messageManager,
         IHistoryMessageTextProvider historyMessageTextProvider,
-        ITransactionManager transactionManager,
-        IAccountManager accountManager)
+        IHistoryInlineKeyBoardProvider inlineKeyboardProvider,
+        IHistoryContextProvider contextProvider,
+        ITransactionManager transactionManager)
     {
         _callbackQueryProvider = callbackQueryProvider;
         _messageManager = messageManager;
         _historyMessageTextProvider = historyMessageTextProvider;
+        _inlineKeyboardProvider = inlineKeyboardProvider;
+        _contextProvider = contextProvider;
         _transactionManager = transactionManager;
-        _accountManager = accountManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
-        if (account is null)
+        if (!_callbackQueryProvider.GetCallbackQuery(updateContext.Update, out var callbackQuery))
         {
-            await _messageManager.DeleteLastMessage(updateContext);
-            var message = "The operation cannot be performed because you do not have a default account." +
-                "Please create a default account first.";
-            await _messageManager.SendErrorMessage(updateContext, message);
-            updateContext.Session.Continue(WorkflowState.CreateAccountStart, true);
+            updateContext.Session.Reset();
             return;
         }
 
-        var transactionsCount = await _transactionManager.GetCount(updateContext.Session.Id, account.Id, updateContext.CancellationToken);
-        if (transactionsCount == 0)
+        var context = await _contextProvider.GetHistoryContex(updateContext);
+        if (context is null)
+            return;
+
+        var data = callbackQuery.Data ?? string.Empty;
+
+        if (data == HistoryCommand.Next.ToString())
+        {
+            context.PageIndex++;
+        }
+        else if (data == HistoryCommand.Previous.ToString())
+        {
+            context.PageIndex--;
+        }
+        else
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            await _messageManager.SendMessage(
-                updateContext,
-                "At the moment, you do not have any registered transactions on the selected account.");
-            updateContext.Session.Continue(WorkflowState.CreateMenu, true);
+            updateContext.Session.Continue(WorkflowState.CreateMenu);
             return;
         }
 
-        var transactions = await _transactionManager.Get(updateContext.Session.Id, updateContext.CancellationToken);
+        var inlineKeyboard = _inlineKeyboardProvider.GetKeyboard(updateContext);
+
+        var transactions = await _transactionManager.Get(
+            updateContext.Session.Id, updateContext.CancellationToken, context.PageIndex, context.PageSize);
+
         var incomes = transactions.Where(t => t.Amount > 0);
         var expenses = transactions.Where(t => t.Amount < 0);
 
         var messageText = _historyMessageTextProvider.GetMessgaText(incomes, expenses);
 
-        if (!await _messageManager.EditLastMessage(updateContext, messageText))
-            await _messageManager.SendMessage(updateContext, messageText);
+        if (!await _messageManager.EditLastMessage(updateContext, messageText, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
-        updateContext.Session.Continue(WorkflowState.CreateMenu);
+        updateContext.Session.Wait();
     }
 }
