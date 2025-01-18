@@ -9,21 +9,28 @@ public class CategoriesInitializer : ICategoriesInitializer
     private readonly ICategoryManager _categoryManager;
     private readonly (CategoryType CategoryType, string Title, string Emoji)[] _defaultCategories = new[]
     {
+        (CategoryType.Income, "Bank Interest", "🏦"),
         (CategoryType.Expense, "Car", "🚗"),
         (CategoryType.Expense, "Cafes and Restaurants", "🍽️"),
         (CategoryType.Expense, "Clothing", "🧥"),
-        (CategoryType.Income, "Deposit Interest", "💰"),
         (CategoryType.Expense, "Education", "🎓"),
+        (CategoryType.Expense, "Entertainment", "🎉"),
         (CategoryType.Expense, "Gasoline", "⛽"),
         (CategoryType.Both, "Gifts", "🎁"),
         (CategoryType.Expense, "Groceries", "🛒"),
-        (CategoryType.Expense, "Health", "🏥"),
+        (CategoryType.Expense, "Healthcare", "🏥"),
         (CategoryType.Expense, "House", "🏠"),
+        (CategoryType.Income, "Investments", "📈"),
         (CategoryType.Expense, "Mobile Communication", "📱"),
         (CategoryType.Expense, "Personal Expenses", "💪"),
-        (CategoryType.Income, "Salary", "💵"),
+        (CategoryType.Income, "Refund", "💵"),
+        (CategoryType.Expense, "Rent", "🏠"),
+        (CategoryType.Income, "Rental Income", "🏠"),
+        (CategoryType.Income, "Salary", "💼"),
+        (CategoryType.Income, "Sales", "🛍"),
+        (CategoryType.Expense, "Shopping", "🛍"),
         (CategoryType.Expense, "Taxi", "🚕"),
-        (CategoryType.Expense, "Trips", "✈️"),
+        (CategoryType.Expense, "Travel", "✈️"),
         (CategoryType.Expense, "Utilities", "💡"),
     };
 
