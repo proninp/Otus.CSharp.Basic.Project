@@ -35,7 +35,7 @@ public static class EmojiExtension
         Emoji.Add => "➕",
         Emoji.Remove => "➖",
         Emoji.Category => "📊",
-        Emoji.Expense => "🛒",
+        Emoji.Expense => "💸",
         Emoji.ExpenseAmount => "💸",
         Emoji.Income => "💵",
         Emoji.IncomeAmount => "💰",

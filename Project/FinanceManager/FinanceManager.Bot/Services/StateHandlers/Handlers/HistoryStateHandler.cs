@@ -53,7 +53,7 @@ public class HistoryStateHandler : IStateHandler
         {
             context.PageIndex--;
         }
-        else
+        else if (data == HistoryCommand.Memu.ToString())
         {
             await _messageManager.DeleteLastMessage(updateContext);
             updateContext.Session.Continue(WorkflowState.CreateMenu);
