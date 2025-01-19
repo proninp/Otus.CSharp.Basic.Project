@@ -73,12 +73,6 @@ public class MessageManager : IMessageManager
         return true;
     }
 
-    public InlineKeyboardButton CreateInlineButton(CallbackData data, params string[] messageParts)
-    {
-        var buttonText = string.Join(' ', messageParts);
-        return InlineKeyboardButton.WithCallbackData(buttonText, data.ToData());
-    }
-
     public InlineKeyboardButton CreateInlineButton(BotUpdateContext updateContext, string data, string message)
     {
         var callBackData = new CallbackData(updateContext, data);

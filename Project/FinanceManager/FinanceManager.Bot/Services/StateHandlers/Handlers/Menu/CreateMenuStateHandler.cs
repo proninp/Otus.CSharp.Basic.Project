@@ -29,15 +29,15 @@ public class CreateMenuStateHandler : IStateHandler
             return;
         }
 
-        var messageText = await GetMessageText(account, updateContext.CancellationToken);
-        var inlineKeyboard = CreateInlineKeyboard();
+        var messageText = await BuildMessageText(account, updateContext.CancellationToken);
+        var inlineKeyboard = CreateInlineKeyboard(updateContext);
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
         updateContext.Session.Wait(WorkflowState.SelectMenu);
     }
 
-    private async Task<string> GetMessageText(AccountDto account, CancellationToken cancellationToken)
+    private async Task<string> BuildMessageText(AccountDto account, CancellationToken cancellationToken)
     {
         var balance = await _accountManager.GetBalance(account, cancellationToken);
 
@@ -52,21 +52,23 @@ public class CreateMenuStateHandler : IStateHandler
         return messageBuilder.ToString();
     }
 
-    private InlineKeyboardMarkup CreateInlineKeyboard()
+    private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context)
     {
         var keyboardButtons = new InlineKeyboardButton[][]
         {
             [
-                InlineKeyboardButton.WithCallbackData(
-                    $"{Emoji.Expense.GetSymbol()} {Enums.Menu.Expense.GetDescription()}", $"{Enums.Menu.Expense.GetKey()}"),
-                InlineKeyboardButton.WithCallbackData(
-                    $"{Emoji.Income.GetSymbol()} {Enums.Menu.Income.GetDescription()}", $"{Enums.Menu.Income.GetKey()}"),
+                _messageManager.CreateInlineButton(context, MainMenu.Expense.GetKey(),
+                    $"{Emoji.Expense.GetSymbol()} {MainMenu.Expense.GetDescription()}"),
+            
+                _messageManager.CreateInlineButton(context, MainMenu.Income.GetKey(),
+                    $"{Emoji.Income.GetSymbol()} {MainMenu.Income.GetDescription()}"),
             ],
             [
-                InlineKeyboardButton.WithCallbackData(
-                    $"{Emoji.History.GetSymbol()} {Enums.Menu.History.GetDescription()}", $"{Enums.Menu.History.GetKey()}"),
-                InlineKeyboardButton.WithCallbackData(
-                    $"{Emoji.Settings.GetSymbol()} {Enums.Menu.Settings.GetDescription()}", $"{Enums.Menu.Settings.GetKey()}"),
+                _messageManager.CreateInlineButton(context, MainMenu.History.GetKey(),
+                    $"{Emoji.History.GetSymbol()} {MainMenu.History.GetDescription()}"),
+
+                _messageManager.CreateInlineButton(context, MainMenu.Settings.GetKey(),
+                    $"{Emoji.Settings.GetSymbol()} {MainMenu.Settings.GetDescription()}"),
             ]
         };
         return new InlineKeyboardMarkup(keyboardButtons);

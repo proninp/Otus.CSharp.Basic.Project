@@ -5,32 +5,36 @@ using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using Telegram.Bot.Types;
+using FinanceManager.Bot.Services.Interfaces.Validators;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 
 public class TransactionSetDateStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
-    private readonly IUpdateCallbackQueryProvider _callbackQueryProvider;
     private readonly ITransactionDateProvider _transactionDateProvider;
     private readonly IMessageManager _messageManager;
+    private readonly ICallbackDataProvider _callbackDataProvider;
+    private readonly ICallbackDataValidator _callbackDataValidator;
 
     public TransactionSetDateStateHandler(
         IUpdateMessageProvider messageProvider,
-        IUpdateCallbackQueryProvider callbackQueryProvider,
+        ICallbackDataProvider callbackDataProvider,
         ITransactionDateProvider transactionDateProvider,
-        IMessageManager messageManager)
+        IMessageManager messageManager,
+        ICallbackDataValidator callbackDataValidator)
     {
         _messageProvider = messageProvider;
-        _callbackQueryProvider = callbackQueryProvider;
         _transactionDateProvider = transactionDateProvider;
         _messageManager = messageManager;
+        _callbackDataProvider = callbackDataProvider;
+        _callbackDataValidator = callbackDataValidator;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        if (!GetUpdateText(updateContext.Update, out var dateText))
+        var dateText = await GetUpdateText(updateContext);
+        if (dateText is null)
         {
             updateContext.Session.Wait();
             return;
@@ -62,18 +66,18 @@ public class TransactionSetDateStateHandler : IStateHandler
         updateContext.Session.Wait(WorkflowState.SetTransactionAmount);
     }
 
-    private bool GetUpdateText(Update update, out string? dateText)
+    private async Task<string?> GetUpdateText(BotUpdateContext updateContext)
     {
-        dateText = null;
-        if (_callbackQueryProvider.GetCallbackQuery(update, out var callbackQuery))
+        string? dateText = null;
+        if (_messageProvider.GetMessage(updateContext.Update, out var message))
+            return message?.Text;
+        
+        var callBackData = await _callbackDataProvider.GetCallbackData(updateContext, false);
+        if (callBackData is not null)
         {
-            dateText = callbackQuery.Data;
+            if (await _callbackDataValidator.Validate(updateContext, callBackData))
+                dateText = callBackData.Data;
         }
-        else
-        {
-            if (_messageProvider.GetMessage(update, out var message))
-                dateText = message?.Text;
-        }
-        return dateText is not null;
+        return dateText;
     }
 }

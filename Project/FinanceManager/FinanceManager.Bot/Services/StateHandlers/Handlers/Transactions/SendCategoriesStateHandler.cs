@@ -33,7 +33,7 @@ public class SendCategoriesStateHandler : IStateHandler
                 $"There is no handler for the {context.TransactionType.GetDescription()} transaction type")
         });
 
-        var inlineKeyboard = CreateInlineKeyboard(categories);
+        var inlineKeyboard = CreateInlineKeyboard(updateContext, categories);
 
         var message = $"Please choose the {context.TransactionTypeDescription} category {Emoji.Category.GetSymbol()}:";
 
@@ -43,13 +43,14 @@ public class SendCategoriesStateHandler : IStateHandler
         updateContext.Session.Wait(WorkflowState.ChooseTransactionCategory);
     }
 
-    private InlineKeyboardMarkup CreateInlineKeyboard(CategoryDto[] categories)
+    private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CategoryDto[] categories)
     {
         var buttons = categories
-            .Select(c => InlineKeyboardButton.WithCallbackData($"{c.Emoji} {c.Title}", c.Id.ToString()))
+            .Select(c => _messageManager.CreateInlineButton(context, c.Id.ToString(), $"{c.Emoji} {c.Title}"))
             .ToList();
 
-        buttons.Add(InlineKeyboardButton.WithCallbackData($"{Emoji.Skip.GetSymbol()} Skip", Guid.Empty.ToString()));
+        buttons.Add(
+            _messageManager.CreateInlineButton(context, Guid.Empty.ToString(), $"{Emoji.Skip.GetSymbol()} Skip"));
 
         var keyboardButtons = buttons
             .Select((button, index) => new { button, index })

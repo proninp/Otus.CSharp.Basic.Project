@@ -22,17 +22,18 @@ public class SendCurrenciesStateHandler : IStateHandler
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
         var currencies = await _currencyManager.GetAll(updateContext.CancellationToken);
-        var inlineKeyboard = CreateInlineKeyboard(currencies);
+        var inlineKeyboard = CreateInlineKeyboard(updateContext, currencies);
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
 
         updateContext.Session.Wait(WorkflowState.ChooseCurrency);
     }
 
-    private InlineKeyboardMarkup CreateInlineKeyboard(CurrencyDto[] currencies)
+    private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CurrencyDto[] currencies)
     {
         var buttons = currencies
-            .Select(c => InlineKeyboardButton.WithCallbackData($"{c.Emoji} {c.CurrencyCode}", c.Id.ToString()))
+            .Select(c => _messageManager
+                .CreateInlineButton(context, c.Id.ToString(), $"{c.Emoji} {c.CurrencyCode}"))
             .ToList();
 
         var keyboardButtons = buttons

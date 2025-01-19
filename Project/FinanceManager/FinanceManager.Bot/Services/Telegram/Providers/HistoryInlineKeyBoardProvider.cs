@@ -1,6 +1,7 @@
 ﻿using FinanceManager.Application.Utils;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -8,43 +9,51 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.Telegram.Providers;
 public class HistoryInlineKeyBoardProvider : IHistoryInlineKeyBoardProvider
 {
+    private readonly IMessageManager _messageManager;
+
+    public HistoryInlineKeyBoardProvider(IMessageManager messageManager)
+    {
+        _messageManager = messageManager;
+    }
+
     public InlineKeyboardMarkup GetKeyboard(BotUpdateContext updateContext)
     {
-        var next = HistoryCommand.Next;
-        var previous = HistoryCommand.Previous;
+        var newer = HistoryCommand.Newer;
+        var older = HistoryCommand.Older;
         var menu = HistoryCommand.Memu;
 
         var context = updateContext.Session.GetHistoryContext();
 
-        var isNextAvailable = context.PageIndex < context.TransactionsCount / context.PageSize;
-        var isPreviousAvailable = context.PageIndex > 0;
+        var pagesCount = (int)Math.Ceiling((double)context.TransactionsCount / context.PageSize) - 1;
+        var isNewerAvailable = context.PageIndex > 0;
+        var isOlderAvailable = context.PageIndex < pagesCount;
 
-        var backButton = InlineKeyboardButton.WithCallbackData(
-                    $"{menu.GetSymbol()} {menu.GetDescription()}", menu.ToString());
+        var callbackData = new CallbackData(updateContext, menu.ToString());
+        var menuButton = _messageManager.CreateInlineButton(callbackData, $"{menu.GetSymbol()} {menu.GetDescription()}");
 
-        if (!(isNextAvailable || isPreviousAvailable))
-            return new InlineKeyboardMarkup(backButton);
+        if (!(isNewerAvailable || isOlderAvailable))
+            return new InlineKeyboardMarkup(menuButton);
 
         var controlButtons = new List<InlineKeyboardButton>();
 
-        if (isNextAvailable)
+        if (isNewerAvailable)
         {
+            callbackData.Data = newer.ToString();
             controlButtons.Add(
-                InlineKeyboardButton.WithCallbackData(
-                    $"{next.GetSymbol()} {next.GetDescription()}", next.ToString()));
+                _messageManager.CreateInlineButton(callbackData, $"{newer.GetSymbol()} {newer.GetDescription()}"));
         }
 
-        if (isPreviousAvailable)
+        if (isOlderAvailable)
         {
+            callbackData.Data = older.ToString();
             controlButtons.Add(
-                InlineKeyboardButton.WithCallbackData(
-                    $"{previous.GetSymbol()} {previous.GetDescription()}", previous.ToString()));
+                _messageManager.CreateInlineButton(callbackData, $"{older.GetSymbol()} {older.GetDescription()}"));
         }
 
         var buttons = new InlineKeyboardButton[][]
         {
             controlButtons.ToArray(),
-            [backButton]
+            [menuButton]
         };
 
         return new InlineKeyboardMarkup(buttons);

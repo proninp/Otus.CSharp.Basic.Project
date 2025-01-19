@@ -19,7 +19,7 @@ public class TransactionDateSelectionStateHandler : IStateHandler
     {
         var context = updateContext.Session.GetTransactionContext();
 
-        var inlineKeyboard = CreateInlineKeyboard();
+        var inlineKeyboard = CreateInlineKeyboard(updateContext);
         var message =
             $"Please choose or enter the date of the {context.TransactionTypeDescription} {Emoji.Calendar.GetSymbol()}" +
              $"{Environment.NewLine}" +
@@ -31,7 +31,7 @@ public class TransactionDateSelectionStateHandler : IStateHandler
         updateContext.Session.Wait(WorkflowState.SetTransactionDate);
     }
 
-    private InlineKeyboardMarkup CreateInlineKeyboard()
+    private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext updateContext)
     {
         var dateFormat = "dd/MM/yyyy";
         var yesterday = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
@@ -39,8 +39,8 @@ public class TransactionDateSelectionStateHandler : IStateHandler
 
         var buttons = new List<InlineKeyboardButton>()
         {
-            InlineKeyboardButton.WithCallbackData("Yesterday", yesterday.ToString(dateFormat)),
-            InlineKeyboardButton.WithCallbackData("Today", today.ToString(dateFormat)),
+            _messageManager.CreateInlineButton(updateContext, yesterday.ToString(dateFormat), "Yesterday"),
+            _messageManager.CreateInlineButton(updateContext, yesterday.ToString(dateFormat), "Today"),
         };
 
         return new InlineKeyboardMarkup(buttons);

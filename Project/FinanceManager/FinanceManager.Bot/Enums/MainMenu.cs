@@ -3,7 +3,7 @@ using FinanceManager.Application.Utils;
 using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 
 namespace FinanceManager.Bot.Enums;
-public enum Menu
+public enum MainMenu
 {
     [Description("None")]
     None,
@@ -19,12 +19,12 @@ public enum Menu
 
 public static class MenuExtension
 {
-    public static string GetKey(this Menu menu) => menu switch
+    public static string GetKey(this MainMenu menu) => menu switch
     {
-        Menu.Expense => nameof(RegisterExpenseStartStateHandler),
-        Menu.Income => nameof(RegisterIncomeStartStateHandler),
-        Menu.History => nameof(HistoryStateHandler),
-        Menu.Settings => nameof(SettingsStateHandler),
+        MainMenu.Expense => nameof(RegisterExpenseStartStateHandler),
+        MainMenu.Income => nameof(RegisterIncomeStartStateHandler),
+        MainMenu.History => nameof(HistoryStateHandler),
+        MainMenu.Settings => nameof(SettingsStateHandler),
         _ => throw new NotImplementedException(menu.GetDescription())
     };
 }

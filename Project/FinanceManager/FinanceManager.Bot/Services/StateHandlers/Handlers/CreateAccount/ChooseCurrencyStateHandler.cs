@@ -5,43 +5,52 @@ using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.Interfaces.Validators;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class ChooseCurrencyStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
-    private readonly IUpdateCallbackQueryProvider _updateCallbackQueryProvider;
     private readonly IMessageManager _messageManager;
+    private readonly ICallbackDataProvider _callbackDataProvider;
+    private readonly ICallbackDataValidator _callbackDataValidator;
 
     public ChooseCurrencyStateHandler(ICurrencyManager currencyManager,
-        IUpdateCallbackQueryProvider updateCallbackQueryProvider,
-        IMessageManager messageManager)
+        ICallbackDataProvider callbackDataProvider,
+        IMessageManager messageManager,
+        ICallbackDataValidator callbackDataValidator)
     {
         _currencyManager = currencyManager;
-        _updateCallbackQueryProvider = updateCallbackQueryProvider;
+        _callbackDataProvider = callbackDataProvider;
         _messageManager = messageManager;
+        _callbackDataValidator = callbackDataValidator;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
         var previousState = WorkflowState.SendCurrencies;
-        if (!_updateCallbackQueryProvider.GetCallbackQuery(updateContext.Update, out var callbackQuery))
+
+        var callbackQuery = await _callbackDataProvider.GetCallbackData(updateContext, true, previousState);
+        if (callbackQuery is null)
+            return;
+
+        if (! await _callbackDataValidator.Validate(updateContext, callbackQuery))
         {
-            updateContext.Session.Continue(previousState);
+            updateContext.Session.Wait();
             return;
         }
 
         var currencyId = callbackQuery.Data;
         if (string.IsNullOrEmpty(currencyId))
         {
-            updateContext.Session.Continue(previousState);
+            await DeleteLastMessageAndContinue(updateContext, previousState);
             return;
         }
 
         var currency = await _currencyManager.GetById(new Guid(currencyId), updateContext.CancellationToken);
         if (currency is null)
         {
-            updateContext.Session.Continue(previousState);
+            await DeleteLastMessageAndContinue(updateContext, previousState);
             return;
         }
 
@@ -53,5 +62,11 @@ public class ChooseCurrencyStateHandler : IStateHandler
         await _messageManager.SendMessage(updateContext, "Enter a number to set the initial balance:");
 
         updateContext.Session.Wait(WorkflowState.SetAccountInitialBalance);
+    }
+
+    private async Task DeleteLastMessageAndContinue(BotUpdateContext updateContext, WorkflowState workflowState)
+    {
+        await _messageManager.DeleteLastMessage(updateContext);
+        updateContext.Session.Continue(workflowState);
     }
 }
