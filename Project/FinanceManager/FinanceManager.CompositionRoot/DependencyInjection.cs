@@ -7,8 +7,8 @@ using FinanceManager.Bot.Application;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Options;
-using FinanceManager.DataAccess.Data;
-using FinanceManager.DataAccess.Data.Repositories;
+using FinanceManager.Infrastructure.Data;
+using FinanceManager.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

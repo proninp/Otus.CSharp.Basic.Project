@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Text;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 
 namespace FinanceManager.Bot.Services.Utils;
@@ -85,7 +84,7 @@ public class TransactionDateProvider : ITransactionDateProvider
 
     private bool CheckValidDateParts(int day, int month)
     {
-        if (month < 1 ||  month > 12)
+        if (month < 1 || month > 12)
             return false;
         int daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, month);
         if (day < 1 || day > daysInMonth)

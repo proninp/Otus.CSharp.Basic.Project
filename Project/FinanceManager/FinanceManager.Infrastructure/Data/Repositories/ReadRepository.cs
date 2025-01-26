@@ -5,7 +5,7 @@ using FinanceManager.Core.Models.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace FinanceManager.DataAccess.Data.Repositories;
+namespace FinanceManager.Infrastructure.Data.Repositories;
 public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
 {
     private protected AppDbContext _context;
