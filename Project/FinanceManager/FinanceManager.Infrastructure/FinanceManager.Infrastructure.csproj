@@ -23,8 +23,4 @@
     <ProjectReference Include="..\FinanceManager.Core\FinanceManager.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Redis\" />
-  </ItemGroup>
-
 </Project>

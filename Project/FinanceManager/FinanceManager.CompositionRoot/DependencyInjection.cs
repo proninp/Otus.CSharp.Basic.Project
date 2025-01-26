@@ -19,6 +19,7 @@ public static class DependencyInjection
     {
         services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
         services.AddDbContext<IUnitOfWork, AppDbContext>();
+        services.AddRedis(configuration);
 
         services.AddHostedService<AppInitializer>();
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
