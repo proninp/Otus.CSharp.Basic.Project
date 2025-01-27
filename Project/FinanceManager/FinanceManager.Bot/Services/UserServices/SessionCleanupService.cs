@@ -1,6 +1,8 @@
 ﻿using FinanceManager.Bot.Services.Interfaces.Managers;
+using FinanceManager.Core.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 namespace FinanceManager.Bot.Services.UserServices;
@@ -19,16 +21,20 @@ public sealed class SessionCleanupService : BackgroundService
     {
         _logger.Information("Session Cleanup Service is starting.");
 
-        using PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromMinutes(10));
-        while (await timer.WaitForNextTickAsync(stoppingToken))
+        while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
                 using var scope = _services.CreateScope();
+
+                var options = scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<AppSettings>>();
                 var userSessionManager = scope.ServiceProvider.GetRequiredService<IUserSessionManager>();
 
-                int cleanedSessions = await userSessionManager.CleanupExpiredSessions(stoppingToken);
-                _logger.Information($"Cleaned {cleanedSessions} expired sessions.");
+                int cleanedSessionsCount = await userSessionManager.CleanupExpiredSessions(stoppingToken);
+                _logger.Information($"Cleaned {cleanedSessionsCount} expired sessions.");
+
+                var interval = options.Value.SessionCleanupIntervalMinutes;
+                await Task.Delay(TimeSpan.FromMinutes(interval), stoppingToken);
 
             }
             catch (Exception ex)

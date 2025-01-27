@@ -4,6 +4,7 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Application.Services.Managers;
 using FinanceManager.Application.Services.Validators;
 using FinanceManager.Bot.Application;
+using FinanceManager.Bot.Services.UserServices;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Options;
@@ -22,6 +23,7 @@ public static class DependencyInjection
         services.AddRedis(configuration);
 
         services.AddHostedService<AppInitializer>();
+        services.AddHostedService<SessionCleanupService>();
         services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IUserManager, UserManager>();
