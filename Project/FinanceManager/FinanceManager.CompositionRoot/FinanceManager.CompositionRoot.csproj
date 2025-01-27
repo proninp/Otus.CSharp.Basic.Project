@@ -21,12 +21,14 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.EventLog" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.24" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FinanceManager.Application\FinanceManager.Application.csproj" />
     <ProjectReference Include="..\FinanceManager.Bot\FinanceManager.Bot.csproj" />
-    <ProjectReference Include="..\FinanceManager.DataAccess\FinanceManager.DataAccess.csproj" />
+    <ProjectReference Include="..\FinanceManager.Infrastructure\FinanceManager.Infrastructure.csproj" />
+    <ProjectReference Include="..\FinanceManager.Redis\FinanceManager.Redis.csproj" />
   </ItemGroup>
 
 </Project>

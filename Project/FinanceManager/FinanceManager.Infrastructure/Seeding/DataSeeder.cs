@@ -1,6 +1,6 @@
 ﻿using FinanceManager.Core.Models;
 
-namespace FinanceManager.DataAccess.Seeding;
+namespace FinanceManager.Infrastructure.Seeding;
 public static class DataSeeder
 {
     public static Currency[] GetCurrencySeeds()

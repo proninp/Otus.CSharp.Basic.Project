@@ -9,6 +9,9 @@ public class UserSessionRegistry : IUserSessionRegistry
 
     public ConcurrentDictionary<long, UserSession> Sessions => _userSessions;
 
+    public IEnumerable<UserSession> ExpiredSessions =>
+        _userSessions.Values.Where(s => s.CreatedAt + s.Expiration <= DateTime.UtcNow);
+
     public UserSessionRegistry()
     {
         _userSessions = new();

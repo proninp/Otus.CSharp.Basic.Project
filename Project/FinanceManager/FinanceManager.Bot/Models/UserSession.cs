@@ -34,6 +34,11 @@ public class UserSession
     public object? WorkflowContext { get; set; }
 
     /// <summary>
+    /// Date and time of session creation
+    /// </summary>
+    public required DateTime CreatedAt { get; set; }
+
+    /// <summary>
     /// The last message sent by the telegram bot
     /// </summary>
     public Message? LastMessage { get; set; }
@@ -43,12 +48,12 @@ public class UserSession
     /// user interactions are consistent within the same session. If the <see cref="CallbackSessionId"/> in the callback query differs from 
     /// the user's active session, the interaction is handled accordingly.
     /// </summary>
-    public string CallbackSessionId { get; private set; }
+    public required string CallbackSessionId { get; init; }
 
-    public UserSession()
-    {
-        CallbackSessionId = GenerateSessionId();
-    }
+    /// <summary>
+    /// Stores the TimeSpan of the user's session lifetime
+    /// </summary>
+    public TimeSpan Expiration { get; set; }
 
     /// <summary>
     /// Resets session to Default state and clears WorkflowContext
@@ -84,26 +89,6 @@ public class UserSession
         State = state;
         _waitForUserInput = false;
     }
-
-    /// <summary>
-    /// Generates uniq session id each time user session requested
-    /// </summary>
-    /// <returns></returns>
-    public string GenerateSessionId()
-    {
-        int maxLength = 10;
-        int byteLength = (int)Math.Ceiling(maxLength * 0.75);
-
-        byte[] randomBytes = RandomNumberGenerator.GetBytes(byteLength);
-
-        string base64Token = Convert.ToBase64String(randomBytes);
-
-        base64Token = base64Token.Replace("=", "").Replace("/", "").Replace("+", "");
-
-        return base64Token.Length > maxLength
-            ? base64Token.Substring(0, maxLength)
-            : base64Token;
-    }
 }
 
 public static class UserSessionExtensions
@@ -120,14 +105,16 @@ public static class UserSessionExtensions
         return session.WorkflowContext is not null ? (session.WorkflowContext as T) : default;
     }
 
-    public static UserSession ToUserSession(this UserDto userDto)
+    public static UserSession ToUserSession(this UserDto userDto, string callbackSessionId)
     {
         return new UserSession
         {
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            State = WorkflowState.Default
+            CallbackSessionId = callbackSessionId,
+            State = WorkflowState.Default,
+            CreatedAt = DateTime.UtcNow,
         };
     }
 }

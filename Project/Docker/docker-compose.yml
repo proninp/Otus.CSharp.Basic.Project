@@ -12,7 +12,7 @@ services:
   redis:
     image: redis:latest
     container_name: finance_mananger_redis_container
-    command: redis-server
+    command: redis-server --requirepass "root"
     volumes:
       - redis:/var/lib/redis
     ports:

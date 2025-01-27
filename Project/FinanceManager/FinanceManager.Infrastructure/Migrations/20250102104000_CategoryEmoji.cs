@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace FinanceManager.DataAccess.Migrations
+namespace FinanceManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class CategoryEmoji : Migration
