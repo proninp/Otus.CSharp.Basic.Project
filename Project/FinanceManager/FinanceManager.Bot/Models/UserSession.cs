@@ -34,6 +34,11 @@ public class UserSession
     public object? WorkflowContext { get; set; }
 
     /// <summary>
+    /// Date and time of session creation
+    /// </summary>
+    public required DateTime CreatedAt { get; set; }
+
+    /// <summary>
     /// The last message sent by the telegram bot
     /// </summary>
     public Message? LastMessage { get; set; }
@@ -44,6 +49,11 @@ public class UserSession
     /// the user's active session, the interaction is handled accordingly.
     /// </summary>
     public string CallbackSessionId { get; private set; }
+
+    /// <summary>
+    /// Stores the TimeSpan of the user's session lifetime
+    /// </summary>
+    public TimeSpan Expiration { get; set; }
 
     public UserSession()
     {
@@ -127,7 +137,8 @@ public static class UserSessionExtensions
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            State = WorkflowState.Default
+            State = WorkflowState.Default,
+            CreatedAt = DateTime.UtcNow,
         };
     }
 }
