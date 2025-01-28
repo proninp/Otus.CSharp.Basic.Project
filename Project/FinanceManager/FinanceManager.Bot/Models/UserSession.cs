@@ -1,7 +1,5 @@
-﻿using System.Security.Cryptography;
-using FinanceManager.Application.DataTransferObjects.ViewModels;
+﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Bot.Enums;
-using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Models;
 public class UserSession
@@ -41,7 +39,7 @@ public class UserSession
     /// <summary>
     /// The last message sent by the telegram bot
     /// </summary>
-    public Message? LastMessage { get; set; }
+    public UserMessage? LastMessage { get; set; }
 
     /// <summary>
     /// Identifies the current session of the user. This ID is embedded in callback query messages and used to ensure that 
@@ -112,8 +110,8 @@ public static class UserSessionExtensions
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            CallbackSessionId = callbackSessionId,
             State = WorkflowState.Default,
+            CallbackSessionId = callbackSessionId,
             CreatedAt = DateTime.UtcNow,
         };
     }
