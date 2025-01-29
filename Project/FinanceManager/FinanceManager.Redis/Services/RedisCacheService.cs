@@ -5,24 +5,26 @@ using StackExchange.Redis;
 namespace FinanceManager.Redis.Services;
 public class RedisCacheService : IRedisCacheService
 {
-    private readonly IConnectionMultiplexer _connectionMultiplexer;
+    private readonly IConnectionMultiplexer _redis;
 
-    public RedisCacheService(IConnectionMultiplexer connectionMultiplexer)
+    public RedisCacheService(IConnectionMultiplexer redis)
     {
-        _connectionMultiplexer = connectionMultiplexer;
+        _redis = redis;
     }
 
     public async Task SaveData<T>(string key, T value, TimeSpan? expiry = null)
     {
-        var db = _connectionMultiplexer.GetDatabase();
+        var db = _redis.GetDatabase();
         var serializedValue = JsonSerializer.Serialize(value);
         await db.StringSetAsync(key, serializedValue, expiry);
     }
 
     public async Task<T?> GetData<T>(string key)
     {
-        var db = _connectionMultiplexer.GetDatabase();
+        var db = _redis.GetDatabase();
         var value = await db.StringGetAsync(key);
-        return value.HasValue ? JsonSerializer.Deserialize<T>(value) : default;
+        
+        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        return value.HasValue ? JsonSerializer.Deserialize<T>(value, options) : default;
     }
 }

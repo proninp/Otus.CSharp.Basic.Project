@@ -20,7 +20,10 @@ public static class RedisExtensions
             return ConnectionMultiplexer.Connect(configuration);
         });
 
-        services.AddTransient<IRedisCacheService, RedisCacheService>();
+        services
+            .AddTransient<IRedisCacheService, RedisCacheService>()
+            .AddTransient<IRedisInitializer, RedisInitializer>();
+
         return services;
     }
 }

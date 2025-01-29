@@ -38,10 +38,12 @@ public class UserSessionProvider : IUserSessionProvider
         if (!_userSessionRegistry.Sessions.TryGetValue(from.Id, out var userSession))
         {
             userSession = await _redisCacheService.GetData<UserSession>(from.Id.ToString());
+
             if (userSession is null)
             {
                 userSession = await _userSessionManager.InstantiateSession(from, cancellationToken);
                 _logger.Information("New session created for user {UserId}", from.Id);
+                await _redisCacheService.SaveData(from.Id.ToString(), userSession);
             }
 
             _userSessionRegistry.Sessions.TryAdd(from.Id, userSession);
