@@ -21,11 +21,12 @@ internal class CallbackDataProvider : ICallbackDataProvider
     {
         CallbackData? callbackData = null;
         var callbackQuery = updateContext.Update.CallbackQuery;
-        if (callbackQuery is not null)
-        {
-            var data = callbackQuery.Data ?? string.Empty;
-            callbackData = CallbackData.FromRawText(data);
-        }
+
+        if (callbackQuery is null)
+            return null;
+
+        var data = callbackQuery.Data ?? string.Empty;
+        callbackData = CallbackData.FromRawText(data);
 
         if (callbackData is null)
         {
@@ -33,6 +34,10 @@ internal class CallbackDataProvider : ICallbackDataProvider
                 await _messageManager.DeleteLastMessage(updateContext);
             if (continueWithStateWhenNull is not null)
                 _sessionStateManager.Continue(updateContext.Session, continueWithStateWhenNull.Value);
+        }
+        else
+        {
+            callbackData.MessageId = callbackQuery.Message?.Id;
         }
 
         return callbackData;

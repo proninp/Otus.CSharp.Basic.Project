@@ -9,13 +9,16 @@ public class CallbackData
 
     public string Data { get; set; } = string.Empty;
 
-    public CallbackData(string sessionId, string data)
+    public int? MessageId { get; set; }
+
+    public CallbackData(string sessionId, string data, int? messageId = null)
     {
         CallbackSessionId = sessionId;
         Data = data;
+        MessageId = messageId;
     }
 
-    public CallbackData(BotUpdateContext updateContext, string data)
+    public CallbackData(BotUpdateContext updateContext, string data, int? messageId = null)
         : this(updateContext.Session.CallbackSessionId, data)
     {
     }
