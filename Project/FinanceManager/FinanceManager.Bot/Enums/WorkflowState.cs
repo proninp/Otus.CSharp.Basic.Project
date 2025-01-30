@@ -9,6 +9,7 @@ public enum WorkflowState
     ChooseAccountName,
     SendCurrencies,
     ChooseCurrency,
+    SendInputAccountInitialBalance,
     SetAccountInitialBalance,
     CreateAccountEnd,
 

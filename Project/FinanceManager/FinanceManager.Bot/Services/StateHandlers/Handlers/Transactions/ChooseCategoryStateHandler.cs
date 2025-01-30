@@ -38,11 +38,11 @@ public class ChooseCategoryStateHandler : IStateHandler
         if (callbackData is null)
             return;
 
-        if (!await _callbackDataValidator.Validate(updateContext, callbackData))
-        {
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
-        }
+        //if (!await _callbackDataValidator.Validate(updateContext, callbackData))
+        //{
+        //    _sessionStateManager.Wait(updateContext.Session);
+        //    return;
+        //}
 
         var categoryId = callbackData.Data;
 
@@ -68,6 +68,6 @@ public class ChooseCategoryStateHandler : IStateHandler
         var context = updateContext.Session.GetTransactionContext();
         context.Category = category;
 
-        _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendTransactionDateSelection);
+        _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendInputTransactionDate);
     }
 }

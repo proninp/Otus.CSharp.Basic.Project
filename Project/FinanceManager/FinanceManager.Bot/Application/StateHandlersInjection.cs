@@ -29,6 +29,7 @@ public static class StateHandlersInjection
             .AddScoped<ChooseAccountNameStateHandler>()
             .AddScoped<SendCurrenciesStateHandler>()
             .AddScoped<ChooseCurrencyStateHandler>()
+            .AddScoped<SendInputAccountBalanceStateHandler>()
             .AddScoped<SetAccountBalanceStateHandler>()
             .AddScoped<CreateAccountEndStateHandler>();
 
@@ -37,6 +38,7 @@ public static class StateHandlersInjection
             .AddScoped<ChooseCategoryStateHandler>()
             .AddScoped<TransactionInputDateStateHandler>()
             .AddScoped<TransactionSetDateStateHandler>()
+            .AddScoped<TransactionIputAmountStateHandler>()
             .AddScoped<TransactionSetAmountStateHandler>()
             .AddScoped<TransactionRegistrationStateHandler>();
 
