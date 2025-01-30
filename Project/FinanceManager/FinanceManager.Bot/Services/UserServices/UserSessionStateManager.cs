@@ -9,6 +9,7 @@ public class UserSessionStateManager : IUserSessionStateManager
     {
         if (isClearContext)
             session.WorkflowContext = null;
+        session.PreviousState = session.State;
         session.State = state;
         session.WaitForUserInput = false;
     }
@@ -22,6 +23,7 @@ public class UserSessionStateManager : IUserSessionStateManager
 
     public void ResetSession(UserSession session)
     {
+        session.PreviousState = WorkflowState.Default;
         session.State = WorkflowState.Default;
         session.WaitForUserInput = false;
         session.WorkflowContext = null;
@@ -34,6 +36,7 @@ public class UserSessionStateManager : IUserSessionStateManager
 
     public void Wait(UserSession session, WorkflowState state)
     {
+        session.PreviousState = session.State;
         session.State = state;
         session.WaitForUserInput = true;
     }
