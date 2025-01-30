@@ -3,9 +3,9 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Application.Utils;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
-using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
@@ -13,12 +13,14 @@ public class SendCategoriesStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
     private readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
     public SendCategoriesStateHandler(
-        ICategoryManager categoryManager, IMessageManager messageManager)
+        ICategoryManager categoryManager, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
     {
         _categoryManager = categoryManager;
         _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -40,7 +42,7 @@ public class SendCategoriesStateHandler : IStateHandler
         if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
-        updateContext.Session.Wait(WorkflowState.ChooseTransactionCategory);
+        _sessionStateManager.Wait(updateContext.Session, WorkflowState.ChooseTransactionCategory);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CategoryDto[] categories)

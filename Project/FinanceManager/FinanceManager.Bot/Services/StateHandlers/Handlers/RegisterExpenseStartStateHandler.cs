@@ -1,16 +1,20 @@
-﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Bot.Models;
-using FinanceManager.Bot.Services.CommandHandlers.Contexts;
+﻿using FinanceManager.Bot.Models;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
-namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers;
 public class RegisterExpenseStartStateHandler : RegisterTransactionStateHandler
 {
+    public RegisterExpenseStartStateHandler(IUserSessionStateManager sessionStateManager) : base(sessionStateManager)
+    {
+    }
+
     private protected override void AddExpenseContext(UserSession session)
     {
-        if (session.WorkflowContext is null)
+        if (session.WorkflowContext?.TransactionContext is null)
         {
-            session.SetData(new TransactionContext { TransactionType = TransactionType.Expense });
+            session.SetTransactionContext(TransactionContext.CreateExpenseContext());
         }
     }
 }

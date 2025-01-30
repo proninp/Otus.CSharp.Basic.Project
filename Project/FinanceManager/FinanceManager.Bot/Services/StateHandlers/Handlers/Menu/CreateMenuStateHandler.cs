@@ -13,11 +13,16 @@ public class CreateMenuStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
-    public CreateMenuStateHandler(IMessageManager messageManager, IAccountManager accountManager)
+    public CreateMenuStateHandler(
+        IMessageManager messageManager,
+        IAccountManager accountManager,
+        IUserSessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _accountManager = accountManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -25,7 +30,7 @@ public class CreateMenuStateHandler : IStateHandler
         var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
         {
-            updateContext.Session.Reset();
+            _sessionStateManager.ResetSession(updateContext.Session);
             return;
         }
 
@@ -34,7 +39,7 @@ public class CreateMenuStateHandler : IStateHandler
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
-        updateContext.Session.Wait(WorkflowState.SelectMenu);
+        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SelectMenu);
     }
 
     private async Task<string> BuildMessageText(AccountDto account, CancellationToken cancellationToken)

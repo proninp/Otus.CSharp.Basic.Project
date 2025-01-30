@@ -1,18 +1,20 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
-using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionDateSelectionStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
-    public TransactionDateSelectionStateHandler(IMessageManager messageManager)
+    public TransactionDateSelectionStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -28,7 +30,8 @@ public class TransactionDateSelectionStateHandler : IStateHandler
         if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
-        updateContext.Session.Wait(WorkflowState.SetTransactionDate);
+        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetTransactionDate);
+
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext updateContext)

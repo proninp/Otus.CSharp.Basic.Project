@@ -16,6 +16,7 @@ public class HistoryStateHandler : IStateHandler
     private readonly IHistoryContextProvider _contextProvider;
     private readonly IHistoryInlineKeyBoardProvider _inlineKeyboardProvider;
     private readonly ITransactionManager _transactionManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
     public HistoryStateHandler(
         ICallbackDataProvider callbackQueryProvider,
@@ -25,7 +26,8 @@ public class HistoryStateHandler : IStateHandler
         IHistoryMessageTextProvider historyMessageTextProvider,
         IHistoryInlineKeyBoardProvider inlineKeyboardProvider,
         IHistoryContextProvider contextProvider,
-        ITransactionManager transactionManager)
+        ITransactionManager transactionManager,
+        IUserSessionStateManager sessionStateManager)
     {
         _callbackDataProvider = callbackQueryProvider;
         _callbackDataValidator = callbackDataValidator;
@@ -34,6 +36,7 @@ public class HistoryStateHandler : IStateHandler
         _inlineKeyboardProvider = inlineKeyboardProvider;
         _contextProvider = contextProvider;
         _transactionManager = transactionManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -44,7 +47,7 @@ public class HistoryStateHandler : IStateHandler
 
         if (!await _callbackDataValidator.Validate(updateContext, callbackData))
         {
-            updateContext.Session.Wait();
+            _sessionStateManager.Wait(updateContext.Session);
             return;
         }
 
@@ -63,7 +66,7 @@ public class HistoryStateHandler : IStateHandler
         else if (callbackData.Data == HistoryCommand.Memu.ToString())
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            updateContext.Session.Continue(WorkflowState.CreateMenu);
+            _sessionStateManager.Continue(updateContext.Session, WorkflowState.CreateMenu);
             return;
         }
 
@@ -80,6 +83,6 @@ public class HistoryStateHandler : IStateHandler
         if (!await _messageManager.EditLastMessage(updateContext, messageText, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
-        updateContext.Session.Wait();
+        _sessionStateManager.Wait(updateContext.Session);
     }
 }

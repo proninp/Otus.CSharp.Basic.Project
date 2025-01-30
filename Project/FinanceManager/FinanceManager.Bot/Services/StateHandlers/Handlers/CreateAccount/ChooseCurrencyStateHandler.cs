@@ -1,11 +1,11 @@
 ﻿using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
-using FinanceManager.Bot.Services.CommandHandlers.Contexts;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Interfaces.Validators;
+using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class ChooseCurrencyStateHandler : IStateHandler
@@ -14,16 +14,19 @@ public class ChooseCurrencyStateHandler : IStateHandler
     private readonly IMessageManager _messageManager;
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ICallbackDataValidator _callbackDataValidator;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
     public ChooseCurrencyStateHandler(ICurrencyManager currencyManager,
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
-        ICallbackDataValidator callbackDataValidator)
+        ICallbackDataValidator callbackDataValidator,
+        IUserSessionStateManager sessionStateManager)
     {
         _currencyManager = currencyManager;
         _callbackDataProvider = callbackDataProvider;
         _messageManager = messageManager;
         _callbackDataValidator = callbackDataValidator;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -36,7 +39,7 @@ public class ChooseCurrencyStateHandler : IStateHandler
 
         if (! await _callbackDataValidator.Validate(updateContext, callbackQuery))
         {
-            updateContext.Session.Wait();
+            _sessionStateManager.Wait(updateContext.Session);
             return;
         }
 
@@ -56,17 +59,17 @@ public class ChooseCurrencyStateHandler : IStateHandler
 
         var context = updateContext.Session.GetCreateAccountContext();
         context.Currency = currency;
-        updateContext.Session.WorkflowContext = context;
 
         await _messageManager.DeleteLastMessage(updateContext);
         await _messageManager.SendMessage(updateContext, "Enter a number to set the initial balance:");
 
-        updateContext.Session.Wait(WorkflowState.SetAccountInitialBalance);
+        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetAccountInitialBalance);
+
     }
 
     private async Task DeleteLastMessageAndContinue(BotUpdateContext updateContext, WorkflowState workflowState)
     {
         await _messageManager.DeleteLastMessage(updateContext);
-        updateContext.Session.Continue(workflowState);
+        _sessionStateManager.Continue(updateContext.Session, workflowState);
     }
 }

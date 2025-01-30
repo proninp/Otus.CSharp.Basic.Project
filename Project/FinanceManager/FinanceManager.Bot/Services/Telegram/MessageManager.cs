@@ -110,7 +110,7 @@ public sealed class MessageManager : IMessageManager
 
     public InlineKeyboardButton CreateInlineButton(CallbackData data, string message)
     {
-        var dataText = data.ToData();
+        var dataText = data.ToTelegramCallbackData();
         return InlineKeyboardButton.WithCallbackData(message, dataText);
     }
 
@@ -123,9 +123,7 @@ public sealed class MessageManager : IMessageManager
         }
         catch (ApiRequestException ex) when (ex.ErrorCode == (int)HttpStatusCode.BadRequest)
         {
-            _logger.Warning(ex, $"Error during {operationName} message {messageId}.{Environment.NewLine}" +
-                $"Status code: {ex.ErrorCode},{Environment.NewLine}" +
-                $"Message: {ex.Message}");
+            _logger.Warning(ex, $"Error during {operationName} message {messageId}. Status code: {ex.ErrorCode}. Message: {ex.Message}");
             return false;
         }
         catch (Exception ex)

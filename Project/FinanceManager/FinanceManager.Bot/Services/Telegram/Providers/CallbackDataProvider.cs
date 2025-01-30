@@ -2,15 +2,18 @@
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
 namespace FinanceManager.Bot.Services.Telegram.Providers;
 internal class CallbackDataProvider : ICallbackDataProvider
 {
     private readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
-    public CallbackDataProvider(IMessageManager messageManager)
+    public CallbackDataProvider(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task<CallbackData?> GetCallbackData(
@@ -29,7 +32,7 @@ internal class CallbackDataProvider : ICallbackDataProvider
             if (isDeleteMessageWhenNull)
                 await _messageManager.DeleteLastMessage(updateContext);
             if (continueWithStateWhenNull is not null)
-                updateContext.Session.Continue(continueWithStateWhenNull.Value);
+                _sessionStateManager.Continue(updateContext.Session, continueWithStateWhenNull.Value);
         }
 
         return callbackData;

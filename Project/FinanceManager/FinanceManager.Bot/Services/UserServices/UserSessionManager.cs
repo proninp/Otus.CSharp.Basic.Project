@@ -43,7 +43,7 @@ public sealed class UserSessionManager : IUserSessionManager
             };
             userDto = await _userManager.Create(userCommand, cancellationToken);
         }
-        var callbackSessionId = GenerateSessionId();
+        var callbackSessionId = GenerateCallbackSessionId();
 
         return userDto.ToUserSession(callbackSessionId);
     }
@@ -61,9 +61,9 @@ public sealed class UserSessionManager : IUserSessionManager
         return expiredSessions.Count();
     }
 
-    private string GenerateSessionId()
+    private string GenerateCallbackSessionId()
     {
-        int maxLength = 10;
+        int maxLength = 6;
         int byteLength = (int)Math.Ceiling(maxLength * 0.75);
 
         byte[] randomBytes = RandomNumberGenerator.GetBytes(byteLength);

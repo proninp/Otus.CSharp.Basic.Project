@@ -3,6 +3,7 @@ using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.Telegram.Providers;
@@ -11,13 +12,18 @@ public class HistoryContextProvider : IHistoryContextProvider
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
     private readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
     public HistoryContextProvider(
-        IAccountManager accountManager, ITransactionManager transactionManager, IMessageManager messageManager)
+        IAccountManager accountManager,
+        ITransactionManager transactionManager,
+        IMessageManager messageManager,
+        IUserSessionStateManager sessionStateManager)
     {
         _accountManager = accountManager;
         _transactionManager = transactionManager;
         _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task<HistoryContext?> GetHistoryContex(BotUpdateContext updateContext)
@@ -32,7 +38,7 @@ public class HistoryContextProvider : IHistoryContextProvider
             var message = "The operation cannot be performed because you do not have a default account." +
                 "Please create a default account first.";
             await _messageManager.SendErrorMessage(updateContext, message);
-            updateContext.Session.Continue(WorkflowState.CreateAccountStart, true);
+            _sessionStateManager.Continue(updateContext.Session, WorkflowState.CreateAccountStart, true);
             return null;
         }
 
@@ -44,11 +50,11 @@ public class HistoryContextProvider : IHistoryContextProvider
             await _messageManager.SendMessage(
                 updateContext,
                 "At the moment, you do not have any registered transactions on the selected account.");
-            updateContext.Session.Continue(WorkflowState.CreateMenu, true);
+            _sessionStateManager.Continue(updateContext.Session, WorkflowState.CreateMenu, true);
             return null;
         }
 
-        updateContext.Session.WorkflowContext = new HistoryContext(account, transactionsCount);
+        updateContext.Session.SetHistoryContext(new HistoryContext(account, transactionsCount));
 
         return updateContext.Session.GetHistoryContext();
     }

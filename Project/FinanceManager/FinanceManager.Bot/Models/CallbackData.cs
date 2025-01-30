@@ -5,13 +5,13 @@ public class CallbackData
 {
     private const char Separator = ' ';
 
-    public string UserSessionId { get; set; }
+    public string CallbackSessionId { get; set; }
 
     public string Data { get; set; } = string.Empty;
 
     public CallbackData(string sessionId, string data)
     {
-        UserSessionId = sessionId;
+        CallbackSessionId = sessionId;
         Data = data;
     }
 
@@ -20,11 +20,11 @@ public class CallbackData
     {
     }
 
-    public string ToData()
+    public string ToTelegramCallbackData()
     {
         var dataBuilder = new StringBuilder();
         dataBuilder
-            .Append(UserSessionId)
+            .Append(CallbackSessionId)
             .Append(Separator)
             .Append(Data);
         return dataBuilder.ToString();
@@ -41,9 +41,8 @@ public class CallbackData
         if (parts.Length != 2)
             return null;
 
-        foreach (var part in parts)
-            if (string.IsNullOrEmpty(part))
-                return null;
+        if (parts.Any(p => string.IsNullOrEmpty(p)))
+            return null;
 
         return new CallbackData(parts[0], parts[1]);
     }

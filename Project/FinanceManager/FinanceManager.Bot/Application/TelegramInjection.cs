@@ -2,6 +2,7 @@
 using FinanceManager.Bot.Services.Interfaces;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
@@ -40,7 +41,8 @@ public static class TelegramInjection
         services
             .AddSingleton<IUserSessionRegistry, UserSessionRegistry>()
             .AddScoped<IUserSessionManager, UserSessionManager>()
-            .AddScoped<IUserSessionProvider, UserSessionProvider>();
+            .AddScoped<IUserSessionProvider, UserSessionProvider>()
+            .AddScoped<IUserSessionStateManager, UserSessionStateManager>();
 
         services
             .AddScoped<IUpdateValidator, UpdateValidator>()

@@ -1,8 +1,9 @@
 ﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Utils;
+using FinanceManager.Bot.Exceptions;
 using FinanceManager.Bot.Models;
 
-namespace FinanceManager.Bot.Services.CommandHandlers.Contexts;
+namespace FinanceManager.Bot.Services.StateHandlers.Contexts;
 public class TransactionContext
 {
     public TransactionType TransactionType { get; init; }
@@ -14,18 +15,22 @@ public class TransactionContext
     public CategoryDto? Category { get; set; }
 
     public string TransactionTypeDescription => TransactionType.GetDescription().ToLower();
+
+    public static TransactionContext CreateExpenseContext() =>
+        new TransactionContext { TransactionType = TransactionType.Expense };
+
+    public static TransactionContext CreateIncomeContext() =>
+        new TransactionContext { TransactionType = TransactionType.Income };
 }
 
 public static class TransactionContextExtesion
 {
     public static TransactionContext GetTransactionContext(this UserSession session)
     {
-        TransactionContext? transactionContext;
         if (session.WorkflowContext is null)
-            throw new ArgumentNullException(nameof(transactionContext));
-        transactionContext = session.WorkflowContext as TransactionContext;
-        if (transactionContext is null)
-            throw new InvalidCastException(nameof(transactionContext));
-        return transactionContext;
+            throw new StateContextNullException(session.State, nameof(session.WorkflowContext));
+        if (session.WorkflowContext.TransactionContext is null)
+            throw new StateContextNullException(session.State, nameof(session.WorkflowContext.TransactionContext));
+        return session.WorkflowContext.TransactionContext;
     }
 }

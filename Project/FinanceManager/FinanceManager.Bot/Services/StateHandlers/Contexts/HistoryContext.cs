@@ -24,12 +24,10 @@ public static class HistoryContextExtesion
 {
     public static HistoryContext GetHistoryContext(this UserSession session)
     {
-        HistoryContext? historyContext;
         if (session.WorkflowContext is null)
-            throw new StateContextNullException(session.State, nameof(historyContext));
-        historyContext = session.WorkflowContext as HistoryContext;
-        if (historyContext is null)
-            throw new InvalidCastException(nameof(historyContext));
-        return historyContext;
+            throw new StateContextNullException(session.State, nameof(session.WorkflowContext));
+        if (session.WorkflowContext.HistoryContext is null)
+            throw new StateContextNullException(session.State, nameof(session.WorkflowContext.HistoryContext));
+        return session.WorkflowContext.HistoryContext;
     }
 }

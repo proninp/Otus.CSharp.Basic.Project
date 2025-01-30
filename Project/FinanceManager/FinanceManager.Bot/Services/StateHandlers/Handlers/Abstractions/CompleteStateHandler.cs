@@ -6,10 +6,12 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 public abstract class CompleteStateHandler : IStateHandler
 {
     private protected readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
-    protected CompleteStateHandler(IMessageManager messageManager)
+    protected CompleteStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -26,10 +28,9 @@ public abstract class CompleteStateHandler : IStateHandler
         }
         finally
         {
-            updateContext.Session.Reset();
+            _sessionStateManager.ResetSession(updateContext.Session);
         }
     }
 
     private protected abstract Task HandleCompleteAsync(BotUpdateContext updateContext);
-
 }

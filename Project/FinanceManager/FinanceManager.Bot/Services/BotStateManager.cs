@@ -11,13 +11,18 @@ public class BotStateManager : IBotStateManager
     private readonly IUserSessionProvider _userSessionProvider;
     private readonly IStateHandlerFactory _stateHandlerFactory;
     private readonly IChatProvider _chatProvider;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
     public BotStateManager(
-        IUserSessionProvider userSessionProvider, IStateHandlerFactory stateHandlerFactory, IChatProvider chatProvider)
+        IUserSessionProvider userSessionProvider,
+        IStateHandlerFactory stateHandlerFactory,
+        IChatProvider chatProvider,
+        IUserSessionStateManager sessionStateManager)
     {
         _userSessionProvider = userSessionProvider;
         _stateHandlerFactory = stateHandlerFactory;
         _chatProvider = chatProvider;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleUpdateAsync(
@@ -34,7 +39,6 @@ public class BotStateManager : IBotStateManager
         {
             var handler = _stateHandlerFactory.GetHandler(session.State);
             await handler.HandleAsync(botContext);
-
-        } while (session.IsContinue());
+        } while (_sessionStateManager.IsContinue(session));
     }
 }

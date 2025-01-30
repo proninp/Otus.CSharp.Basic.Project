@@ -11,13 +11,18 @@ public class SelectMenuStateHandler : IStateHandler
     private readonly IMessageManager _messageManager;
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ICallbackDataValidator _callbackDataValidator;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
     public SelectMenuStateHandler(
-        ICallbackDataProvider callbackDataProvider, IMessageManager messageManager, ICallbackDataValidator callbackDataValidator)
+        ICallbackDataProvider callbackDataProvider,
+        IMessageManager messageManager,
+        ICallbackDataValidator callbackDataValidator,
+        IUserSessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _callbackDataProvider = callbackDataProvider;
         _callbackDataValidator = callbackDataValidator;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -30,7 +35,8 @@ public class SelectMenuStateHandler : IStateHandler
         if (!await _callbackDataValidator.Validate(updateContext, callbackData, true))
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            updateContext.Session.Continue(previousState);
+            _sessionStateManager.Continue(updateContext.Session, previousState);
+            return;
         }
 
         var stateMapping = new Dictionary<string, WorkflowState>
@@ -44,6 +50,6 @@ public class SelectMenuStateHandler : IStateHandler
         if (!stateMapping.TryGetValue(callbackData.Data, out var newState))
             newState = updateContext.Session.State;
 
-        updateContext.Session.Continue(newState, true);
+        _sessionStateManager.Continue(updateContext.Session, newState, true);
     }
 }

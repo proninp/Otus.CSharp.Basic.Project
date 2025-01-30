@@ -15,7 +15,7 @@ public class CallbackDataValidator : ICallbackDataValidator
     public async Task<bool> Validate(
         BotUpdateContext updateContext, CallbackData callbackData, bool isSendInformationMessage = false)
     {
-        if (updateContext.Session.CallbackSessionId != callbackData.UserSessionId)
+        if (updateContext.Session.CallbackSessionId != callbackData.CallbackSessionId)
         {
             if (isSendInformationMessage)
             {

@@ -9,28 +9,30 @@ public class DefaultStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
-    public DefaultStateHandler(IAccountManager accountManager, IMessageManager messageManager)
+    public DefaultStateHandler(
+        IAccountManager accountManager, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
     {
         _accountManager = accountManager;
         _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        var defaultAccount = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
+        var nextState = WorkflowState.CreateMenu;
 
+        var defaultAccount = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
         if (defaultAccount is null)
         {
             var messageText = $"Hi, {updateContext.Session.UserName}! {Emoji.Greeting.GetSymbol()}" +
                 $"{Environment.NewLine}Let's set you up!";
             await _messageManager.SendMessage(updateContext, messageText);
 
-            updateContext.Session.Continue(WorkflowState.CreateAccountStart, true);
+            nextState = WorkflowState.CreateAccountStart;
         }
-        else
-        {
-            updateContext.Session.Continue(WorkflowState.CreateMenu, true);
-        }
+
+        _sessionStateManager.Continue(updateContext.Session, nextState, true);
     }
 }

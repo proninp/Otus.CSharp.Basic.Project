@@ -11,12 +11,14 @@ public class SendCurrenciesStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IMessageManager _messageManager;
+    private readonly IUserSessionStateManager _sessionStateManager;
 
     public SendCurrenciesStateHandler(
-        ICurrencyManager currencyManager, IMessageManager messageManager)
+        ICurrencyManager currencyManager, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
     {
         _currencyManager = currencyManager;
         _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
     }
 
     public async Task HandleAsync(BotUpdateContext updateContext)
@@ -26,7 +28,7 @@ public class SendCurrenciesStateHandler : IStateHandler
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
 
-        updateContext.Session.Wait(WorkflowState.ChooseCurrency);
+        _sessionStateManager.Wait(updateContext.Session, WorkflowState.ChooseCurrency);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CurrencyDto[] currencies)
