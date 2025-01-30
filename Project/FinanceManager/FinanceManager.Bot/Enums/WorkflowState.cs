@@ -20,8 +20,9 @@ public enum WorkflowState
     AddIncome,
     DeleteIncome,
     
-    SendTransactionDateSelection,
+    SendInputTransactionDate,
     SetTransactionDate,
+    SendInputTransactionAmount,
     SetTransactionAmount,
     SendTransactionCategories,
     ChooseTransactionCategory,

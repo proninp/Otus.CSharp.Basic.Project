@@ -6,12 +6,12 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public class TransactionDateSelectionStateHandler : IStateHandler
+public class TransactionInputDateStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
     private readonly IUserSessionStateManager _sessionStateManager;
 
-    public TransactionDateSelectionStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+    public TransactionInputDateStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
@@ -31,7 +31,6 @@ public class TransactionDateSelectionStateHandler : IStateHandler
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
         _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetTransactionDate);
-
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext updateContext)

@@ -35,7 +35,7 @@ public static class StateHandlersInjection
         services
             .AddScoped<SendCategoriesStateHandler>()
             .AddScoped<ChooseCategoryStateHandler>()
-            .AddScoped<TransactionDateSelectionStateHandler>()
+            .AddScoped<TransactionInputDateStateHandler>()
             .AddScoped<TransactionSetDateStateHandler>()
             .AddScoped<TransactionSetAmountStateHandler>()
             .AddScoped<TransactionRegistrationStateHandler>();

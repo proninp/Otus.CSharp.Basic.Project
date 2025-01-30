@@ -1,5 +1,4 @@
-﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Bot.Enums;
+﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
@@ -49,24 +48,16 @@ public class TransactionSetDateStateHandler : IStateHandler
             await _messageManager.DeleteLastMessage(updateContext);
             await _messageManager.SendErrorMessage(updateContext, incorrectDateMessage);
 
-            _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendTransactionDateSelection);
+            _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendInputTransactionDate);
             return;
         }
 
         var context = updateContext.Session.GetTransactionContext();
         context.Date = date;
 
-        var emoji = context.TransactionType switch
-        {
-            TransactionType.Expense => Emoji.ExpenseAmount.GetSymbol(),
-            TransactionType.Income => Emoji.IncomeAmount.GetSymbol(),
-            _ => string.Empty
-        };
-
         await _messageManager.DeleteLastMessage(updateContext);
-        await _messageManager.SendMessage(updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
 
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetTransactionAmount);
+        _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendInputTransactionAmount);
     }
 
     private async Task<string?> GetUpdateText(BotUpdateContext updateContext)
@@ -74,12 +65,12 @@ public class TransactionSetDateStateHandler : IStateHandler
         string? dateText = null;
         if (_messageProvider.GetMessage(updateContext.Update, out var message))
             return message?.Text;
-        
+
         var callBackData = await _callbackDataProvider.GetCallbackData(updateContext, false);
         if (callBackData is not null)
         {
             if (await _callbackDataValidator.Validate(updateContext, callBackData))
-                dateText = callBackData.Data;
+            dateText = callBackData.Data;
         }
         return dateText;
     }

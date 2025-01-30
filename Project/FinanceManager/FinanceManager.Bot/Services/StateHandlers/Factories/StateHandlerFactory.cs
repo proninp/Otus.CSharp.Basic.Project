@@ -39,8 +39,9 @@ public class StateHandlerFactory : IStateHandlerFactory
 
         WorkflowState.SendTransactionCategories => _serviceProvider.GetRequiredService<SendCategoriesStateHandler>(),
         WorkflowState.ChooseTransactionCategory => _serviceProvider.GetRequiredService<ChooseCategoryStateHandler>(),
-        WorkflowState.SendTransactionDateSelection => _serviceProvider.GetRequiredService<TransactionDateSelectionStateHandler>(),
+        WorkflowState.SendInputTransactionDate => _serviceProvider.GetRequiredService<TransactionInputDateStateHandler>(),
         WorkflowState.SetTransactionDate => _serviceProvider.GetRequiredService<TransactionSetDateStateHandler>(),
+        WorkflowState.SendInputTransactionAmount => _serviceProvider.GetRequiredService<TransactionIputAmountStateHandler>(),
         WorkflowState.SetTransactionAmount => _serviceProvider.GetRequiredService<TransactionSetAmountStateHandler>(),
         WorkflowState.RegisterTransaction => _serviceProvider.GetRequiredService<TransactionRegistrationStateHandler>(),
         _ => throw new StateHandlerNotFoundException(state)
