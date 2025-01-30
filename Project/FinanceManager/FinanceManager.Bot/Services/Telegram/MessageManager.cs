@@ -84,9 +84,15 @@ public sealed class MessageManager : IMessageManager
         if (updateContext.Session.LastMessage is null)
             return false;
 
-        var messageId = updateContext.Session.LastMessage.Id;
+        var result = await DeleteMessage(updateContext, updateContext.Session.LastMessage.Id);
 
-        var result = await ExecuteWithErrorHandlingAsync(
+        updateContext.Session.LastMessage = null;
+        return result;
+    }
+
+    public async Task<bool> DeleteMessage(BotUpdateContext updateContext, int messageId)
+    {
+        return await ExecuteWithErrorHandlingAsync(
             async () =>
             {
                 await updateContext.BotClient.DeleteMessage(
@@ -97,9 +103,6 @@ public sealed class MessageManager : IMessageManager
             "deleting",
             messageId
             );
-
-        updateContext.Session.LastMessage = null;
-        return result;
     }
 
     public InlineKeyboardButton CreateInlineButton(BotUpdateContext updateContext, string data, string message)
