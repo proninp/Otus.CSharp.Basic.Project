@@ -39,16 +39,16 @@ public static class TelegramInjection
             .AddScoped<IBotStateManager, BotStateManager>();
 
         services
-            .AddSingleton<IUserSessionRegistry, UserSessionRegistry>()
-            .AddScoped<IUserSessionManager, UserSessionManager>()
-            .AddScoped<IUserSessionProvider, UserSessionProvider>()
-            .AddScoped<IUserSessionStateManager, UserSessionStateManager>();
+            .AddSingleton<ISessionRegistry, SessionRegistry>()
+            .AddScoped<ISessionManager, SessionManager>()
+            .AddScoped<ISessionProvider, SessionProvider>()
+            .AddScoped<ISessionStateManager, SessionStateManager>();
 
         services
             .AddScoped<IUpdateValidator, UpdateValidator>()
             .AddScoped<IUpdateMessageProvider, UpdateMessageProvider>()
+            .AddScoped<ISessionConsistencyValidator, SessionConsistencyValidator>()
             .AddScoped<ICallbackDataProvider, CallbackDataProvider>()
-            .AddScoped<ICallbackDataValidator, CallbackDataValidator>()
             .AddScoped<IChatProvider, ChatProvider>()
             .AddScoped<IMessageManager, MessageManager>()
             .AddScoped<ITransactionDateProvider, TransactionDateProvider>()

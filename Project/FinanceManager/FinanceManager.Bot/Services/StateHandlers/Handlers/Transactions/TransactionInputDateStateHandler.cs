@@ -9,9 +9,9 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 public class TransactionInputDateStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
-    public TransactionInputDateStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+    public TransactionInputDateStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;

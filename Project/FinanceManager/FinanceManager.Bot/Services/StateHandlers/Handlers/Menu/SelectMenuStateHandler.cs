@@ -11,13 +11,13 @@ public class SelectMenuStateHandler : IStateHandler
     private readonly IMessageManager _messageManager;
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ICallbackDataValidator _callbackDataValidator;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public SelectMenuStateHandler(
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
         ICallbackDataValidator callbackDataValidator,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _callbackDataProvider = callbackDataProvider;
@@ -31,13 +31,6 @@ public class SelectMenuStateHandler : IStateHandler
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true, previousState);
         if (callbackData is null)
             return;
-
-        if (!await _callbackDataValidator.Validate(updateContext, callbackData, true))
-        {
-            await _messageManager.DeleteLastMessage(updateContext);
-            _sessionStateManager.Continue(updateContext.Session, previousState);
-            return;
-        }
 
         var stateMapping = new Dictionary<string, WorkflowState>
         {

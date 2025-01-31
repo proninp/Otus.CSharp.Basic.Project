@@ -122,6 +122,7 @@ public sealed class MessageManager : IMessageManager
         try
         {
             await action();
+            _logger.Debug($"Message with Id: {messageId} has been deleted.");
             return true;
         }
         catch (ApiRequestException ex) when (ex.ErrorCode == (int)HttpStatusCode.BadRequest)

@@ -2,27 +2,31 @@
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.Interfaces.Validators;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services;
 public class BotStateManager : IBotStateManager
 {
-    private readonly IUserSessionProvider _userSessionProvider;
+    private readonly ISessionProvider _userSessionProvider;
     private readonly IStateHandlerFactory _stateHandlerFactory;
     private readonly IChatProvider _chatProvider;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
+    private readonly ISessionConsistencyValidator _consistencyValidator;
 
     public BotStateManager(
-        IUserSessionProvider userSessionProvider,
+        ISessionProvider userSessionProvider,
         IStateHandlerFactory stateHandlerFactory,
         IChatProvider chatProvider,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager,
+        ISessionConsistencyValidator consistencyValidator)
     {
         _userSessionProvider = userSessionProvider;
         _stateHandlerFactory = stateHandlerFactory;
         _chatProvider = chatProvider;
         _sessionStateManager = sessionStateManager;
+        _consistencyValidator = consistencyValidator;
     }
 
     public async Task HandleUpdateAsync(
@@ -34,6 +38,8 @@ public class BotStateManager : IBotStateManager
             return;
 
         var botContext = new BotUpdateContext(session, botClient, update, chat, cancellationToken);
+
+        await _consistencyValidator.ValidateCallbackConsistency(botContext);
 
         do
         {

@@ -11,8 +11,6 @@ public class UserSession
 
     public string? UserName { get; set; }
 
-    public WorkflowState PreviousState { get; set; }
-
     public WorkflowState State { get; set; }
 
     public bool WaitForUserInput { get; set; }
@@ -37,7 +35,6 @@ public static class UserSessionExtensions
             Id = userDto.Id,
             TelegramId = userDto.TelegramId,
             UserName = userDto.Username,
-            PreviousState = WorkflowState.Default,
             State = WorkflowState.Default,
             CallbackSessionId = callbackSessionId,
             CreatedAt = DateTime.UtcNow,

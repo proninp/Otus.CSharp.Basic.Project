@@ -2,6 +2,7 @@
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
@@ -13,9 +14,10 @@ public class TransactionRegistrationStateHandler : CompleteStateHandler
 
     public TransactionRegistrationStateHandler(
         IMessageManager messageManager,
+        ISessionStateManager sessionStateManager,
         IAccountManager accountManager,
         ITransactionManager transactionManager)
-        : base(messageManager)
+        : base(messageManager, sessionStateManager)
     {
         _accountManager = accountManager;
         _transactionManager = transactionManager;

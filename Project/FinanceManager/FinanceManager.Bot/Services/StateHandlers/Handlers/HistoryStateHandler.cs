@@ -16,7 +16,7 @@ public class HistoryStateHandler : IStateHandler
     private readonly IHistoryContextProvider _contextProvider;
     private readonly IHistoryInlineKeyBoardProvider _inlineKeyboardProvider;
     private readonly ITransactionManager _transactionManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public HistoryStateHandler(
         ICallbackDataProvider callbackQueryProvider,
@@ -27,7 +27,7 @@ public class HistoryStateHandler : IStateHandler
         IHistoryInlineKeyBoardProvider inlineKeyboardProvider,
         IHistoryContextProvider contextProvider,
         ITransactionManager transactionManager,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _callbackDataProvider = callbackQueryProvider;
         _callbackDataValidator = callbackDataValidator;
@@ -44,12 +44,6 @@ public class HistoryStateHandler : IStateHandler
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true, WorkflowState.CreateMenu);
         if (callbackData is null)
             return;
-
-        if (!await _callbackDataValidator.Validate(updateContext, callbackData))
-        {
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
-        }
 
         var context = await _contextProvider.GetHistoryContex(updateContext);
         if (context is null)

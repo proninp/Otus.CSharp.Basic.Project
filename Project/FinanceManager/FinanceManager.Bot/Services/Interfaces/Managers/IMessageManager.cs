@@ -16,6 +16,8 @@ public interface IMessageManager
 
     Task<bool> DeleteLastMessage(BotUpdateContext updateContext);
 
+    Task<bool> DeleteMessage(BotUpdateContext updateContext, int messageId);
+
     InlineKeyboardButton CreateInlineButton(BotUpdateContext updateContext, string data, string message);
 
     InlineKeyboardButton CreateInlineButton(CallbackData data, string message);

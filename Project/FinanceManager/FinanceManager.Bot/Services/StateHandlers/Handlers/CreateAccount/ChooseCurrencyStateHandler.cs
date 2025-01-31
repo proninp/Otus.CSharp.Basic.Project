@@ -14,13 +14,13 @@ public class ChooseCurrencyStateHandler : IStateHandler
     private readonly IMessageManager _messageManager;
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ICallbackDataValidator _callbackDataValidator;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public ChooseCurrencyStateHandler(ICurrencyManager currencyManager,
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
         ICallbackDataValidator callbackDataValidator,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _currencyManager = currencyManager;
         _callbackDataProvider = callbackDataProvider;
@@ -36,12 +36,6 @@ public class ChooseCurrencyStateHandler : IStateHandler
         var callbackQuery = await _callbackDataProvider.GetCallbackData(updateContext, true, previousState);
         if (callbackQuery is null)
             return;
-
-        if (! await _callbackDataValidator.Validate(updateContext, callbackQuery))
-        {
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
-        }
 
         var currencyId = callbackQuery.Data;
         if (string.IsNullOrEmpty(currencyId))
@@ -61,10 +55,8 @@ public class ChooseCurrencyStateHandler : IStateHandler
         context.Currency = currency;
 
         await _messageManager.DeleteLastMessage(updateContext);
-        await _messageManager.SendMessage(updateContext, "Enter a number to set the initial balance:");
-
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetAccountInitialBalance);
-
+        
+        _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendInputAccountInitialBalance);
     }
 
     private async Task DeleteLastMessageAndContinue(BotUpdateContext updateContext, WorkflowState workflowState)

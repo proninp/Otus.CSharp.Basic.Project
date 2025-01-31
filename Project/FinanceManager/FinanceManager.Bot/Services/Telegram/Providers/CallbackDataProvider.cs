@@ -8,9 +8,9 @@ namespace FinanceManager.Bot.Services.Telegram.Providers;
 internal class CallbackDataProvider : ICallbackDataProvider
 {
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
-    public CallbackDataProvider(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+    public CallbackDataProvider(IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
@@ -22,11 +22,11 @@ internal class CallbackDataProvider : ICallbackDataProvider
         CallbackData? callbackData = null;
         var callbackQuery = updateContext.Update.CallbackQuery;
 
-        if (callbackQuery is null)
-            return null;
-
-        var data = callbackQuery.Data ?? string.Empty;
-        callbackData = CallbackData.FromRawText(data);
+        if (callbackQuery is not null)
+        {
+            var data = callbackQuery.Data ?? string.Empty;
+            callbackData = CallbackData.FromRawText(data);
+        }
 
         if (callbackData is null)
         {
@@ -37,7 +37,7 @@ internal class CallbackDataProvider : ICallbackDataProvider
         }
         else
         {
-            callbackData.MessageId = callbackQuery.Message?.Id;
+            callbackData.MessageId = callbackQuery?.Message?.Id;
         }
 
         return callbackData;

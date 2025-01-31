@@ -15,7 +15,7 @@ public class TransactionSetDateStateHandler : IStateHandler
     private readonly IMessageManager _messageManager;
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ICallbackDataValidator _callbackDataValidator;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public TransactionSetDateStateHandler(
         IUpdateMessageProvider messageProvider,
@@ -23,7 +23,7 @@ public class TransactionSetDateStateHandler : IStateHandler
         ITransactionDateProvider transactionDateProvider,
         IMessageManager messageManager,
         ICallbackDataValidator callbackDataValidator,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _messageProvider = messageProvider;
         _transactionDateProvider = transactionDateProvider;
@@ -69,7 +69,6 @@ public class TransactionSetDateStateHandler : IStateHandler
         var callBackData = await _callbackDataProvider.GetCallbackData(updateContext, false);
         if (callBackData is not null)
         {
-            if (await _callbackDataValidator.Validate(updateContext, callBackData))
             dateText = callBackData.Data;
         }
         return dateText;

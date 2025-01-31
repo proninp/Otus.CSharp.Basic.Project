@@ -4,6 +4,7 @@ using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
@@ -15,11 +16,12 @@ public class CreateAccountEndStateHandler : CompleteStateHandler
     private readonly ICategoriesInitializer _categoriesInitializer;
 
     public CreateAccountEndStateHandler(
+        IMessageManager messageManager,
+        ISessionStateManager sessionStateManager,
         IAccountManager accountManager,
         ITransactionManager transactionManager,
-        ICategoriesInitializer categoriesInitializer,
-        IMessageManager messageManager)
-        : base(messageManager)
+        ICategoriesInitializer categoriesInitializer)
+        : base(messageManager, sessionStateManager)
     {
         _accountManager = accountManager;
         _transactionManager = transactionManager;
