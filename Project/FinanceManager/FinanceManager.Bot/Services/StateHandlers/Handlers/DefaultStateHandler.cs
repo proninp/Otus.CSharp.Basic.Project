@@ -21,18 +21,20 @@ public class DefaultStateHandler : IStateHandler
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        var nextState = WorkflowState.CreateMenu;
-
-        var defaultAccount = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
+        var session = updateContext.Session;
+        var defaultAccount = await _accountManager.GetDefault(session.Id, updateContext.CancellationToken);
         if (defaultAccount is null)
         {
-            var messageText = $"Hi, {updateContext.Session.UserName}! {Emoji.Greeting.GetSymbol()}" +
+            var messageText = $"Hi, {session.UserName}! {Emoji.Greeting.GetSymbol()}" +
                 $"{Environment.NewLine}Let's set you up!";
+
             await _messageManager.SendMessage(updateContext, messageText);
 
-            nextState = WorkflowState.CreateAccountStart;
+            _sessionStateManager.InitAccount(session);
         }
-
-        _sessionStateManager.Continue(updateContext.Session, nextState, true);
+        else
+        {
+            _sessionStateManager.ToMenu(session);
+        }
     }
 }

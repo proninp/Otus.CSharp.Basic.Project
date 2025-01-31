@@ -4,13 +4,11 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using FinanceManager.Bot.Services.Interfaces.Validators;
 
 namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class HistoryStateHandler : IStateHandler
 {
     private readonly ICallbackDataProvider _callbackDataProvider;
-    private readonly ICallbackDataValidator _callbackDataValidator;
     private readonly IMessageManager _messageManager;
     private readonly IHistoryMessageTextProvider _historyMessageTextProvider;
     private readonly IHistoryContextProvider _contextProvider;
@@ -20,8 +18,6 @@ public class HistoryStateHandler : IStateHandler
 
     public HistoryStateHandler(
         ICallbackDataProvider callbackQueryProvider,
-        ICallbackDataValidator callbackDataValidator,
-        ICallbackDataValidator dataValidator,
         IMessageManager messageManager,
         IHistoryMessageTextProvider historyMessageTextProvider,
         IHistoryInlineKeyBoardProvider inlineKeyboardProvider,
@@ -30,7 +26,6 @@ public class HistoryStateHandler : IStateHandler
         ISessionStateManager sessionStateManager)
     {
         _callbackDataProvider = callbackQueryProvider;
-        _callbackDataValidator = callbackDataValidator;
         _messageManager = messageManager;
         _historyMessageTextProvider = historyMessageTextProvider;
         _inlineKeyboardProvider = inlineKeyboardProvider;
@@ -41,9 +36,12 @@ public class HistoryStateHandler : IStateHandler
 
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
-        var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true, WorkflowState.CreateMenu);
+        var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackData is null)
+        {
+            _sessionStateManager.ToMenu(updateContext.Session);
             return;
+        }
 
         var context = await _contextProvider.GetHistoryContex(updateContext);
         if (context is null)
@@ -60,7 +58,7 @@ public class HistoryStateHandler : IStateHandler
         else if (callbackData.Data == HistoryCommand.Memu.ToString())
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            _sessionStateManager.Continue(updateContext.Session, WorkflowState.CreateMenu);
+            _sessionStateManager.ToMenu(updateContext.Session);
             return;
         }
 

@@ -1,5 +1,4 @@
-﻿using FinanceManager.Bot.Enums;
-using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
@@ -41,6 +40,6 @@ public class SetAccountBalanceStateHandler : IStateHandler
         var context = updateContext.Session.GetCreateAccountContext();
         context.InitialBalance = amount;
 
-        _sessionStateManager.Continue(updateContext.Session, WorkflowState.CreateAccountEnd);
+        _sessionStateManager.Next(updateContext.Session);
     }
 }

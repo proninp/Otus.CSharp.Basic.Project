@@ -30,6 +30,6 @@ public class TransactionIputAmountStateHandler : IStateHandler
 
         await _messageManager.SendMessage(updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
 
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetTransactionAmount);
+        _sessionStateManager.Next(updateContext.Session);
     }
 }

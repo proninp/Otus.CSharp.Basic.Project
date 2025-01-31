@@ -18,6 +18,6 @@ public class CreateAccountStartStateHandler : IStateHandler
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
         await _messageManager.SendMessage(updateContext, "Please enter the account name:");
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.ChooseAccountName);
+        _sessionStateManager.Next(updateContext.Session);
     }
 }

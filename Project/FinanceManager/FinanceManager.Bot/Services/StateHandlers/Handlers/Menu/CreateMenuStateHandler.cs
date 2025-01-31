@@ -39,7 +39,7 @@ public class CreateMenuStateHandler : IStateHandler
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SelectMenu);
+        _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<string> BuildMessageText(AccountDto account, CancellationToken cancellationToken)

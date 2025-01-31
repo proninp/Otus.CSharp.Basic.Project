@@ -17,7 +17,7 @@ public abstract class RegisterTransactionStateHandler : IStateHandler
     {
         AddExpenseContext(updateContext.Session);
 
-        _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendTransactionCategories);
+        _sessionStateManager.Next(updateContext.Session);
 
         return Task.CompletedTask;
     }

@@ -42,7 +42,7 @@ public class SendCategoriesStateHandler : IStateHandler
         if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.ChooseTransactionCategory);
+        _sessionStateManager.Next(updateContext.Session);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CategoryDto[] categories)

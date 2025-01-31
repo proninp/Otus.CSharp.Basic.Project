@@ -38,7 +38,7 @@ public class HistoryContextProvider : IHistoryContextProvider
             var message = "The operation cannot be performed because you do not have a default account." +
                 "Please create a default account first.";
             await _messageManager.SendErrorMessage(updateContext, message);
-            _sessionStateManager.Continue(updateContext.Session, WorkflowState.CreateAccountStart, true);
+            _sessionStateManager.InitAccount(updateContext.Session);
             return null;
         }
 
@@ -50,7 +50,7 @@ public class HistoryContextProvider : IHistoryContextProvider
             await _messageManager.SendMessage(
                 updateContext,
                 "At the moment, you do not have any registered transactions on the selected account.");
-            _sessionStateManager.Continue(updateContext.Session, WorkflowState.CreateMenu, true);
+            _sessionStateManager.ToMenu(updateContext.Session);
             return null;
         }
 

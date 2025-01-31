@@ -14,7 +14,6 @@ public class TransactionSetDateStateHandler : IStateHandler
     private readonly ITransactionDateProvider _transactionDateProvider;
     private readonly IMessageManager _messageManager;
     private readonly ICallbackDataProvider _callbackDataProvider;
-    private readonly ICallbackDataValidator _callbackDataValidator;
     private readonly ISessionStateManager _sessionStateManager;
 
     public TransactionSetDateStateHandler(
@@ -22,14 +21,12 @@ public class TransactionSetDateStateHandler : IStateHandler
         ICallbackDataProvider callbackDataProvider,
         ITransactionDateProvider transactionDateProvider,
         IMessageManager messageManager,
-        ICallbackDataValidator callbackDataValidator,
         ISessionStateManager sessionStateManager)
     {
         _messageProvider = messageProvider;
         _transactionDateProvider = transactionDateProvider;
         _messageManager = messageManager;
         _callbackDataProvider = callbackDataProvider;
-        _callbackDataValidator = callbackDataValidator;
         _sessionStateManager = sessionStateManager;
     }
 
@@ -48,7 +45,7 @@ public class TransactionSetDateStateHandler : IStateHandler
             await _messageManager.DeleteLastMessage(updateContext);
             await _messageManager.SendErrorMessage(updateContext, incorrectDateMessage);
 
-            _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendInputTransactionDate);
+            _sessionStateManager.Previous(updateContext.Session);
             return;
         }
 
@@ -57,7 +54,7 @@ public class TransactionSetDateStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendInputTransactionAmount);
+        _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<string?> GetUpdateText(BotUpdateContext updateContext)

@@ -48,6 +48,6 @@ public class TransactionSetAmountStateHandler : IStateHandler
         var context = updateContext.Session.GetTransactionContext();
         context.Amount = amount;
 
-        _sessionStateManager.Continue(updateContext.Session, WorkflowState.RegisterTransaction);
+        _sessionStateManager.Next(updateContext.Session);
     }
 }

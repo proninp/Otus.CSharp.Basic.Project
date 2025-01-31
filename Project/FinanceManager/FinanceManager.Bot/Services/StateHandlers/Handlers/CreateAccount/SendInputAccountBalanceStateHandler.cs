@@ -23,6 +23,6 @@ public class SendInputAccountBalanceStateHandler : IStateHandler
     public async Task HandleAsync(BotUpdateContext updateContext)
     {
         await _messageManager.SendMessage(updateContext, "Enter a number to set the initial balance:");
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetAccountInitialBalance);
+        _sessionStateManager.Next(updateContext.Session);
     }
 }

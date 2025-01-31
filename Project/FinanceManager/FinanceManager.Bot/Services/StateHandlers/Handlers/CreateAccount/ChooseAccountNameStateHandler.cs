@@ -1,5 +1,4 @@
 ﻿using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
@@ -62,6 +61,6 @@ public class ChooseAccountNameStateHandler : IStateHandler
         }
 
         updateContext.Session.SetCreateAccountContext(new CreateAccountContext { AccountName = accountTitle });
-        _sessionStateManager.Continue(updateContext.Session, WorkflowState.SendCurrencies);
+        _sessionStateManager.Next(updateContext.Session);
     }
 }

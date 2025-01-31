@@ -1,6 +1,5 @@
 ﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
@@ -28,7 +27,7 @@ public class SendCurrenciesStateHandler : IStateHandler
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
 
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.ChooseCurrency);
+        _sessionStateManager.Next(updateContext.Session);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CurrencyDto[] currencies)

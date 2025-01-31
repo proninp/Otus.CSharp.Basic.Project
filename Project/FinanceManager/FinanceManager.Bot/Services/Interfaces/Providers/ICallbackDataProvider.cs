@@ -5,5 +5,5 @@ namespace FinanceManager.Bot.Services.Interfaces.Providers;
 public interface ICallbackDataProvider
 {
     Task<CallbackData?> GetCallbackData(
-        BotUpdateContext updateContext, bool isDeleteMessageWhenNull = true, WorkflowState? continueWithStateWhenNull = null);
+        BotUpdateContext updateContext, bool isDeleteMessageWhenNull = true);
 }

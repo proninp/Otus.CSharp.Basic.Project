@@ -30,7 +30,7 @@ public class TransactionInputDateStateHandler : IStateHandler
         if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
-        _sessionStateManager.Wait(updateContext.Session, WorkflowState.SetTransactionDate);
+        _sessionStateManager.Next(updateContext.Session);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext updateContext)
