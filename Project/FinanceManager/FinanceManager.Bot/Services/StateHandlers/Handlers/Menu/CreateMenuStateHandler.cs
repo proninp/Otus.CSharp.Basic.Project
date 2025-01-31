@@ -13,12 +13,12 @@ public class CreateMenuStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public CreateMenuStateHandler(
         IMessageManager messageManager,
         IAccountManager accountManager,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _accountManager = accountManager;
@@ -30,7 +30,7 @@ public class CreateMenuStateHandler : IStateHandler
         var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
         {
-            _sessionStateManager.ResetSession(updateContext.Session);
+            _sessionStateManager.Reset(updateContext.Session);
             return;
         }
 

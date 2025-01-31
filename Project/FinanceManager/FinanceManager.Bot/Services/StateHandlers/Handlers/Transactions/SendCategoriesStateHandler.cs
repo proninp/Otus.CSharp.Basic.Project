@@ -13,10 +13,10 @@ public class SendCategoriesStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public SendCategoriesStateHandler(
-        ICategoryManager categoryManager, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+        ICategoryManager categoryManager, IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _categoryManager = categoryManager;
         _messageManager = messageManager;

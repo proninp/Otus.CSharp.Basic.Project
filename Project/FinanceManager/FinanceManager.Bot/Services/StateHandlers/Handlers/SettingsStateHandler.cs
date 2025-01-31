@@ -7,9 +7,9 @@ namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
 public class SettingsStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
-    public SettingsStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+    public SettingsStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;

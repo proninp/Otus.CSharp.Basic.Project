@@ -12,13 +12,13 @@ public class HistoryContextProvider : IHistoryContextProvider
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public HistoryContextProvider(
         IAccountManager accountManager,
         ITransactionManager transactionManager,
         IMessageManager messageManager,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _accountManager = accountManager;
         _transactionManager = transactionManager;

@@ -11,10 +11,10 @@ public class SendCurrenciesStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public SendCurrenciesStateHandler(
-        ICurrencyManager currencyManager, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+        ICurrencyManager currencyManager, IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _currencyManager = currencyManager;
         _messageManager = messageManager;

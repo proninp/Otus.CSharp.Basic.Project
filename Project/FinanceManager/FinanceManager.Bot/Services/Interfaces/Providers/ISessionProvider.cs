@@ -2,7 +2,7 @@
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.Interfaces.Providers;
-public interface IUserSessionProvider
+public interface ISessionProvider
 {
     Task<UserSession> GetUserSession(User? from, CancellationToken cancellationToken);
 }

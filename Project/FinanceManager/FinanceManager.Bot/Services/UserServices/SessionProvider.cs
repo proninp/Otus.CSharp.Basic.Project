@@ -9,17 +9,17 @@ using Serilog;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.UserServices;
-public class UserSessionProvider : IUserSessionProvider
+public class SessionProvider : ISessionProvider
 {
-    private readonly IUserSessionRegistry _userSessionRegistry;
-    private readonly IUserSessionManager _userSessionManager;
+    private readonly ISessionRegistry _userSessionRegistry;
+    private readonly ISessionManager _userSessionManager;
     private readonly IRedisCacheService _redisCacheService;
     private readonly AppSettings _options;
     private readonly ILogger _logger;
 
-    public UserSessionProvider(
-        IUserSessionRegistry userSessionRegistry,
-        IUserSessionManager userSessionManager,
+    public SessionProvider(
+        ISessionRegistry userSessionRegistry,
+        ISessionManager userSessionManager,
         IRedisCacheService redisCacheService,
         IOptionsSnapshot<AppSettings> options,
         ILogger logger)

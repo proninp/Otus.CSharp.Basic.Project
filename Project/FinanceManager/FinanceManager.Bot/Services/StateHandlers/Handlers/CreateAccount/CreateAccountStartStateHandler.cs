@@ -7,9 +7,9 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class CreateAccountStartStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
-    public CreateAccountStartStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+    public CreateAccountStartStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;

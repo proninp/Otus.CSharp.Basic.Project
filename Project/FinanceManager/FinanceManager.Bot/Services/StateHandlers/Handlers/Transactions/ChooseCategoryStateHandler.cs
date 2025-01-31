@@ -15,14 +15,14 @@ public class ChooseCategoryStateHandler : IStateHandler
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ICallbackDataValidator _callbackDataValidator;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public ChooseCategoryStateHandler(
         ICallbackDataProvider callbackQueryProvider,
         ICategoryManager categoryManager,
         ICallbackDataValidator callbackDataValidator,
         IMessageManager messageManager,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _callbackDataProvider = callbackQueryProvider;
         _categoryManager = categoryManager;

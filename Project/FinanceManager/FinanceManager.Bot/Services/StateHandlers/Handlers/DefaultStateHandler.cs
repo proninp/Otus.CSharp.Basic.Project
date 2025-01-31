@@ -9,10 +9,10 @@ public class DefaultStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public DefaultStateHandler(
-        IAccountManager accountManager, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+        IAccountManager accountManager, IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _accountManager = accountManager;
         _messageManager = messageManager;

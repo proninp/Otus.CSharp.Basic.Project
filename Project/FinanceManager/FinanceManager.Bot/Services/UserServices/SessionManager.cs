@@ -10,16 +10,16 @@ using Microsoft.Extensions.Options;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.UserServices;
-public sealed class UserSessionManager : IUserSessionManager
+public sealed class SessionManager : ISessionManager
 {
     private readonly IUserManager _userManager;
-    private readonly IUserSessionRegistry _userSessionRegistry;
+    private readonly ISessionRegistry _userSessionRegistry;
     private readonly IRedisCacheService _redisCacheService;
     private readonly AppSettings _options;
 
-    public UserSessionManager(
+    public SessionManager(
         IUserManager userManager,
-        IUserSessionRegistry userSessionRegistry,
+        ISessionRegistry userSessionRegistry,
         IRedisCacheService redisCacheService,
         IOptionsSnapshot<AppSettings> options)
     {

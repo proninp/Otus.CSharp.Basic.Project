@@ -10,10 +10,10 @@ public class TransactionSetAmountStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;    
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public TransactionSetAmountStateHandler(
-        IUpdateMessageProvider messageProvider, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+        IUpdateMessageProvider messageProvider, IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageProvider = messageProvider;
         _messageManager = messageManager;

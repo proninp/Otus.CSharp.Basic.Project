@@ -6,9 +6,9 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 public abstract class CompleteStateHandler : IStateHandler
 {
     private protected readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
-    protected CompleteStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+    protected CompleteStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
@@ -28,7 +28,7 @@ public abstract class CompleteStateHandler : IStateHandler
         }
         finally
         {
-            _sessionStateManager.ResetSession(updateContext.Session);
+            _sessionStateManager.Reset(updateContext.Session);
         }
     }
 

@@ -12,9 +12,9 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 public class SendInputAccountBalanceStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
-    public SendInputAccountBalanceStateHandler(IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+    public SendInputAccountBalanceStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;

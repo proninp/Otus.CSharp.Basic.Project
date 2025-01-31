@@ -2,7 +2,7 @@
 using FinanceManager.Bot.Models;
 
 namespace FinanceManager.Bot.Services.Interfaces;
-public interface IUserSessionRegistry
+public interface ISessionRegistry
 {
     public ConcurrentDictionary<long, UserSession> Sessions { get; }
 

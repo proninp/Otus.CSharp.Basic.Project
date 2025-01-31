@@ -10,10 +10,10 @@ public class SetAccountBalanceStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _updateMessageProvider;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public SetAccountBalanceStateHandler(
-        IUpdateMessageProvider updateMessageProvider, IMessageManager messageManager, IUserSessionStateManager sessionStateManager)
+        IUpdateMessageProvider updateMessageProvider, IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _updateMessageProvider = updateMessageProvider;
         _messageManager = messageManager;

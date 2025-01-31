@@ -3,7 +3,7 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces;
 
 namespace FinanceManager.Bot.Services.UserServices;
-public class UserSessionRegistry : IUserSessionRegistry
+public class SessionRegistry : ISessionRegistry
 {
     private readonly ConcurrentDictionary<long, UserSession> _userSessions;
 
@@ -12,7 +12,7 @@ public class UserSessionRegistry : IUserSessionRegistry
     public IEnumerable<UserSession> ExpiredSessions =>
         _userSessions.Values.Where(s => s.CreatedAt + s.Expiration <= DateTime.UtcNow);
 
-    public UserSessionRegistry()
+    public SessionRegistry()
     {
         _userSessions = new();
     }

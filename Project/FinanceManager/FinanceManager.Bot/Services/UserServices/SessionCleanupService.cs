@@ -28,7 +28,7 @@ public sealed class SessionCleanupService : BackgroundService
                 using var scope = _services.CreateScope();
 
                 var options = scope.ServiceProvider.GetRequiredService<IOptionsSnapshot<AppSettings>>();
-                var userSessionManager = scope.ServiceProvider.GetRequiredService<IUserSessionManager>();
+                var userSessionManager = scope.ServiceProvider.GetRequiredService<ISessionManager>();
 
                 int cleanedSessionsCount = await userSessionManager.CleanupExpiredSessions(stoppingToken);
                 _logger.Information($"Cleaned {cleanedSessionsCount} expired sessions.");

@@ -6,9 +6,9 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 public abstract class RegisterTransactionStateHandler : IStateHandler
 {
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
-    protected RegisterTransactionStateHandler(IUserSessionStateManager sessionStateManager)
+    protected RegisterTransactionStateHandler(ISessionStateManager sessionStateManager)
     {
         _sessionStateManager = sessionStateManager;
     }

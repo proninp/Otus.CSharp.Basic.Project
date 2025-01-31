@@ -6,7 +6,7 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers;
 public class RegisterExpenseStartStateHandler : RegisterTransactionStateHandler
 {
-    public RegisterExpenseStartStateHandler(IUserSessionStateManager sessionStateManager) : base(sessionStateManager)
+    public RegisterExpenseStartStateHandler(ISessionStateManager sessionStateManager) : base(sessionStateManager)
     {
     }
 

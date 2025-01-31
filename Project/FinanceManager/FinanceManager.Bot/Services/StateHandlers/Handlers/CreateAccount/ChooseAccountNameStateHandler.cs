@@ -12,13 +12,13 @@ public class ChooseAccountNameStateHandler : IStateHandler
     private readonly IAccountManager _accountManager;
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IMessageManager _messageManager;
-    private readonly IUserSessionStateManager _sessionStateManager;
+    private readonly ISessionStateManager _sessionStateManager;
 
     public ChooseAccountNameStateHandler(
         IAccountManager accountManager,
         IUpdateMessageProvider messageProvider,
         IMessageManager messageManager,
-        IUserSessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager)
     {
         _accountManager = accountManager;
         _messageProvider = messageProvider;
