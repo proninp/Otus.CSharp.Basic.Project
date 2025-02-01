@@ -3,7 +3,7 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces;
 
 namespace FinanceManager.Bot.Services.UserServices;
-public class SessionRegistry : ISessionRegistry
+public sealed class SessionRegistry : ISessionRegistry
 {
     private readonly ConcurrentDictionary<long, UserSession> _userSessions;
 

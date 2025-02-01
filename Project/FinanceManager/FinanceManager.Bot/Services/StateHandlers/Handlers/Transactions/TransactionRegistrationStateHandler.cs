@@ -7,7 +7,7 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public class TransactionRegistrationStateHandler : CompleteStateHandler
+public sealed class TransactionRegistrationStateHandler : CompleteStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;

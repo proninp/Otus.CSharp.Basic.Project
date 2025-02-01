@@ -4,7 +4,7 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers;
-public class RegisterIncomeStartStateHandler : RegisterTransactionStateHandler
+public sealed class RegisterIncomeStartStateHandler : RegisterTransactionStateHandler
 {
     public RegisterIncomeStartStateHandler(ISessionStateManager sessionStateManager) : base(sessionStateManager)
     {
