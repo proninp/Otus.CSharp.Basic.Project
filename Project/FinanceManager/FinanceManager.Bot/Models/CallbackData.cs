@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace FinanceManager.Bot.Models;
-public class CallbackData
+public sealed class CallbackData
 {
     private const char Separator = ' ';
 

@@ -1,5 +1,4 @@
 ﻿using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
@@ -7,7 +6,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
-public class ChooseCurrencyStateHandler : IStateHandler
+public sealed class ChooseCurrencyStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IMessageManager _messageManager;
@@ -25,40 +24,31 @@ public class ChooseCurrencyStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var callbackQuery = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackQuery is null)
-        {
-            _sessionStateManager.Previous(updateContext.Session);
-            return;
-        }
+            return _sessionStateManager.Previous(updateContext.Session);
 
         var currencyId = callbackQuery.Data;
         if (string.IsNullOrEmpty(currencyId))
-        {
-            await DeleteLastMessageAndContinue(updateContext);
-            return;
-        }
+            return await DeleteLastMessageAndContinue(updateContext);
 
         var currency = await _currencyManager.GetById(new Guid(currencyId), updateContext.CancellationToken);
         if (currency is null)
-        {
-            await DeleteLastMessageAndContinue(updateContext);
-            return;
-        }
+            return await DeleteLastMessageAndContinue(updateContext);
 
         var context = updateContext.Session.GetCreateAccountContext();
         context.Currency = currency;
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 
-    private async Task DeleteLastMessageAndContinue(BotUpdateContext updateContext)
+    private async Task<bool> DeleteLastMessageAndContinue(BotUpdateContext updateContext)
     {
         await _messageManager.DeleteLastMessage(updateContext);
-        _sessionStateManager.Previous(updateContext.Session);
+        return _sessionStateManager.Previous(updateContext.Session);
     }
 }

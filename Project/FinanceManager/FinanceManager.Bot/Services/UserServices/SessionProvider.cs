@@ -9,7 +9,7 @@ using Serilog;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.UserServices;
-public class SessionProvider : ISessionProvider
+public sealed class SessionProvider : ISessionProvider
 {
     private readonly ISessionRegistry _userSessionRegistry;
     private readonly ISessionManager _userSessionManager;

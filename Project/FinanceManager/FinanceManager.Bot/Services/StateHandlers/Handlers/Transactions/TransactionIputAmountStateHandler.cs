@@ -6,7 +6,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public class TransactionIputAmountStateHandler : IStateHandler
+public sealed class TransactionIputAmountStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
@@ -17,7 +17,7 @@ public class TransactionIputAmountStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var context = updateContext.Session.GetTransactionContext();
 
@@ -28,8 +28,9 @@ public class TransactionIputAmountStateHandler : IStateHandler
             _ => string.Empty
         };
 
-        await _messageManager.SendMessage(updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
+        await _messageManager.SendMessage(
+            updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 }

@@ -3,7 +3,7 @@ using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Models;
-public class UserSession
+public sealed class UserSession
 {
     public Guid Id { get; init; }
 
@@ -12,8 +12,6 @@ public class UserSession
     public string? UserName { get; set; }
 
     public WorkflowState State { get; set; }
-
-    public bool WaitForUserInput { get; set; }
 
     public WorkflowContext? WorkflowContext { get; set; }
 

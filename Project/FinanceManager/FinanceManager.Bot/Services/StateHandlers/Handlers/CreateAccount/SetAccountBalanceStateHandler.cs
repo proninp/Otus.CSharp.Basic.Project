@@ -5,7 +5,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
-public class SetAccountBalanceStateHandler : IStateHandler
+public sealed class SetAccountBalanceStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _updateMessageProvider;
     private readonly IMessageManager _messageManager;
@@ -19,27 +19,22 @@ public class SetAccountBalanceStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         if (!_updateMessageProvider.GetMessage(updateContext.Update, out var message))
-        {
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
-        }
+            return false;
 
         var amountText = message.Text;
         if (!decimal.TryParse(amountText, out var amount))
         {
             await _messageManager.SendErrorMessage(updateContext,
                 "The entered value is not a number. Please try again.");
-
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
+            return false;
         }
 
         var context = updateContext.Session.GetCreateAccountContext();
         context.InitialBalance = amount;
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 }

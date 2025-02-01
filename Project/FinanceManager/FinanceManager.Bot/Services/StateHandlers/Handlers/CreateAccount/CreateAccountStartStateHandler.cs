@@ -4,7 +4,7 @@ using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
-public class CreateAccountStartStateHandler : IStateHandler
+public sealed class CreateAccountStartStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
@@ -15,9 +15,9 @@ public class CreateAccountStartStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         await _messageManager.SendMessage(updateContext, "Please enter the account name:");
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 }

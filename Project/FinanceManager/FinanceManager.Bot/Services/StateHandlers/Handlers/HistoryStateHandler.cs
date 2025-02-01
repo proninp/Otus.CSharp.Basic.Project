@@ -5,8 +5,8 @@ using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
-namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
-public class HistoryStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers;
+public sealed class HistoryStateHandler : IStateHandler
 {
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly IMessageManager _messageManager;
@@ -34,18 +34,15 @@ public class HistoryStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackData is null)
-        {
-            _sessionStateManager.ToMenu(updateContext.Session);
-            return;
-        }
+            return _sessionStateManager.ToMenu(updateContext.Session);
 
         var context = await _contextProvider.GetHistoryContex(updateContext);
         if (context is null)
-            return;
+            return false;
 
         if (callbackData.Data == HistoryCommand.Newer.ToString())
         {
@@ -58,8 +55,7 @@ public class HistoryStateHandler : IStateHandler
         else if (callbackData.Data == HistoryCommand.Memu.ToString())
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            _sessionStateManager.ToMenu(updateContext.Session);
-            return;
+            return _sessionStateManager.ToMenu(updateContext.Session);
         }
 
         var inlineKeyboard = _inlineKeyboardProvider.GetKeyboard(updateContext);
@@ -75,6 +71,6 @@ public class HistoryStateHandler : IStateHandler
         if (!await _messageManager.EditLastMessage(updateContext, messageText, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
-        _sessionStateManager.Wait(updateContext.Session);
+        return false;
     }
 }

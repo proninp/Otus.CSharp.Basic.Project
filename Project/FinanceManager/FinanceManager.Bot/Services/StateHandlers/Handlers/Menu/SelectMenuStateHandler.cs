@@ -17,14 +17,11 @@ public sealed class SelectMenuStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackData is null)
-        {
-            _sessionStateManager.Previous(updateContext.Session);
-            return;
-        }    
+            return _sessionStateManager.Previous(updateContext.Session);
 
         var stateMapping = new Dictionary<string, WorkflowState>
         {
@@ -37,6 +34,6 @@ public sealed class SelectMenuStateHandler : IStateHandler
         if (!stateMapping.TryGetValue(callbackData.Data, out var newState))
             newState = updateContext.Session.State;
 
-        _sessionStateManager.FromMenu(updateContext.Session, newState);
+        return _sessionStateManager.FromMenu(updateContext.Session, newState);
     }
 }

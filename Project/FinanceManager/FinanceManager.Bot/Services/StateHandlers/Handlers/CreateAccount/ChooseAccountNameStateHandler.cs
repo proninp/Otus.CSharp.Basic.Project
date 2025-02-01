@@ -6,7 +6,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
-public class ChooseAccountNameStateHandler : IStateHandler
+public sealed class ChooseAccountNameStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IUpdateMessageProvider _messageProvider;
@@ -25,13 +25,10 @@ public class ChooseAccountNameStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         if (!_messageProvider.GetMessage(updateContext.Update, out var message))
-        {
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
-        }
+            return false;
 
         var accountTitle = message.Text;
         if (string.IsNullOrWhiteSpace(accountTitle) || accountTitle.Length == 0)
@@ -39,16 +36,14 @@ public class ChooseAccountNameStateHandler : IStateHandler
             await _messageManager.SendErrorMessage(updateContext,
                 "The account name must contain at least one non-whitespace character.");
 
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
+            return false;
         }
         if (!char.IsLetterOrDigit(accountTitle[0]))
         {
             await _messageManager.SendErrorMessage(updateContext,
                 "The account name must start with a number or letter. Enter a different account name.");
 
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
+            return false;
         }
         var existingAccount = await _accountManager.GetByName(updateContext.Session.Id, accountTitle, false, updateContext.CancellationToken);
         if (existingAccount is not null)
@@ -56,11 +51,10 @@ public class ChooseAccountNameStateHandler : IStateHandler
             await _messageManager.SendErrorMessage(updateContext,
                 "An account with that name already exists. Enter a different name.");
 
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
+            return false;
         }
 
         updateContext.Session.SetCreateAccountContext(new CreateAccountContext { AccountName = accountTitle });
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 }

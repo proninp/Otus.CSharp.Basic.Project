@@ -7,12 +7,11 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services;
-public class BotStateManager : IBotStateManager
+public sealed class BotStateManager : IBotStateManager
 {
     private readonly ISessionProvider _userSessionProvider;
     private readonly IStateHandlerFactory _stateHandlerFactory;
     private readonly IChatProvider _chatProvider;
-    private readonly ISessionStateManager _sessionStateManager;
     private readonly ISessionConsistencyValidator _consistencyValidator;
 
     public BotStateManager(
@@ -25,7 +24,6 @@ public class BotStateManager : IBotStateManager
         _userSessionProvider = userSessionProvider;
         _stateHandlerFactory = stateHandlerFactory;
         _chatProvider = chatProvider;
-        _sessionStateManager = sessionStateManager;
         _consistencyValidator = consistencyValidator;
     }
 
@@ -41,10 +39,11 @@ public class BotStateManager : IBotStateManager
 
         await _consistencyValidator.ValidateCallbackConsistency(botContext);
 
+        bool isContinue;
         do
         {
             var handler = _stateHandlerFactory.GetHandler(session.State);
-            await handler.HandleAsync(botContext);
-        } while (_sessionStateManager.IsContinue(session));
+            isContinue = await handler.HandleAsync(botContext);
+        } while (isContinue);
     }
 }

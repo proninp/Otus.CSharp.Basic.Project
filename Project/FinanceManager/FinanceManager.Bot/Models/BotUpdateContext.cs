@@ -2,7 +2,7 @@
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Models;
-public class BotUpdateContext
+public sealed class BotUpdateContext
 {
     public UserSession Session { get; init; }
 

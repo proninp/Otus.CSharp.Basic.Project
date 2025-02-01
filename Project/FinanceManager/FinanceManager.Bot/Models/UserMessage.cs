@@ -1,7 +1,7 @@
 ﻿using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Models;
-public class UserMessage
+public sealed class UserMessage
 {
     public int Id { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
@@ -27,22 +26,18 @@ public sealed class ChooseCategoryStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackData is null)
-        {
-            _sessionStateManager.Previous(updateContext.Session);
-            return;
-        }
+            return _sessionStateManager.Previous(updateContext.Session);
 
         var categoryId = callbackData.Data;
 
         if (string.IsNullOrEmpty(categoryId))
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            _sessionStateManager.Previous(updateContext.Session);
-            return;
+            return _sessionStateManager.Previous(updateContext.Session);
         }
 
         CategoryDto? category = null;
@@ -51,15 +46,12 @@ public sealed class ChooseCategoryStateHandler : IStateHandler
         {
             category = await _categoryManager.GetById(new Guid(categoryId), updateContext.CancellationToken);
             if (category is null)
-            {
-                _sessionStateManager.Previous(updateContext.Session);
-                return;
-            }
+                return _sessionStateManager.Previous(updateContext.Session);
         }
 
         var context = updateContext.Session.GetTransactionContext();
         context.Category = category;
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 }

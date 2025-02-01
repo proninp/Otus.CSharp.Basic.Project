@@ -9,7 +9,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
-public class CreateMenuStateHandler : IStateHandler
+public sealed class CreateMenuStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
@@ -25,21 +25,18 @@ public class CreateMenuStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
-        {
-            _sessionStateManager.Reset(updateContext.Session);
-            return;
-        }
+            return _sessionStateManager.Reset(updateContext.Session);
 
         var messageText = await BuildMessageText(account, updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<string> BuildMessageText(AccountDto account, CancellationToken cancellationToken)
@@ -64,7 +61,7 @@ public class CreateMenuStateHandler : IStateHandler
             [
                 _messageManager.CreateInlineButton(context, MainMenu.Expense.GetKey(),
                     $"{Emoji.Expense.GetSymbol()} {MainMenu.Expense.GetDescription()}"),
-            
+
                 _messageManager.CreateInlineButton(context, MainMenu.Income.GetKey(),
                     $"{Emoji.Income.GetSymbol()} {MainMenu.Income.GetDescription()}"),
             ],

@@ -1,14 +1,12 @@
-﻿using FinanceManager.Bot.Enums;
-using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 
-public class TransactionSetDateStateHandler : IStateHandler
+public sealed class TransactionSetDateStateHandler : IStateHandler
 {
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly ITransactionDateProvider _transactionDateProvider;
@@ -30,14 +28,11 @@ public class TransactionSetDateStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var dateText = await GetUpdateText(updateContext);
         if (dateText is null)
-        {
-            _sessionStateManager.Wait(updateContext.Session);
-            return;
-        }
+            return false;
 
         if (!_transactionDateProvider.TryParseDate(dateText, out var date))
         {
@@ -45,8 +40,7 @@ public class TransactionSetDateStateHandler : IStateHandler
             await _messageManager.DeleteLastMessage(updateContext);
             await _messageManager.SendErrorMessage(updateContext, incorrectDateMessage);
 
-            _sessionStateManager.Previous(updateContext.Session);
-            return;
+            return _sessionStateManager.Previous(updateContext.Session);
         }
 
         var context = updateContext.Session.GetTransactionContext();
@@ -54,7 +48,7 @@ public class TransactionSetDateStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<string?> GetUpdateText(BotUpdateContext updateContext)

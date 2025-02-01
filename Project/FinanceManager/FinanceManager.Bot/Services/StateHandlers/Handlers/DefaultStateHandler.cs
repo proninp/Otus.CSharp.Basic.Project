@@ -4,8 +4,8 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
-namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
-public class DefaultStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers;
+public sealed class DefaultStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
@@ -19,7 +19,7 @@ public class DefaultStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var session = updateContext.Session;
         var defaultAccount = await _accountManager.GetDefault(session.Id, updateContext.CancellationToken);
@@ -30,11 +30,11 @@ public class DefaultStateHandler : IStateHandler
 
             await _messageManager.SendMessage(updateContext, messageText);
 
-            _sessionStateManager.InitAccount(session);
+            return _sessionStateManager.InitAccount(session);
         }
         else
         {
-            _sessionStateManager.ToMenu(session);
+            return _sessionStateManager.ToMenu(session);
         }
     }
 }

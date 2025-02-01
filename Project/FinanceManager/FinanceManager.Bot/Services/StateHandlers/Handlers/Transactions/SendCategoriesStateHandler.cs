@@ -9,7 +9,7 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public class SendCategoriesStateHandler : IStateHandler
+public sealed class SendCategoriesStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
     private readonly IMessageManager _messageManager;
@@ -23,7 +23,7 @@ public class SendCategoriesStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var context = updateContext.Session.GetTransactionContext();
 
@@ -42,7 +42,7 @@ public class SendCategoriesStateHandler : IStateHandler
         if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CategoryDto[] categories)

@@ -14,7 +14,7 @@ public abstract class CompleteStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         try
         {
@@ -30,6 +30,7 @@ public abstract class CompleteStateHandler : IStateHandler
         {
             _sessionStateManager.Reset(updateContext.Session);
         }
+        return true;
     }
 
     private protected abstract Task HandleCompleteAsync(BotUpdateContext updateContext);

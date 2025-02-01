@@ -1,5 +1,5 @@
 ﻿namespace FinanceManager.Bot.Models;
-public class BotCommand
+public sealed class BotCommand
 {
     public string Name { get; init; }
     public string Description { get; init; }

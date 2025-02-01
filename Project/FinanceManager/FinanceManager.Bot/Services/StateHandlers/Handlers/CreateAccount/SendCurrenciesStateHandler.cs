@@ -6,7 +6,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
-public class SendCurrenciesStateHandler : IStateHandler
+public sealed class SendCurrenciesStateHandler : IStateHandler
 {
     private readonly ICurrencyManager _currencyManager;
     private readonly IMessageManager _messageManager;
@@ -20,14 +20,14 @@ public class SendCurrenciesStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var currencies = await _currencyManager.GetAll(updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(updateContext, currencies);
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
 
-        _sessionStateManager.Next(updateContext.Session);
+        return _sessionStateManager.Next(updateContext.Session);
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CurrencyDto[] currencies)

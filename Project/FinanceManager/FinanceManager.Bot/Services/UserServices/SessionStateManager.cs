@@ -5,10 +5,8 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 namespace FinanceManager.Bot.Services.UserServices;
 public class SessionStateManager : ISessionStateManager
 {
-    public void Previous(UserSession session)
+    public bool Previous(UserSession session)
     {
-        session.WaitForUserInput = false;
-
         var stateTransitions = new Dictionary<WorkflowState, WorkflowState>
         {
             { WorkflowState.SelectMenu, WorkflowState.CreateMenu },
@@ -30,88 +28,66 @@ public class SessionStateManager : ISessionStateManager
         {
             Reset(session);
         }
+        return true;
     }
 
-    public void Next(UserSession session)
+    public bool Next(UserSession session)
     {
-        var stateTransitions = new Dictionary<WorkflowState, (WorkflowState next, bool wait)>
+        var stateTransitions = new Dictionary<WorkflowState, (WorkflowState next, bool isContinue)>
         {
-            { WorkflowState.CreateMenu, (WorkflowState.SelectMenu, true) },
+            { WorkflowState.CreateMenu, (WorkflowState.SelectMenu, false) },
 
-            { WorkflowState.CreateAccountStart, (WorkflowState.ChooseAccountName, true) },
-            { WorkflowState.ChooseAccountName, (WorkflowState.SendCurrencies, false) },
-            { WorkflowState.SendCurrencies, (WorkflowState.ChooseCurrency, true) },
-            { WorkflowState.ChooseCurrency, (WorkflowState.SendInputAccountInitialBalance, false) },
-            { WorkflowState.SendInputAccountInitialBalance, (WorkflowState.SetAccountInitialBalance, true) },
-            { WorkflowState.SetAccountInitialBalance, (WorkflowState.CreateAccountEnd, false) },
-            { WorkflowState.CreateAccountEnd, (WorkflowState.CreateMenu, false) },
+            { WorkflowState.CreateAccountStart, (WorkflowState.ChooseAccountName, false) },
+            { WorkflowState.ChooseAccountName, (WorkflowState.SendCurrencies, true) },
+            { WorkflowState.SendCurrencies, (WorkflowState.ChooseCurrency, false) },
+            { WorkflowState.ChooseCurrency, (WorkflowState.SendInputAccountInitialBalance, true) },
+            { WorkflowState.SendInputAccountInitialBalance, (WorkflowState.SetAccountInitialBalance, false) },
+            { WorkflowState.SetAccountInitialBalance, (WorkflowState.CreateAccountEnd, true) },
+            { WorkflowState.CreateAccountEnd, (WorkflowState.CreateMenu, true) },
             
-            { WorkflowState.AddExpense, (WorkflowState.SendTransactionCategories, false) },
-            { WorkflowState.AddIncome, (WorkflowState.SendTransactionCategories, false) },
-            { WorkflowState.SendTransactionCategories, (WorkflowState.ChooseTransactionCategory, true) },
-            { WorkflowState.ChooseTransactionCategory, (WorkflowState.SendInputTransactionDate, false) },
-            { WorkflowState.SendInputTransactionDate, (WorkflowState.SetTransactionDate, true) },
-            { WorkflowState.SetTransactionDate, (WorkflowState.SendInputTransactionAmount, false) },
-            { WorkflowState.SendInputTransactionAmount, (WorkflowState.SetTransactionAmount, true) },
-            { WorkflowState.SetTransactionAmount, (WorkflowState.RegisterTransaction, false) },
-            { WorkflowState.RegisterTransaction, (WorkflowState.CreateMenu, false) },
+            { WorkflowState.AddExpense, (WorkflowState.SendTransactionCategories, true) },
+            { WorkflowState.AddIncome, (WorkflowState.SendTransactionCategories, true) },
+            { WorkflowState.SendTransactionCategories, (WorkflowState.ChooseTransactionCategory, false) },
+            { WorkflowState.ChooseTransactionCategory, (WorkflowState.SendInputTransactionDate, true) },
+            { WorkflowState.SendInputTransactionDate, (WorkflowState.SetTransactionDate, false) },
+            { WorkflowState.SetTransactionDate, (WorkflowState.SendInputTransactionAmount, true) },
+            { WorkflowState.SendInputTransactionAmount, (WorkflowState.SetTransactionAmount, false) },
+            { WorkflowState.SetTransactionAmount, (WorkflowState.RegisterTransaction, true) },
+            { WorkflowState.RegisterTransaction, (WorkflowState.CreateMenu, true) },
 
-            { WorkflowState.Settings, (WorkflowState.CreateMenu, false) },
+            { WorkflowState.Settings, (WorkflowState.CreateMenu, true) },
         };
 
+        bool result;
 
         if (stateTransitions.TryGetValue(session.State, out var sessionBehavior))
         {
             session.State = sessionBehavior.next;
-            session.WaitForUserInput = sessionBehavior.wait;
+            result = sessionBehavior.isContinue;
         }
         else
         {
-            Reset(session);
+            result = Reset(session);
         }
+        return result;
     }
 
-    public void ToMenu(UserSession session)
+    public bool ToMenu(UserSession session) =>
+        Continue(session, WorkflowState.CreateMenu);
+
+    public bool InitAccount(UserSession session) =>
+        Continue(session, WorkflowState.CreateAccountStart);
+
+    public bool FromMenu(UserSession session, WorkflowState toState) =>
+        Continue(session, toState);
+    
+    public bool Reset(UserSession session) =>
+        Continue(session, WorkflowState.Default);
+
+    private bool Continue(UserSession session, WorkflowState withState)
     {
         session.WorkflowContext = null;
-        session.State = WorkflowState.CreateMenu;
-        session.WaitForUserInput = false;
-    }
-
-    public void InitAccount(UserSession session)
-    {
-        session.WorkflowContext = null;
-        session.State = WorkflowState.CreateAccountStart;
-        session.WaitForUserInput = false;
-    }
-
-    public void FromMenu(UserSession session, WorkflowState newState) =>
-        Continue(session, newState, true);
-
-    public bool IsContinue(UserSession session)
-    {
-        var wait = session.WaitForUserInput;
-        session.WaitForUserInput = false;
-        return !wait;
-    }
-
-    public void Reset(UserSession session)
-    {
-        session.State = WorkflowState.Default;
-        session.WaitForUserInput = false;
-        session.WorkflowContext = null;
-    }
-
-    public void Wait(UserSession session)
-    {
-        session.WaitForUserInput = true;
-    }
-
-    private void Continue(UserSession session, WorkflowState state, bool isClearContext = false)
-    {
-        if (isClearContext)
-            session.WorkflowContext = null;
-        session.State = state;
-        session.WaitForUserInput = false;
+        session.State = withState;
+        return true;
     }
 }
