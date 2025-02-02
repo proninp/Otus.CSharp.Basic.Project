@@ -38,7 +38,7 @@ public sealed class HistoryStateHandler : IStateHandler
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackData is null)
-            return _sessionStateManager.ToMenu(updateContext.Session);
+            return await _sessionStateManager.ToMenu(updateContext.Session);
 
         var context = await _contextProvider.GetHistoryContex(updateContext);
         if (context is null)
@@ -55,7 +55,7 @@ public sealed class HistoryStateHandler : IStateHandler
         else if (callbackData.Data == HistoryCommand.Memu.ToString())
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            return _sessionStateManager.ToMenu(updateContext.Session);
+            return await _sessionStateManager.ToMenu(updateContext.Session);
         }
 
         var inlineKeyboard = _inlineKeyboardProvider.GetKeyboard(updateContext);

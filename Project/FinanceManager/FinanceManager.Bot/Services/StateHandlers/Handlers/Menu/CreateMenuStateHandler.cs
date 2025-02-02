@@ -29,14 +29,14 @@ public sealed class CreateMenuStateHandler : IStateHandler
     {
         var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
-            return _sessionStateManager.Reset(updateContext.Session);
+            return await _sessionStateManager.Reset(updateContext.Session);
 
         var messageText = await BuildMessageText(account, updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<string> BuildMessageText(AccountDto account, CancellationToken cancellationToken)

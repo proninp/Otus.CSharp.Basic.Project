@@ -4,15 +4,15 @@ using FinanceManager.Bot.Models;
 namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
 public interface ISessionStateManager
 {
-    bool Reset(UserSession session);
+    Task<bool> Reset(UserSession session);
 
-    bool Next(UserSession session);
+    Task<bool> Next(UserSession session);
 
-    bool Previous(UserSession session);
+    Task<bool> Previous(UserSession session);
 
-    bool InitAccount(UserSession session);
+    Task<bool> InitAccount(UserSession session);
 
-    bool ToMenu(UserSession session);
+    Task<bool> ToMenu(UserSession session);
 
-    bool FromMenu(UserSession session, WorkflowState toState);
+    Task<bool> FromMenu(UserSession session, WorkflowState toState);
 }

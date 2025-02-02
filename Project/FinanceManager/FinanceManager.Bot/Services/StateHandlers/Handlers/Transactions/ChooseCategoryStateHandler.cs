@@ -30,14 +30,14 @@ public sealed class ChooseCategoryStateHandler : IStateHandler
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackData is null)
-            return _sessionStateManager.Previous(updateContext.Session);
+            return await _sessionStateManager.Previous(updateContext.Session);
 
         var categoryId = callbackData.Data;
 
         if (string.IsNullOrEmpty(categoryId))
         {
             await _messageManager.DeleteLastMessage(updateContext);
-            return _sessionStateManager.Previous(updateContext.Session);
+            return await _sessionStateManager.Previous(updateContext.Session);
         }
 
         CategoryDto? category = null;
@@ -46,12 +46,12 @@ public sealed class ChooseCategoryStateHandler : IStateHandler
         {
             category = await _categoryManager.GetById(new Guid(categoryId), updateContext.CancellationToken);
             if (category is null)
-                return _sessionStateManager.Previous(updateContext.Session);
+                return await _sessionStateManager.Previous(updateContext.Session);
         }
 
         var context = updateContext.Session.GetTransactionContext();
         context.Category = category;
 
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 }

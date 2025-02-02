@@ -18,7 +18,6 @@ public sealed class BotStateManager : IBotStateManager
         ISessionProvider userSessionProvider,
         IStateHandlerFactory stateHandlerFactory,
         IChatProvider chatProvider,
-        ISessionStateManager sessionStateManager,
         ISessionConsistencyValidator consistencyValidator)
     {
         _userSessionProvider = userSessionProvider;

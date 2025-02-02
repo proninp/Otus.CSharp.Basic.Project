@@ -12,13 +12,13 @@ public abstract class RegisterTransactionStateHandler : IStateHandler
         _sessionStateManager = sessionStateManager;
     }
 
-    public Task<bool> HandleAsync(BotUpdateContext updateContext)
+    public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         AddExpenseContext(updateContext.Session);
 
-        var result = _sessionStateManager.Next(updateContext.Session);
+        var result = await _sessionStateManager.Next(updateContext.Session);
 
-        return Task.FromResult(result);
+        return result;
     }
 
     private protected abstract void AddExpenseContext(UserSession session);

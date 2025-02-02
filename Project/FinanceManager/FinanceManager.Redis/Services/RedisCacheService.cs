@@ -12,14 +12,21 @@ public class RedisCacheService : IRedisCacheService
         _redis = redis;
     }
 
-    public async Task SaveData<T>(string key, T value, TimeSpan? expiry = null)
+    public async Task SaveDataAsync<T>(string key, T value, TimeSpan? expiry = null)
     {
         var db = _redis.GetDatabase();
         var serializedValue = JsonSerializer.Serialize(value);
         await db.StringSetAsync(key, serializedValue, expiry);
     }
 
-    public async Task<T?> GetData<T>(string key)
+    public void SaveData<T>(string key, T value, TimeSpan? expiry = null)
+    {
+        var db = _redis.GetDatabase();
+        var serializedValue = JsonSerializer.Serialize(value);
+        db.StringSet(key, serializedValue, expiry);
+    }
+
+    public async Task<T?> GetDataAsync<T>(string key)
     {
         var db = _redis.GetDatabase();
         var value = await db.StringGetAsync(key);

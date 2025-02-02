@@ -21,8 +21,7 @@ public static class RedisExtensions
         });
 
         services
-            .AddTransient<IRedisCacheService, RedisCacheService>()
-            .AddTransient<IRedisInitializer, RedisInitializer>();
+            .AddTransient<IRedisCacheService, RedisCacheService>();
 
         return services;
     }

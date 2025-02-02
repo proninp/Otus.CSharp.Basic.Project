@@ -1,11 +1,19 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Redis.Services.Interfaces;
 
 namespace FinanceManager.Bot.Services.UserServices;
 public class SessionStateManager : ISessionStateManager
 {
-    public bool Previous(UserSession session)
+    private readonly IRedisCacheService _redisCacheService;
+
+    public SessionStateManager(IRedisCacheService redisCacheService)
+    {
+        _redisCacheService = redisCacheService;
+    }
+
+    public async Task<bool> Previous(UserSession session)
     {
         var stateTransitions = new Dictionary<WorkflowState, WorkflowState>
         {
@@ -22,16 +30,16 @@ public class SessionStateManager : ISessionStateManager
 
         if (stateTransitions.TryGetValue(session.State, out var toState))
         {
-            session.State = toState;
+            await SetState(session, toState);
         }
         else
         {
-            Reset(session);
+            await Reset(session);
         }
         return true;
     }
 
-    public bool Next(UserSession session)
+    public async Task<bool> Next(UserSession session)
     {
         var stateTransitions = new Dictionary<WorkflowState, (WorkflowState next, bool isContinue)>
         {
@@ -62,32 +70,38 @@ public class SessionStateManager : ISessionStateManager
 
         if (stateTransitions.TryGetValue(session.State, out var sessionBehavior))
         {
-            session.State = sessionBehavior.next;
+            await SetState(session, sessionBehavior.next);
             result = sessionBehavior.isContinue;
         }
         else
         {
-            result = Reset(session);
+            result = await Reset(session);
         }
         return result;
     }
 
-    public bool ToMenu(UserSession session) =>
-        Continue(session, WorkflowState.CreateMenu);
+    public async Task<bool> ToMenu(UserSession session) =>
+        await Continue(session, WorkflowState.CreateMenu);
 
-    public bool InitAccount(UserSession session) =>
-        Continue(session, WorkflowState.CreateAccountStart);
+    public async Task<bool> InitAccount(UserSession session) =>
+        await Continue(session, WorkflowState.CreateAccountStart);
 
-    public bool FromMenu(UserSession session, WorkflowState toState) =>
-        Continue(session, toState);
-    
-    public bool Reset(UserSession session) =>
-        Continue(session, WorkflowState.Default);
+    public async Task<bool> FromMenu(UserSession session, WorkflowState toState) =>
+        await Continue(session, toState);
 
-    private bool Continue(UserSession session, WorkflowState withState)
+    public async Task<bool> Reset(UserSession session) =>
+        await Continue(session, WorkflowState.Default);
+
+    private async Task<bool> Continue(UserSession session, WorkflowState withState)
     {
         session.WorkflowContext = null;
-        session.State = withState;
+        await SetState(session, withState);
         return true;
+    }
+
+    private async Task SetState(UserSession session, WorkflowState newState)
+    {
+        session.State = newState;
+        await _redisCacheService.SaveDataAsync(session.TelegramId.ToString(), session);
     }
 }

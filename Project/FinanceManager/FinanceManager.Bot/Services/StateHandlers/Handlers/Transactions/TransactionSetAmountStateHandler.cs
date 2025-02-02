@@ -42,6 +42,6 @@ public sealed class TransactionSetAmountStateHandler : IStateHandler
         var context = updateContext.Session.GetTransactionContext();
         context.Amount = amount;
 
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 }

@@ -51,7 +51,7 @@ public class SessionConsistencyValidator : ISessionConsistencyValidator
 
         await _messageManager.SendErrorMessage(updateContext, message);
 
-        _sessionStateManager.Previous(updateContext.Session);
+        await _sessionStateManager.Previous(updateContext.Session);
         return false;
     }
 }

@@ -35,6 +35,6 @@ public sealed class SetAccountBalanceStateHandler : IStateHandler
         var context = updateContext.Session.GetCreateAccountContext();
         context.InitialBalance = amount;
 
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 }

@@ -40,7 +40,7 @@ public sealed class TransactionSetDateStateHandler : IStateHandler
             await _messageManager.DeleteLastMessage(updateContext);
             await _messageManager.SendErrorMessage(updateContext, incorrectDateMessage);
 
-            return _sessionStateManager.Previous(updateContext.Session);
+            return await _sessionStateManager.Previous(updateContext.Session);
         }
 
         var context = updateContext.Session.GetTransactionContext();
@@ -48,7 +48,7 @@ public sealed class TransactionSetDateStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<string?> GetUpdateText(BotUpdateContext updateContext)

@@ -30,11 +30,11 @@ public sealed class DefaultStateHandler : IStateHandler
 
             await _messageManager.SendMessage(updateContext, messageText);
 
-            return _sessionStateManager.InitAccount(session);
+            return await _sessionStateManager.InitAccount(session);
         }
         else
         {
-            return _sessionStateManager.ToMenu(session);
+            return await _sessionStateManager.ToMenu(session);
         }
     }
 }

@@ -55,7 +55,7 @@ public sealed class SessionManager : ISessionManager
         {
             var ttl = TimeSpan.FromMinutes(_options.RedisUserSessionExpirationMinutes);
 
-            await _redisCacheService.SaveData(session.TelegramId.ToString(), session, ttl);
+            await _redisCacheService.SaveDataAsync(session.TelegramId.ToString(), session, ttl);
             _userSessionRegistry.Sessions.TryRemove(session.TelegramId, out var _);
         }
         return expiredSessions.Count();

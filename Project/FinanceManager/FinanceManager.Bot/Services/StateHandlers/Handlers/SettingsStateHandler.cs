@@ -20,6 +20,6 @@ public sealed class SettingsStateHandler : IStateHandler
         await _messageManager.DeleteLastMessage(updateContext);
         await _messageManager.SendMessage(updateContext,
             $"The settings feature is under development {Emoji.Rocket.GetSymbol()}");
-        return _sessionStateManager.ToMenu(updateContext.Session);
+        return await _sessionStateManager.ToMenu(updateContext.Session);
     }
 }

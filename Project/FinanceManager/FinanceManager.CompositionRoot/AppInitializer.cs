@@ -21,9 +21,6 @@ public sealed class AppInitializer : BackgroundService
         using var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         await appDbContext.Database.MigrateAsync(stoppingToken);
 
-        var redisInitializer = scope.ServiceProvider.GetRequiredService<IRedisInitializer>();
-        await redisInitializer.ClearDatabase();
-
         var pollingService = scope.ServiceProvider.GetRequiredService<IPollingService>();
         await pollingService.DoWork(stoppingToken);
     }

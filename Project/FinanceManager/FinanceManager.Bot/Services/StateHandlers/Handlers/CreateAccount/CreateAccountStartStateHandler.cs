@@ -1,5 +1,4 @@
-﻿using FinanceManager.Bot.Enums;
-using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
@@ -18,6 +17,6 @@ public sealed class CreateAccountStartStateHandler : IStateHandler
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         await _messageManager.SendMessage(updateContext, "Please enter the account name:");
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 }

@@ -28,7 +28,7 @@ public sealed class ChooseCurrencyStateHandler : IStateHandler
     {
         var callbackQuery = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackQuery is null)
-            return _sessionStateManager.Previous(updateContext.Session);
+            return await _sessionStateManager.Previous(updateContext.Session);
 
         var currencyId = callbackQuery.Data;
         if (string.IsNullOrEmpty(currencyId))
@@ -43,12 +43,12 @@ public sealed class ChooseCurrencyStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<bool> DeleteLastMessageAndContinue(BotUpdateContext updateContext)
     {
         await _messageManager.DeleteLastMessage(updateContext);
-        return _sessionStateManager.Previous(updateContext.Session);
+        return await _sessionStateManager.Previous(updateContext.Session);
     }
 }

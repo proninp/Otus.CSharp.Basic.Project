@@ -55,6 +55,6 @@ public sealed class ChooseAccountNameStateHandler : IStateHandler
         }
 
         updateContext.Session.SetCreateAccountContext(new CreateAccountContext { AccountName = accountTitle });
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 }

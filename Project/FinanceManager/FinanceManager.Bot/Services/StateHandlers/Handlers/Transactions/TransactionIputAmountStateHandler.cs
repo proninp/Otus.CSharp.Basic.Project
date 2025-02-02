@@ -31,6 +31,6 @@ public sealed class TransactionIputAmountStateHandler : IStateHandler
         await _messageManager.SendMessage(
             updateContext, $"Please enter {context.TransactionTypeDescription} {emoji} amount:");
 
-        return _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(updateContext.Session);
     }
 }

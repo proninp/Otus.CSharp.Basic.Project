@@ -1,5 +1,4 @@
 ﻿using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
@@ -38,7 +37,7 @@ public class HistoryContextProvider : IHistoryContextProvider
             var message = "The operation cannot be performed because you do not have a default account." +
                 "Please create a default account first.";
             await _messageManager.SendErrorMessage(updateContext, message);
-            _sessionStateManager.InitAccount(updateContext.Session);
+            await _sessionStateManager.InitAccount(updateContext.Session);
             return null;
         }
 
@@ -50,7 +49,7 @@ public class HistoryContextProvider : IHistoryContextProvider
             await _messageManager.SendMessage(
                 updateContext,
                 "At the moment, you do not have any registered transactions on the selected account.");
-            _sessionStateManager.ToMenu(updateContext.Session);
+            await _sessionStateManager.ToMenu(updateContext.Session);
             return null;
         }
 
