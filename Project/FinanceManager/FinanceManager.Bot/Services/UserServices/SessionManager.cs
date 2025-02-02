@@ -7,6 +7,7 @@ using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Core.Options;
 using FinanceManager.Redis.Services.Interfaces;
 using Microsoft.Extensions.Options;
+using Serilog;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.UserServices;
@@ -16,17 +17,20 @@ public sealed class SessionManager : ISessionManager
     private readonly ISessionRegistry _userSessionRegistry;
     private readonly IRedisCacheService _redisCacheService;
     private readonly AppSettings _options;
+    private readonly ILogger _logger;
 
     public SessionManager(
         IUserManager userManager,
         ISessionRegistry userSessionRegistry,
         IRedisCacheService redisCacheService,
-        IOptionsSnapshot<AppSettings> options)
+        IOptionsSnapshot<AppSettings> options,
+        ILogger logger)
     {
         _userManager = userManager;
         _userSessionRegistry = userSessionRegistry;
         _redisCacheService = redisCacheService;
         _options = options.Value;
+        _logger = logger;
     }
 
     public async Task<UserSession> InstantiateSession(User from, CancellationToken cancellationToken)
@@ -44,17 +48,20 @@ public sealed class SessionManager : ISessionManager
             userDto = await _userManager.Create(userCommand, cancellationToken);
         }
         var callbackSessionId = GenerateCallbackSessionId();
+        var session = userDto.ToUserSession(callbackSessionId, _options.InMemoryUserSessionExpirationMinutes);
+        
+        _logger.Information("New session created for user {UserId}", from.Id);
 
-        return userDto.ToUserSession(callbackSessionId);
+        return session;
     }
 
     public async Task<int> CleanupExpiredSessions(CancellationToken cancellationToken)
     {
+        var ttl = TimeSpan.FromMinutes(_options.RedisUserSessionExpirationMinutes);
+        
         var expiredSessions = _userSessionRegistry.ExpiredSessions;
         foreach (var session in expiredSessions)
         {
-            var ttl = TimeSpan.FromMinutes(_options.RedisUserSessionExpirationMinutes);
-
             await _redisCacheService.SaveDataAsync(session.TelegramId.ToString(), session, ttl);
             _userSessionRegistry.Sessions.TryRemove(session.TelegramId, out var _);
         }

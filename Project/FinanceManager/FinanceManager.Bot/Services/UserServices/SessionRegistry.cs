@@ -10,7 +10,7 @@ public sealed class SessionRegistry : ISessionRegistry
     public ConcurrentDictionary<long, UserSession> Sessions => _userSessions;
 
     public IEnumerable<UserSession> ExpiredSessions =>
-        _userSessions.Values.Where(s => s.CreatedAt + s.Expiration <= DateTime.UtcNow);
+        _userSessions.Values.Where(s => s.LastActivity + s.Expiration <= DateTime.UtcNow);
 
     public SessionRegistry()
     {

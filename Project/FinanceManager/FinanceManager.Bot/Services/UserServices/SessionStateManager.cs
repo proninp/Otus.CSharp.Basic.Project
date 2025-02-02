@@ -102,6 +102,7 @@ public class SessionStateManager : ISessionStateManager
     private async Task SetState(UserSession session, WorkflowState newState)
     {
         session.State = newState;
+        session.LastActivity = DateTime.UtcNow;
         await _redisCacheService.SaveDataAsync(session.TelegramId.ToString(), session);
     }
 }

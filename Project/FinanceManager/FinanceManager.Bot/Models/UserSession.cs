@@ -15,7 +15,7 @@ public sealed class UserSession
 
     public WorkflowContext? WorkflowContext { get; set; }
 
-    public required DateTime CreatedAt { get; set; }
+    public required DateTime LastActivity { get; set; }
 
     public UserMessage? LastMessage { get; set; }
 
@@ -26,7 +26,7 @@ public sealed class UserSession
 
 public static class UserSessionExtensions
 {
-    public static UserSession ToUserSession(this UserDto userDto, string callbackSessionId)
+    public static UserSession ToUserSession(this UserDto userDto, string callbackSessionId, int ttlMinutes = 5)
     {
         return new UserSession
         {
@@ -35,7 +35,8 @@ public static class UserSessionExtensions
             UserName = userDto.Username,
             State = WorkflowState.Default,
             CallbackSessionId = callbackSessionId,
-            CreatedAt = DateTime.UtcNow,
+            LastActivity = DateTime.UtcNow,
+            Expiration = TimeSpan.FromMinutes(ttlMinutes)
         };
     }
 }
