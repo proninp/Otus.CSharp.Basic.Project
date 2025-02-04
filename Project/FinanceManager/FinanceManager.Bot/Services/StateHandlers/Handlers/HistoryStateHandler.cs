@@ -44,18 +44,13 @@ public sealed class HistoryStateHandler : IStateHandler
         if (context is null)
             return false;
 
-        if (callbackData.Data == HistoryCommand.Newer.ToString())
+        if (callbackData.Data == NavigationCommand.Newer.GetCallbackData())
         {
             context.PageIndex--;
         }
-        else if (callbackData.Data == HistoryCommand.Older.ToString())
+        else if (callbackData.Data == NavigationCommand.Older.GetCallbackData())
         {
             context.PageIndex++;
-        }
-        else if (callbackData.Data == HistoryCommand.Memu.ToString())
-        {
-            await _messageManager.DeleteLastMessage(updateContext);
-            return await _sessionStateManager.ToMenu(updateContext.Session);
         }
 
         var inlineKeyboard = _inlineKeyboardProvider.GetKeyboard(updateContext);

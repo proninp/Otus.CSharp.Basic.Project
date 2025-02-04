@@ -1,8 +1,10 @@
-﻿using FinanceManager.Application.Utils;
+﻿using System.Runtime.InteropServices;
+using FinanceManager.Application.Utils;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -10,17 +12,18 @@ namespace FinanceManager.Bot.Services.Telegram.Providers;
 public class HistoryInlineKeyBoardProvider : IHistoryInlineKeyBoardProvider
 {
     private readonly IMessageManager _messageManager;
+    private readonly IMenuCallbackHandler _menuCallbackHandler;
 
-    public HistoryInlineKeyBoardProvider(IMessageManager messageManager)
+    public HistoryInlineKeyBoardProvider(IMessageManager messageManager, IMenuCallbackHandler menuCallbackHandler)
     {
         _messageManager = messageManager;
+        _menuCallbackHandler = menuCallbackHandler;
     }
 
     public InlineKeyboardMarkup GetKeyboard(BotUpdateContext updateContext)
     {
-        var newer = HistoryCommand.Newer;
-        var older = HistoryCommand.Older;
-        var menu = HistoryCommand.Memu;
+        var newer = NavigationCommand.Newer;
+        var older = NavigationCommand.Older;
 
         var context = updateContext.Session.GetHistoryContext();
 
@@ -28,8 +31,7 @@ public class HistoryInlineKeyBoardProvider : IHistoryInlineKeyBoardProvider
         var isNewerAvailable = context.PageIndex > 0;
         var isOlderAvailable = context.PageIndex < pagesCount;
 
-        var callbackData = new CallbackData(updateContext, menu.ToString());
-        var menuButton = _messageManager.CreateInlineButton(callbackData, $"{menu.GetSymbol()} {menu.GetDescription()}");
+        var menuButton = _menuCallbackHandler.GetMenuButton(updateContext);
 
         if (!(isNewerAvailable || isOlderAvailable))
             return new InlineKeyboardMarkup(menuButton);
@@ -38,14 +40,14 @@ public class HistoryInlineKeyBoardProvider : IHistoryInlineKeyBoardProvider
 
         if (isNewerAvailable)
         {
-            callbackData.Data = newer.ToString();
+            var callbackData = new CallbackData(updateContext, newer.GetCallbackData());
             controlButtons.Add(
                 _messageManager.CreateInlineButton(callbackData, $"{newer.GetSymbol()} {newer.GetDescription()}"));
         }
 
         if (isOlderAvailable)
         {
-            callbackData.Data = older.ToString();
+            var callbackData = new CallbackData(updateContext, older.GetCallbackData());
             controlButtons.Add(
                 _messageManager.CreateInlineButton(callbackData, $"{older.GetSymbol()} {older.GetDescription()}"));
         }

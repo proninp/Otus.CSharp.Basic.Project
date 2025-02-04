@@ -10,11 +10,16 @@ public sealed class TransactionInputDateStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
+    private readonly IMenuCallbackHandler _menuCallbackProvider;
 
-    public TransactionInputDateStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
+    public TransactionInputDateStateHandler(
+        IMessageManager messageManager,
+        ISessionStateManager sessionStateManager,
+        IMenuCallbackHandler menuCallbackProvider)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
+        _menuCallbackProvider = menuCallbackProvider;
     }
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
@@ -39,11 +44,17 @@ public sealed class TransactionInputDateStateHandler : IStateHandler
         var yesterday = DateOnly.FromDateTime(DateTime.Today.AddDays(-1));
         var today = DateOnly.FromDateTime(DateTime.Today);
 
-        var buttons = new List<InlineKeyboardButton>()
+        var buttons = new List<InlineKeyboardButton[]>()
         {
-            _messageManager.CreateInlineButton(updateContext, yesterday.ToString(dateFormat), "Yesterday"),
-            _messageManager.CreateInlineButton(updateContext, yesterday.ToString(dateFormat), "Today"),
+            new InlineKeyboardButton[]
+            {
+                _messageManager.CreateInlineButton(updateContext, yesterday.ToString(dateFormat), "Yesterday"),
+                _messageManager.CreateInlineButton(updateContext, yesterday.ToString(dateFormat), "Today")
+            }
         };
+
+        var menuButton = _menuCallbackProvider.GetMenuButton(updateContext);
+        buttons.Add([menuButton]);
 
         return new InlineKeyboardMarkup(buttons);
     }

@@ -13,17 +13,20 @@ public sealed class BotStateManager : IBotStateManager
     private readonly IStateHandlerFactory _stateHandlerFactory;
     private readonly IChatProvider _chatProvider;
     private readonly ISessionConsistencyValidator _consistencyValidator;
+    private readonly IMenuCallbackHandler _menuCallbackHandler;
 
     public BotStateManager(
         ISessionProvider userSessionProvider,
         IStateHandlerFactory stateHandlerFactory,
         IChatProvider chatProvider,
-        ISessionConsistencyValidator consistencyValidator)
+        ISessionConsistencyValidator consistencyValidator,
+        IMenuCallbackHandler menuCallbackHandler)
     {
         _userSessionProvider = userSessionProvider;
         _stateHandlerFactory = stateHandlerFactory;
         _chatProvider = chatProvider;
         _consistencyValidator = consistencyValidator;
+        _menuCallbackHandler = menuCallbackHandler;
     }
 
     public async Task HandleUpdateAsync(
@@ -36,7 +39,8 @@ public sealed class BotStateManager : IBotStateManager
 
         var botContext = new BotUpdateContext(session, botClient, update, chat, cancellationToken);
 
-        await _consistencyValidator.ValidateCallbackConsistency(botContext);
+        if (await _consistencyValidator.ValidateCallbackConsistency(botContext))
+            await _menuCallbackHandler.HandleMenuCallback(botContext);
 
         bool isContinue;
         do

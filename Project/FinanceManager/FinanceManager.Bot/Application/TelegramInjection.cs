@@ -6,6 +6,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
+using FinanceManager.Bot.Services.Telegram.Handlers;
 using FinanceManager.Bot.Services.Telegram.Providers;
 using FinanceManager.Bot.Services.Telegram.Validators;
 using FinanceManager.Bot.Services.UserServices;
@@ -54,7 +55,8 @@ public static class TelegramInjection
             .AddScoped<ITransactionDateProvider, TransactionDateProvider>()
             .AddScoped<IHistoryMessageTextProvider, HistoryMessageTextProvider>()
             .AddScoped<IHistoryContextProvider, HistoryContextProvider>()
-            .AddScoped<IHistoryInlineKeyBoardProvider, HistoryInlineKeyBoardProvider>();
+            .AddScoped<IHistoryInlineKeyBoardProvider, HistoryInlineKeyBoardProvider>()
+            .AddScoped<IMenuCallbackHandler, MenuCallbackHandler>();
 
         services.AddStateHandlers();
 

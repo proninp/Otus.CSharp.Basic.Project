@@ -29,16 +29,14 @@ public sealed class ChooseCategoryStateHandler : IStateHandler
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
-        if (callbackData is null)
-            return await _sessionStateManager.Previous(updateContext.Session);
 
-        var categoryId = callbackData.Data;
-
-        if (string.IsNullOrEmpty(categoryId))
+        if (callbackData is null || string.IsNullOrEmpty(callbackData.Data))
         {
             await _messageManager.DeleteLastMessage(updateContext);
             return await _sessionStateManager.Previous(updateContext.Session);
         }
+
+        var categoryId = callbackData.Data;
 
         CategoryDto? category = null;
 
