@@ -1,7 +1,7 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 
-namespace FinanceManager.Bot.Services.Interfaces.StateHandlers;
+namespace FinanceManager.Bot.Services.Interfaces.Managers;
 public interface ISessionStateManager
 {
     Task<bool> Reset(UserSession session);

@@ -12,7 +12,9 @@ public sealed class TransactionSetAmountStateHandler : IStateHandler
     private readonly ISessionStateManager _sessionStateManager;
 
     public TransactionSetAmountStateHandler(
-        IUpdateMessageProvider messageProvider, IMessageManager messageManager, ISessionStateManager sessionStateManager)
+        IUpdateMessageProvider messageProvider,
+        IMessageManager messageManager,
+        ISessionStateManager sessionStateManager)
     {
         _messageProvider = messageProvider;
         _messageManager = messageManager;

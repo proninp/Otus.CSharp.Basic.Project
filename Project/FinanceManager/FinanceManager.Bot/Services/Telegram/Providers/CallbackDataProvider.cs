@@ -1,7 +1,6 @@
 ﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
-using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
 namespace FinanceManager.Bot.Services.Telegram.Providers;
 public sealed class CallbackDataProvider : ICallbackDataProvider

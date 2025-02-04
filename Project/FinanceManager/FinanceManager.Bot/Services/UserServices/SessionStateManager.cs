@@ -1,6 +1,6 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
-using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Redis.Services.Interfaces;
 
 namespace FinanceManager.Bot.Services.UserServices;
