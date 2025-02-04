@@ -3,7 +3,7 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
-namespace FinanceManager.Bot.Services.CommandHandlers.Handlers;
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
 public sealed class SettingsStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;

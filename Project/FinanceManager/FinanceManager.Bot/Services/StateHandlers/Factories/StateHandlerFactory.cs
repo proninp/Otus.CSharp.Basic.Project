@@ -1,10 +1,10 @@
 ﻿using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Exceptions;
-using FinanceManager.Bot.Services.CommandHandlers.Handlers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using Microsoft.Extensions.DependencyInjection;
 
