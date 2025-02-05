@@ -1,10 +1,9 @@
-﻿using System.Text;
-using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Application.Services.Interfaces.Managers;
+﻿using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Application.Utils;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
+using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -14,15 +13,18 @@ public sealed class CreateMenuStateHandler : IStateHandler
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
+    private readonly IAccountInfoProvider _accountInfoProvider;
 
     public CreateMenuStateHandler(
         IMessageManager messageManager,
         IAccountManager accountManager,
-        ISessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager,
+        IAccountInfoProvider accountInfoProvider)
     {
         _messageManager = messageManager;
         _accountManager = accountManager;
         _sessionStateManager = sessionStateManager;
+        _accountInfoProvider = accountInfoProvider;
     }
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
@@ -31,27 +33,12 @@ public sealed class CreateMenuStateHandler : IStateHandler
         if (account is null)
             return await _sessionStateManager.Reset(updateContext.Session);
 
-        var messageText = await BuildMessageText(account, updateContext.CancellationToken);
+        var messageText = await _accountInfoProvider.GetAccountInfoAsync(account, updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
 
         await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
-    }
-
-    private async Task<string> BuildMessageText(AccountDto account, CancellationToken cancellationToken)
-    {
-        var balance = await _accountManager.GetBalance(account, cancellationToken);
-
-        var messageBuilder = new StringBuilder($"{Emoji.IncomeAmount.GetSymbol()} Account: {account.Title}");
-        messageBuilder.AppendLine();
-        messageBuilder.Append($"{Emoji.Income.GetSymbol()} Balance: {balance}");
-        if (account.Currency is not null)
-            messageBuilder.Append($" {account.Currency.CurrencyCode} {account.Currency.Emoji}");
-        messageBuilder.AppendLine();
-        messageBuilder.Append("Choose an action:");
-
-        return messageBuilder.ToString();
     }
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context)
