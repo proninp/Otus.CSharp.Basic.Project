@@ -19,7 +19,8 @@ public enum Emoji
     Calendar,
     Skip,
     Rocket,
-    Clock
+    Clock,
+    Accounts
 }
 
 public static class EmojiExtension
@@ -34,7 +35,7 @@ public static class EmojiExtension
         Emoji.Money => "💰",
         Emoji.Add => "➕",
         Emoji.Remove => "➖",
-        Emoji.Category => "📊",
+        Emoji.Category => "🗂️",
         Emoji.Expense => "💸",
         Emoji.ExpenseAmount => "💸",
         Emoji.Income => "💵",
@@ -45,6 +46,7 @@ public static class EmojiExtension
         Emoji.Skip => "➡️",
         Emoji.Rocket => "🚀",
         Emoji.Clock => "🕐",
+        Emoji.Accounts => "🏦",
         _ => string.Empty
     };
 }

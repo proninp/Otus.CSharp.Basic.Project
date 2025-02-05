@@ -25,7 +25,6 @@ public class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SelectMenu => _serviceProvider.GetRequiredService<SelectMenuStateHandler>(),
 
         WorkflowState.History => _serviceProvider.GetRequiredService<HistoryStateHandler>(),
-        WorkflowState.Settings => _serviceProvider.GetRequiredService<SettingsStateHandler>(),
 
         WorkflowState.CreateAccountStart => _serviceProvider.GetRequiredService<CreateAccountStartStateHandler>(),
         WorkflowState.ChooseAccountName => _serviceProvider.GetRequiredService<ChooseAccountNameStateHandler>(),
@@ -45,6 +44,13 @@ public class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SendInputTransactionAmount => _serviceProvider.GetRequiredService<TransactionIputAmountStateHandler>(),
         WorkflowState.SetTransactionAmount => _serviceProvider.GetRequiredService<TransactionSetAmountStateHandler>(),
         WorkflowState.RegisterTransaction => _serviceProvider.GetRequiredService<TransactionRegistrationStateHandler>(),
+
+        WorkflowState.CreateSettingsMenu => _serviceProvider.GetRequiredService<CreateSettingsMenuStateHandler>(),
+        WorkflowState.SelectSettingsMenu => _serviceProvider.GetRequiredService<SelectSettingsMenuStateHandler>(),
+        WorkflowState.ManageCategories => _serviceProvider.GetRequiredService<ManageCategoriesStateHandler>(),
+        WorkflowState.ManageTransactions => _serviceProvider.GetRequiredService<ManageTransactionsStateHandler>(),
+        WorkflowState.ManageAccounts => _serviceProvider.GetRequiredService<ManageAccountsStateHandler>(),
+
         _ => throw new StateHandlerNotFoundException(state)
     };
 }

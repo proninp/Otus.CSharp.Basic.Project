@@ -22,7 +22,8 @@ public static class StateHandlersInjection
             .AddScoped<RegisterExpenseStartStateHandler>()
             .AddScoped<RegisterIncomeStartStateHandler>()
             .AddScoped<HistoryStateHandler>()
-            .AddScoped<SettingsStateHandler>();
+            .AddScoped<CreateSettingsMenuStateHandler>()
+            .AddScoped<SelectSettingsMenuStateHandler>();
 
         services
             .AddScoped<CreateAccountStartStateHandler>()
@@ -41,6 +42,11 @@ public static class StateHandlersInjection
             .AddScoped<TransactionIputAmountStateHandler>()
             .AddScoped<TransactionSetAmountStateHandler>()
             .AddScoped<TransactionRegistrationStateHandler>();
+
+        services
+            .AddScoped<ManageCategoriesStateHandler>()
+            .AddScoped<ManageTransactionsStateHandler>()
+            .AddScoped<ManageAccountsStateHandler>();
 
         return services;
     }

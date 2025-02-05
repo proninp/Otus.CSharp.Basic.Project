@@ -4,14 +4,14 @@ using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
-public sealed class SelectMenuStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
+public class SelectSettingsMenuStateHandler : IStateHandler
 {
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ISessionStateManager _sessionStateManager;
     private readonly IMessageManager _messageManager;
 
-    public SelectMenuStateHandler(
+    public SelectSettingsMenuStateHandler(
         ICallbackDataProvider callbackDataProvider,
         ISessionStateManager sessionStateManager,
         IMessageManager messageManager)
@@ -29,10 +29,9 @@ public sealed class SelectMenuStateHandler : IStateHandler
 
         var stateMapping = new Dictionary<string, WorkflowState>
         {
-            { MainMenu.Expense.GetKey(), WorkflowState.AddExpense },
-            { MainMenu.Income.GetKey(), WorkflowState.AddIncome },
-            { MainMenu.History.GetKey(), WorkflowState.History },
-            { MainMenu.Settings.GetKey(), WorkflowState.CreateSettingsMenu }
+            { SettingsMenu.ManageCategories.GetKey(), WorkflowState.ManageCategories },
+            { SettingsMenu.ManageTransactios.GetKey(), WorkflowState.ManageTransactions },
+            { SettingsMenu.ManageAccounts.GetKey(), WorkflowState.ManageAccounts },
         };
 
         if (!stateMapping.TryGetValue(callbackData.Data, out var newState))
