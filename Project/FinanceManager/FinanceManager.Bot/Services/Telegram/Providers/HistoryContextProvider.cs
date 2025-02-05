@@ -48,7 +48,7 @@ public class HistoryContextProvider : IHistoryContextProvider
             await _messageManager.SendMessage(
                 updateContext,
                 "At the moment, you do not have any registered transactions on the selected account.");
-            await _sessionStateManager.ToMenu(updateContext.Session);
+            await _sessionStateManager.ToMainMenu(updateContext.Session);
             return null;
         }
 

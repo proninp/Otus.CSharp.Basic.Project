@@ -34,7 +34,7 @@ public sealed class DefaultStateHandler : IStateHandler
         }
         else
         {
-            return await _sessionStateManager.ToMenu(session);
+            return await _sessionStateManager.ToMainMenu(session);
         }
     }
 }

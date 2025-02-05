@@ -18,6 +18,7 @@ public class SessionStateManager : ISessionStateManager
         var stateTransitions = new Dictionary<WorkflowState, WorkflowState>
         {
             { WorkflowState.SelectMenu, WorkflowState.CreateMenu },
+
             { WorkflowState.ChooseAccountName, WorkflowState.CreateAccountStart },
             { WorkflowState.ChooseCurrency, WorkflowState.SendCurrencies },
             { WorkflowState.SetAccountInitialBalance, WorkflowState.SendInputAccountInitialBalance },
@@ -25,7 +26,12 @@ public class SessionStateManager : ISessionStateManager
             { WorkflowState.SetTransactionDate, WorkflowState.SendInputTransactionDate },
             { WorkflowState.SetTransactionAmount, WorkflowState.SendInputTransactionAmount },
             { WorkflowState.History, WorkflowState.CreateMenu },
-            { WorkflowState.Settings, WorkflowState.CreateMenu }
+            
+            { WorkflowState.SelectSettingsMenu, WorkflowState.CreateSettingsMenu },
+
+            { WorkflowState.SetNewCategoryType, WorkflowState.SendChooseNewCategoryType },
+            { WorkflowState.SetNewCategoryName, WorkflowState.SendInputNewCategoryName },
+            { WorkflowState.SetNewCategoryEmoji, WorkflowState.SendInputNewCategoryEmoji },
         };
 
         if (stateTransitions.TryGetValue(session.State, out var toState))
@@ -52,7 +58,7 @@ public class SessionStateManager : ISessionStateManager
             { WorkflowState.SendInputAccountInitialBalance, (WorkflowState.SetAccountInitialBalance, false) },
             { WorkflowState.SetAccountInitialBalance, (WorkflowState.CreateAccountEnd, true) },
             { WorkflowState.CreateAccountEnd, (WorkflowState.CreateMenu, true) },
-            
+
             { WorkflowState.AddExpense, (WorkflowState.SendTransactionCategories, true) },
             { WorkflowState.AddIncome, (WorkflowState.SendTransactionCategories, true) },
             { WorkflowState.SendTransactionCategories, (WorkflowState.ChooseTransactionCategory, false) },
@@ -63,7 +69,15 @@ public class SessionStateManager : ISessionStateManager
             { WorkflowState.SetTransactionAmount, (WorkflowState.RegisterTransaction, true) },
             { WorkflowState.RegisterTransaction, (WorkflowState.CreateMenu, true) },
 
-            { WorkflowState.Settings, (WorkflowState.CreateMenu, true) },
+            { WorkflowState.CreateSettingsMenu, (WorkflowState.SelectSettingsMenu, false) },
+
+            { WorkflowState.SendChooseNewCategoryType, (WorkflowState.SetNewCategoryType, false) },
+            { WorkflowState.SetNewCategoryType, (WorkflowState.SendInputNewCategoryName, true) },
+            { WorkflowState.SendInputNewCategoryName, (WorkflowState.SetNewCategoryName, false) },
+            { WorkflowState.SetNewCategoryName, (WorkflowState.SendInputNewCategoryEmoji, true) },
+            { WorkflowState.SendInputNewCategoryEmoji, (WorkflowState.SetNewCategoryEmoji, false) },
+            { WorkflowState.SetNewCategoryEmoji, (WorkflowState.RegisterNewCategory, true) },
+            { WorkflowState.RegisterNewCategory, (WorkflowState.ManageTransactions, true) },
         };
 
         bool result;
@@ -80,8 +94,11 @@ public class SessionStateManager : ISessionStateManager
         return result;
     }
 
-    public async Task<bool> ToMenu(UserSession session) =>
+    public async Task<bool> ToMainMenu(UserSession session) =>
         await Continue(session, WorkflowState.CreateMenu);
+
+    public async Task<bool> ToSettingsMenu(UserSession session) =>
+        await Continue(session, WorkflowState.CreateSettingsMenu);
 
     public async Task<bool> InitAccount(UserSession session) =>
         await Continue(session, WorkflowState.CreateAccountStart);
@@ -98,6 +115,13 @@ public class SessionStateManager : ISessionStateManager
         await SetState(session, withState);
         return true;
     }
+
+    public async Task<bool> Complete(UserSession session) => session.State switch
+    {
+        WorkflowState.RegisterTransaction => await ToMainMenu(session),
+        WorkflowState.RegisterNewCategory => await Continue(session, WorkflowState.ManageAccounts),
+        _ => await Reset(session)
+    };
 
     private async Task SetState(UserSession session, WorkflowState newState)
     {

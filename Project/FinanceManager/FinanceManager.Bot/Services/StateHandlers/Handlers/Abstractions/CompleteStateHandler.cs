@@ -28,7 +28,7 @@ public abstract class CompleteStateHandler : IStateHandler
         }
         finally
         {
-            await _sessionStateManager.Reset(updateContext.Session);
+            await _sessionStateManager.Complete(updateContext.Session);
         }
         return true;
     }

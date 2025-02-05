@@ -12,7 +12,11 @@ public interface ISessionStateManager
 
     Task<bool> InitAccount(UserSession session);
 
-    Task<bool> ToMenu(UserSession session);
+    Task<bool> ToMainMenu(UserSession session);
+
+    Task<bool> ToSettingsMenu(UserSession session);
 
     Task<bool> FromMenu(UserSession session, WorkflowState toState);
+
+    Task<bool> Complete(UserSession session);
 }

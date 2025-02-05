@@ -41,7 +41,7 @@ public sealed class MenuCallbackHandler : IMenuCallbackHandler
             if (callbackData.Data == menuData)
             {
                 await _messageManager.DeleteLastMessage(context);
-                await _sessionStateManager.ToMenu(context.Session);
+                await _sessionStateManager.ToMainMenu(context.Session);
                 return true;
             }
         }

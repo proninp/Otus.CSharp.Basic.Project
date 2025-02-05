@@ -14,8 +14,6 @@ public enum WorkflowState
     CreateAccountEnd,
 
     DeleteAccount,
-    AddCategory,
-    DeleteCategory,
     AddExpense,
     DeleteExpense,
     AddIncome,
@@ -29,8 +27,40 @@ public enum WorkflowState
     ChooseTransactionCategory,
     RegisterTransaction,
 
+    CreateSettingsMenu,
+    SelectSettingsMenu,
+    ManageCategories,
+    ManageTransactions,
+    ManageAccounts,
+
+    SendChooseNewCategoryType,
+    SetNewCategoryType,
+    SendInputNewCategoryName,
+    SetNewCategoryName,
+    SendInputNewCategoryEmoji,
+    SetNewCategoryEmoji,
+    RegisterNewCategory,
+
+    SendChooseDeletingCategoryType,
+    SetDeletingCategoryType,
+    SendChooseCategoryToDelete,
+    ChooseCategoryToDelete,
+    SendSwitchTransactionsToAnotherCategory,
+    HandleSwitchTransactionsToAnotherCategory,
+    SendChooseCategoriesToSwitchTransactions,
+    ChooseCategoryToSwitch,
+
+    SendChooseRenamingCategoryType,
+    SetRenamingCategoryType,
+    SendChooseRenamingCategory,
+    ChooseCategoryToRename,
+    SendInputCategoryName,
+    SetCategoryName,
+    SendInputCategoryEmoji,
+    SetCategoryEmoji,
+    RegisterRenameCategory,
+
     AddTransfer,
     DeleteTransfer,
     History,
-    Settings
 }

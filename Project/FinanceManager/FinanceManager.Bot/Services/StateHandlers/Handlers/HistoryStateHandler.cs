@@ -38,7 +38,7 @@ public sealed class HistoryStateHandler : IStateHandler
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
         if (callbackData is null)
-            return await _sessionStateManager.ToMenu(updateContext.Session);
+            return await _sessionStateManager.ToMainMenu(updateContext.Session);
 
         var context = await _contextProvider.GetHistoryContex(updateContext);
         if (context is null)
