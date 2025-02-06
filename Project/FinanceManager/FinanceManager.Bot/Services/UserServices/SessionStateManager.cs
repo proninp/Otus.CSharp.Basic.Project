@@ -18,21 +18,16 @@ public class SessionStateManager : ISessionStateManager
         var stateTransitions = new Dictionary<WorkflowState, WorkflowState>
         {
             { WorkflowState.SelectMenu, WorkflowState.CreateMenu },
-
-            { WorkflowState.ChooseAccountName, WorkflowState.CreateAccountStart },
-            { WorkflowState.ChooseCurrency, WorkflowState.SendCurrencies },
-            { WorkflowState.SetAccountInitialBalance, WorkflowState.SendInputAccountInitialBalance },
-            { WorkflowState.ChooseTransactionCategory, WorkflowState.SendTransactionCategories },
-            { WorkflowState.SetTransactionDate, WorkflowState.SendInputTransactionDate },
-            { WorkflowState.SetTransactionAmount, WorkflowState.SendInputTransactionAmount },
-            { WorkflowState.History, WorkflowState.CreateMenu },
-            
             { WorkflowState.SelectSettingsMenu, WorkflowState.CreateSettingsMenu },
-
-            { WorkflowState.SetNewCategoryType, WorkflowState.SendChooseNewCategoryType },
-            { WorkflowState.SetNewCategoryName, WorkflowState.SendInputNewCategoryName },
-            { WorkflowState.SetNewCategoryEmoji, WorkflowState.SendInputNewCategoryEmoji },
+            { WorkflowState.SelectManageCategoriesMenu, WorkflowState.CreateManageCategoriesMenu },
         };
+
+        AddCreateAccountWorkflowPrevious(stateTransitions);
+        AddRegistrTransactionWorkflowPrevious(stateTransitions);
+        AddCreateCategoryWorkflowPrevious(stateTransitions);
+        AddRemoveCategoryWorkflowPrevious(stateTransitions);
+        AddRenameCategoryWorkflowPrevious(stateTransitions);
+
 
         if (stateTransitions.TryGetValue(session.State, out var toState))
         {
@@ -50,35 +45,15 @@ public class SessionStateManager : ISessionStateManager
         var stateTransitions = new Dictionary<WorkflowState, (WorkflowState next, bool isContinue)>
         {
             { WorkflowState.CreateMenu, (WorkflowState.SelectMenu, false) },
-
-            { WorkflowState.CreateAccountStart, (WorkflowState.ChooseAccountName, false) },
-            { WorkflowState.ChooseAccountName, (WorkflowState.SendCurrencies, true) },
-            { WorkflowState.SendCurrencies, (WorkflowState.ChooseCurrency, false) },
-            { WorkflowState.ChooseCurrency, (WorkflowState.SendInputAccountInitialBalance, true) },
-            { WorkflowState.SendInputAccountInitialBalance, (WorkflowState.SetAccountInitialBalance, false) },
-            { WorkflowState.SetAccountInitialBalance, (WorkflowState.CreateAccountEnd, true) },
-            { WorkflowState.CreateAccountEnd, (WorkflowState.CreateMenu, true) },
-
-            { WorkflowState.AddExpense, (WorkflowState.SendTransactionCategories, true) },
-            { WorkflowState.AddIncome, (WorkflowState.SendTransactionCategories, true) },
-            { WorkflowState.SendTransactionCategories, (WorkflowState.ChooseTransactionCategory, false) },
-            { WorkflowState.ChooseTransactionCategory, (WorkflowState.SendInputTransactionDate, true) },
-            { WorkflowState.SendInputTransactionDate, (WorkflowState.SetTransactionDate, false) },
-            { WorkflowState.SetTransactionDate, (WorkflowState.SendInputTransactionAmount, true) },
-            { WorkflowState.SendInputTransactionAmount, (WorkflowState.SetTransactionAmount, false) },
-            { WorkflowState.SetTransactionAmount, (WorkflowState.RegisterTransaction, true) },
-            { WorkflowState.RegisterTransaction, (WorkflowState.CreateMenu, true) },
-
             { WorkflowState.CreateSettingsMenu, (WorkflowState.SelectSettingsMenu, false) },
-
-            { WorkflowState.SendChooseNewCategoryType, (WorkflowState.SetNewCategoryType, false) },
-            { WorkflowState.SetNewCategoryType, (WorkflowState.SendInputNewCategoryName, true) },
-            { WorkflowState.SendInputNewCategoryName, (WorkflowState.SetNewCategoryName, false) },
-            { WorkflowState.SetNewCategoryName, (WorkflowState.SendInputNewCategoryEmoji, true) },
-            { WorkflowState.SendInputNewCategoryEmoji, (WorkflowState.SetNewCategoryEmoji, false) },
-            { WorkflowState.SetNewCategoryEmoji, (WorkflowState.RegisterNewCategory, true) },
-            { WorkflowState.RegisterNewCategory, (WorkflowState.ManageTransactions, true) },
+            { WorkflowState.CreateManageCategoriesMenu, (WorkflowState.SelectManageCategoriesMenu, false) },
         };
+
+        AddCreateAccountWorkflowNext(stateTransitions);
+        AddRegisterTransactionWorkflowNext(stateTransitions);
+        AddCreateCategoryWorkflowNext(stateTransitions);
+        AddRemoveCategoryWorkflowNext(stateTransitions);
+        AddRenameCategoryWorkflowNext(stateTransitions);
 
         bool result;
 
@@ -129,4 +104,100 @@ public class SessionStateManager : ISessionStateManager
         session.LastActivity = DateTime.UtcNow;
         await _redisCacheService.SaveDataAsync(session.TelegramId.ToString(), session);
     }
+
+    private void AddCreateAccountWorkflowPrevious(Dictionary<WorkflowState, WorkflowState> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.ChooseAccountName, WorkflowState.CreateAccountStart);
+        workflowMap.Add(WorkflowState.ChooseCurrency, WorkflowState.SendCurrencies);
+        workflowMap.Add(WorkflowState.SetAccountInitialBalance, WorkflowState.SendInputAccountInitialBalance);
+    }
+
+    private void AddCreateAccountWorkflowNext(Dictionary<WorkflowState, (WorkflowState next, bool isContinue)> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.CreateAccountStart, (WorkflowState.ChooseAccountName, false));
+        workflowMap.Add(WorkflowState.ChooseAccountName, (WorkflowState.SendCurrencies, true));
+        workflowMap.Add(WorkflowState.SendCurrencies, (WorkflowState.ChooseCurrency, false));
+        workflowMap.Add(WorkflowState.ChooseCurrency, (WorkflowState.SendInputAccountInitialBalance, true));
+        workflowMap.Add(WorkflowState.SendInputAccountInitialBalance, (WorkflowState.SetAccountInitialBalance, false));
+        workflowMap.Add(WorkflowState.SetAccountInitialBalance, (WorkflowState.CreateAccountEnd, true));
+        workflowMap.Add(WorkflowState.CreateAccountEnd, (WorkflowState.CreateMenu, true));
+    }
+
+    private void AddRegistrTransactionWorkflowPrevious(Dictionary<WorkflowState, WorkflowState> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.ChooseTransactionCategory, WorkflowState.SendTransactionCategories);
+        workflowMap.Add(WorkflowState.SetTransactionDate, WorkflowState.SendInputTransactionDate);
+        workflowMap.Add(WorkflowState.SetTransactionAmount, WorkflowState.SendInputTransactionAmount);
+        workflowMap.Add(WorkflowState.History, WorkflowState.CreateMenu);
+    }
+
+    private void AddRegisterTransactionWorkflowNext(Dictionary<WorkflowState, (WorkflowState next, bool isContinue)> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.AddExpense, (WorkflowState.SendTransactionCategories, true));
+        workflowMap.Add(WorkflowState.AddIncome, (WorkflowState.SendTransactionCategories, true));
+        workflowMap.Add(WorkflowState.SendTransactionCategories, (WorkflowState.ChooseTransactionCategory, false));
+        workflowMap.Add(WorkflowState.ChooseTransactionCategory, (WorkflowState.SendInputTransactionDate, true));
+        workflowMap.Add(WorkflowState.SendInputTransactionDate, (WorkflowState.SetTransactionDate, false));
+        workflowMap.Add(WorkflowState.SetTransactionDate, (WorkflowState.SendInputTransactionAmount, true));
+        workflowMap.Add(WorkflowState.SendInputTransactionAmount, (WorkflowState.SetTransactionAmount, false));
+        workflowMap.Add(WorkflowState.SetTransactionAmount, (WorkflowState.RegisterTransaction, true));
+        workflowMap.Add(WorkflowState.RegisterTransaction, (WorkflowState.CreateMenu, true));
+    }
+
+    private void AddCreateCategoryWorkflowPrevious(Dictionary<WorkflowState, WorkflowState> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.SetNewCategoryType, WorkflowState.SendChooseNewCategoryType);
+        workflowMap.Add(WorkflowState.SetNewCategoryName, WorkflowState.SendInputNewCategoryName);
+        workflowMap.Add(WorkflowState.SetNewCategoryEmoji, WorkflowState.SendInputNewCategoryEmoji);
+    }
+
+    private void AddCreateCategoryWorkflowNext(Dictionary<WorkflowState, (WorkflowState next, bool isContinue)> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.SendChooseNewCategoryType, (WorkflowState.SetNewCategoryType, false));
+        workflowMap.Add(WorkflowState.SetNewCategoryType, (WorkflowState.SendInputNewCategoryName, true));
+        workflowMap.Add(WorkflowState.SendInputNewCategoryName, (WorkflowState.SetNewCategoryName, false));
+        workflowMap.Add(WorkflowState.SetNewCategoryName, (WorkflowState.SendInputNewCategoryEmoji, true));
+        workflowMap.Add(WorkflowState.SendInputNewCategoryEmoji, (WorkflowState.SetNewCategoryEmoji, false));
+        workflowMap.Add(WorkflowState.SetNewCategoryEmoji, (WorkflowState.RegisterNewCategory, true));
+        workflowMap.Add(WorkflowState.RegisterNewCategory, (WorkflowState.ManageCategories, true));
+    }
+
+    private void AddRemoveCategoryWorkflowPrevious(Dictionary<WorkflowState, WorkflowState> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.SetDeletingCategoryType, WorkflowState.SendChooseDeletingCategoryType);
+        workflowMap.Add(WorkflowState.ChooseCategoryToDelete, WorkflowState.SendChooseCategoryToDelete);
+        workflowMap.Add(WorkflowState.HandleDeletingCategoryConfirmation, WorkflowState.SendDeletingCategoryConfirmation);
+    }
+
+    private void AddRemoveCategoryWorkflowNext(Dictionary<WorkflowState, (WorkflowState next, bool isContinue)> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.SendChooseDeletingCategoryType, (WorkflowState.SetDeletingCategoryType, false));
+        workflowMap.Add(WorkflowState.SetDeletingCategoryType, (WorkflowState.SendChooseCategoryToDelete, true));
+        workflowMap.Add(WorkflowState.SendChooseCategoryToDelete, (WorkflowState.ChooseCategoryToDelete, false));
+        workflowMap.Add(WorkflowState.ChooseCategoryToDelete, (WorkflowState.SendDeletingCategoryConfirmation, true));
+        workflowMap.Add(WorkflowState.SendDeletingCategoryConfirmation, (WorkflowState.HandleDeletingCategoryConfirmation, false));
+        workflowMap.Add(WorkflowState.HandleDeletingCategoryConfirmation, (WorkflowState.RegisterDeleteCategory, true));
+        workflowMap.Add(WorkflowState.RegisterDeleteCategory, (WorkflowState.ManageCategories, true));
+    }
+
+    private void AddRenameCategoryWorkflowPrevious(Dictionary<WorkflowState, WorkflowState> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.SetRenamingCategoryType, WorkflowState.SendChooseRenamingCategoryType);
+        workflowMap.Add(WorkflowState.ChooseCategoryToRename, WorkflowState.SendChooseRenamingCategory);
+        workflowMap.Add(WorkflowState.SetCategoryName, WorkflowState.SendInputCategoryName);
+        workflowMap.Add(WorkflowState.SetCategoryEmoji, WorkflowState.SendInputCategoryEmoji);
+    }
+
+    private void AddRenameCategoryWorkflowNext(Dictionary<WorkflowState, (WorkflowState next, bool isContinue)> workflowMap)
+    {
+        workflowMap.Add(WorkflowState.SendChooseRenamingCategoryType, (WorkflowState.SetRenamingCategoryType, false));
+        workflowMap.Add(WorkflowState.SetRenamingCategoryType, (WorkflowState.SendChooseRenamingCategory, true));
+        workflowMap.Add(WorkflowState.SendChooseRenamingCategory, (WorkflowState.ChooseCategoryToRename, false));
+        workflowMap.Add(WorkflowState.ChooseCategoryToRename, (WorkflowState.SendInputCategoryName, true));
+        workflowMap.Add(WorkflowState.SendInputCategoryName, (WorkflowState.SetCategoryName, false));
+        workflowMap.Add(WorkflowState.SetCategoryName, (WorkflowState.SendInputCategoryEmoji, true));
+        workflowMap.Add(WorkflowState.SendInputCategoryEmoji, (WorkflowState.SetCategoryEmoji, false));
+        workflowMap.Add(WorkflowState.SetCategoryEmoji, (WorkflowState.RegisterRenameCategory, true));
+        workflowMap.Add(WorkflowState.RegisterRenameCategory, (WorkflowState.ManageCategories, true));
+    }    
 }
