@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using FinanceManager.Application.Utils;
-using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageTransactions;
 
 namespace FinanceManager.Bot.Enums;
 public enum SettingsMenu

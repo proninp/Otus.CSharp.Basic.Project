@@ -4,6 +4,9 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageTransactions;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using Microsoft.Extensions.DependencyInjection;
 

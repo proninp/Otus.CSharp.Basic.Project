@@ -7,7 +7,6 @@ public enum Emoji
     Warning,
     Info,
     Money,
-    Add,
     Remove,
     Category,
     Expense,
@@ -20,7 +19,10 @@ public enum Emoji
     Skip,
     Rocket,
     Clock,
-    Accounts
+    Accounts,
+    Add,
+    Delete,
+    Change
 }
 
 public static class EmojiExtension
@@ -34,6 +36,8 @@ public static class EmojiExtension
         Emoji.Info => "ℹ️",
         Emoji.Money => "💰",
         Emoji.Add => "➕",
+        Emoji.Delete => "🗑️",
+        Emoji.Change => "📝",
         Emoji.Remove => "➖",
         Emoji.Category => "🗂️",
         Emoji.Expense => "💸",

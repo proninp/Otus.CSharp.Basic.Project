@@ -4,7 +4,7 @@ using FinanceManager.Bot.Exceptions;
 using FinanceManager.Bot.Models;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Contexts;
-public class TransactionContext
+public sealed class TransactionContext
 {
     public TransactionType TransactionType { get; init; }
 

@@ -3,7 +3,7 @@ using FinanceManager.Bot.Exceptions;
 using FinanceManager.Bot.Models;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Contexts;
-public class HistoryContext
+public sealed class HistoryContext
 {
     public AccountDto AccountDto { get; init; }
 

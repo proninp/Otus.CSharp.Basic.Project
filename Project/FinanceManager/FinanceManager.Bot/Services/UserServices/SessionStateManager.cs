@@ -4,7 +4,7 @@ using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Redis.Services.Interfaces;
 
 namespace FinanceManager.Bot.Services.UserServices;
-public class SessionStateManager : ISessionStateManager
+public sealed class SessionStateManager : ISessionStateManager
 {
     private readonly IRedisCacheService _redisCacheService;
 
@@ -27,7 +27,6 @@ public class SessionStateManager : ISessionStateManager
         AddCreateCategoryWorkflowPrevious(stateTransitions);
         AddRemoveCategoryWorkflowPrevious(stateTransitions);
         AddRenameCategoryWorkflowPrevious(stateTransitions);
-
 
         if (stateTransitions.TryGetValue(session.State, out var toState))
         {
@@ -146,14 +145,14 @@ public class SessionStateManager : ISessionStateManager
 
     private void AddCreateCategoryWorkflowPrevious(Dictionary<WorkflowState, WorkflowState> workflowMap)
     {
-        workflowMap.Add(WorkflowState.SetNewCategoryType, WorkflowState.SendChooseNewCategoryType);
+        workflowMap.Add(WorkflowState.SetNewCategoryType, WorkflowState.SendNewCategoryType);
         workflowMap.Add(WorkflowState.SetNewCategoryName, WorkflowState.SendInputNewCategoryName);
         workflowMap.Add(WorkflowState.SetNewCategoryEmoji, WorkflowState.SendInputNewCategoryEmoji);
     }
 
     private void AddCreateCategoryWorkflowNext(Dictionary<WorkflowState, (WorkflowState next, bool isContinue)> workflowMap)
     {
-        workflowMap.Add(WorkflowState.SendChooseNewCategoryType, (WorkflowState.SetNewCategoryType, false));
+        workflowMap.Add(WorkflowState.SendNewCategoryType, (WorkflowState.SetNewCategoryType, false));
         workflowMap.Add(WorkflowState.SetNewCategoryType, (WorkflowState.SendInputNewCategoryName, true));
         workflowMap.Add(WorkflowState.SendInputNewCategoryName, (WorkflowState.SetNewCategoryName, false));
         workflowMap.Add(WorkflowState.SetNewCategoryName, (WorkflowState.SendInputNewCategoryEmoji, true));

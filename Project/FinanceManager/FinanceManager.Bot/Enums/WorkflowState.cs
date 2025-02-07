@@ -32,7 +32,7 @@ public enum WorkflowState
     CreateManageCategoriesMenu,
     SelectManageCategoriesMenu,
 
-    SendChooseNewCategoryType,
+    SendNewCategoryType,
     SetNewCategoryType,
     SendInputNewCategoryName,
     SetNewCategoryName,

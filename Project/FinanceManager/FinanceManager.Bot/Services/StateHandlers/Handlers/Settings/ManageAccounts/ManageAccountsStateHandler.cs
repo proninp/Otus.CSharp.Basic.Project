@@ -3,13 +3,13 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
-public class ManageTransactionsStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
+public sealed class ManageAccountsStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
 
-    public ManageTransactionsStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
+    public ManageAccountsStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
     {
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
@@ -19,7 +19,7 @@ public class ManageTransactionsStateHandler : IStateHandler
     {
         await _messageManager.DeleteLastMessage(updateContext);
         await _messageManager.SendMessage(updateContext,
-            $"The Manage transactions feature is under development {Emoji.Rocket.GetSymbol()}");
+            $"The Manage accoints feature is under development {Emoji.Rocket.GetSymbol()}");
         updateContext.Session.LastMessage = null;
         return await _sessionStateManager.ToSettingsMenu(updateContext.Session);
     }

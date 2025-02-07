@@ -3,7 +3,7 @@ using FinanceManager.Bot.Exceptions;
 using FinanceManager.Bot.Models;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Contexts;
-public class CreateAccountContext
+public sealed class CreateAccountContext
 {
     public string? AccountName { get; set; }
 

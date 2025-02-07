@@ -8,7 +8,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
-public class CreateSettingsMenuStateHandler : IStateHandler
+public sealed class CreateSettingsMenuStateHandler : IStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly IMessageManager _messageManager;
