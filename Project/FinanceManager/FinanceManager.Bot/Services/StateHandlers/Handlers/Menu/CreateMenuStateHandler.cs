@@ -35,8 +35,9 @@ public sealed class CreateMenuStateHandler : IStateHandler
 
         var messageText = await _accountInfoProvider.GetAccountInfoAsync(account, updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
-
-        await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
+        
+        if (!await _messageManager.EditLastMessage(updateContext, messageText, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }
