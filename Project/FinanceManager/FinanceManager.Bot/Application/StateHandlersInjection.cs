@@ -38,8 +38,8 @@ public static class StateHandlersInjection
             .AddScoped<CreateAccountEndStateHandler>();
 
         services
-            .AddScoped<SendCategoriesStateHandler>()
-            .AddScoped<ChooseCategoryStateHandler>()
+            .AddScoped<SendTransactionCategoriesStateHandler>()
+            .AddScoped<ChooseTransactionCategoryStateHandler>()
             .AddScoped<TransactionInputDateStateHandler>()
             .AddScoped<TransactionSetDateStateHandler>()
             .AddScoped<TransactionIputAmountStateHandler>()

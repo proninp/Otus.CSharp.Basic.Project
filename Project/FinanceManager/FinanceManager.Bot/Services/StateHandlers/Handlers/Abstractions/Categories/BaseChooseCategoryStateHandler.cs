@@ -4,24 +4,23 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public sealed class ChooseCategoryStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
+public abstract class BaseChooseCategoryStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
 
-    public ChooseCategoryStateHandler(
-        ICallbackDataProvider callbackQueryProvider,
+    protected BaseChooseCategoryStateHandler(
         ICategoryManager categoryManager,
+        ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager)
     {
-        _callbackDataProvider = callbackQueryProvider;
         _categoryManager = categoryManager;
+        _callbackDataProvider = callbackDataProvider;
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
     }
@@ -47,9 +46,10 @@ public sealed class ChooseCategoryStateHandler : IStateHandler
                 return await _sessionStateManager.Previous(updateContext.Session);
         }
 
-        var context = updateContext.Session.GetTransactionContext();
-        context.Category = category;
+        SaveCategoryToContext(updateContext.Session, category);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }
+
+    protected abstract void SaveCategoryToContext(UserSession session, CategoryDto? category);
 }

@@ -1,22 +1,20 @@
 ﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Application.Utils;
-using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public sealed class SendCategoriesStateHandler : IStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
+public abstract class BaseSendCategoriesStateHandler : IStateHandler
 {
     private readonly ICategoryManager _categoryManager;
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
     private readonly IMenuCallbackHandler _menuCallbackProvider;
 
-    public SendCategoriesStateHandler(
+    protected BaseSendCategoriesStateHandler(
         ICategoryManager categoryManager,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,
@@ -30,25 +28,27 @@ public sealed class SendCategoriesStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var context = updateContext.Session.GetTransactionContext();
-
-        var categories = await (context.TransactionType switch
+        var transactionType = GetTransactionType(updateContext.Session);
+        var categories = await (transactionType switch
         {
             TransactionType.Expense => _categoryManager.GetExpenses(updateContext.Session.Id, updateContext.CancellationToken),
             TransactionType.Income => _categoryManager.GetIncomes(updateContext.Session.Id, updateContext.CancellationToken),
             _ => throw new InvalidOperationException(
-                $"There is no handler for the {context.TransactionType.GetDescription()} transaction type")
+                $"There is no handler for the {transactionType.GetDescription()} transaction type")
         });
 
+        var message = GetMessageText(updateContext.Session);
         var inlineKeyboard = CreateInlineKeyboard(updateContext, categories);
 
-        var message = $"Please choose the {context.TransactionTypeDescription} category {Emoji.Category.GetSymbol()}:";
-
-        if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
+        if (!await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }
+
+    protected abstract TransactionType GetTransactionType(UserSession session);
+
+    protected abstract string GetMessageText(UserSession session);
 
     private InlineKeyboardMarkup CreateInlineKeyboard(BotUpdateContext context, CategoryDto[] categories)
     {
