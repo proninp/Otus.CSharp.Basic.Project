@@ -5,11 +5,14 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageTransactions;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Factories;
-public class StateHandlerFactory : IStateHandlerFactory
+public sealed class StateHandlerFactory : IStateHandlerFactory
 {
     private readonly IServiceProvider _serviceProvider;
 
@@ -50,6 +53,10 @@ public class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.ManageCategories => _serviceProvider.GetRequiredService<ManageCategoriesStateHandler>(),
         WorkflowState.ManageTransactions => _serviceProvider.GetRequiredService<ManageTransactionsStateHandler>(),
         WorkflowState.ManageAccounts => _serviceProvider.GetRequiredService<ManageAccountsStateHandler>(),
+
+        WorkflowState.CreateManageCategoriesMenu => _serviceProvider.GetRequiredService<CreateManageCategoriesMenuStateHandler>(),
+        WorkflowState.SelectManageCategoriesMenu => _serviceProvider.GetRequiredService<SelectManageCategoriesMenuStateHandler>(),
+
 
         _ => throw new StateHandlerNotFoundException(state)
     };
