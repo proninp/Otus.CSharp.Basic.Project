@@ -58,7 +58,8 @@ public static class TelegramInjection
             .AddScoped<IHistoryContextProvider, HistoryContextProvider>()
             .AddScoped<IHistoryInlineKeyBoardProvider, HistoryInlineKeyBoardProvider>()
             .AddScoped<IAccountInfoProvider, AccountInfoProvider>()
-            .AddScoped<IMenuCallbackHandler, MenuCallbackHandler>();
+            .AddScoped<IMenuCallbackHandler, MenuCallbackHandler>()
+            .AddScoped<IEmojiTextValidator ,EmojiTextValidator>();
 
         services.AddStateHandlers();
 
