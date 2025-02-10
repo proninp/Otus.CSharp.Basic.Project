@@ -53,10 +53,11 @@ public sealed class CategoryManager : ICategoryManager
             cancellationToken: cancellationToken);
     }
 
-    public Task<bool> Exists(Guid userId, CancellationToken cancellationToken)
-    {
-        return _repository.Exists(c => c.UserId == userId, cancellationToken);
-    }
+    public Task<bool> Exists(Guid userId, CancellationToken cancellationToken) =>
+        _repository.Exists(c => c.UserId == userId, cancellationToken);
+
+    public Task<bool> ExistsByTittle(Guid userId, string title, CancellationToken cancellationToken) =>
+        _repository.Exists(c => c.UserId == userId && c.Title == title, cancellationToken);
 
     public async Task<CategoryDto> Create(CreateCategoryDto command, CancellationToken cancellationToken)
     {

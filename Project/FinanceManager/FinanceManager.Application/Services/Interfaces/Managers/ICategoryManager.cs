@@ -15,6 +15,8 @@ public interface ICategoryManager
 
     Task<bool> Exists(Guid userId, CancellationToken cancellationToken);
 
+    Task<bool> ExistsByTittle(Guid userId, string title, CancellationToken cancellationToken);
+
     Task<CategoryDto> Create(CreateCategoryDto command, CancellationToken cancellationToken);
 
     Task<CategoryDto> Update(UpdateCategoryDto command, CancellationToken cancellationToken);
