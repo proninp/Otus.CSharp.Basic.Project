@@ -15,25 +15,21 @@ public sealed class WorkflowContext
 
     public RenameCategoryContext? RenameCategoryContext { get; private set; }
 
-    public WorkflowContext() { }
-
-    public WorkflowContext(CreateAccountContext createAccountContext) =>
+    public WorkflowContext(
+        CreateAccountContext? createAccountContext = null,
+        HistoryContext? historyContext = null,
+        TransactionContext? transactionContext = null,
+        CreateCategoryContext? createCategoryContext = null,
+        DeleteCategoryContext? deleteCategoryContext = null,
+        RenameCategoryContext? renameCategoryContext = null)
+    {
         CreateAccountContext = createAccountContext;
-
-    public WorkflowContext(HistoryContext historyContext) =>
         HistoryContext = historyContext;
-
-    public WorkflowContext(TransactionContext transactionContext) =>
         TransactionContext = transactionContext;
-
-    public WorkflowContext(CreateCategoryContext createCategoryContext) =>
         CreateCategoryContext = createCategoryContext;
-    
-    public WorkflowContext(DeleteCategoryContext deleteCategoryContext) =>
         DeleteCategoryContext = deleteCategoryContext;
-
-    public WorkflowContext(RenameCategoryContext renameCategoryContext) =>
         RenameCategoryContext = renameCategoryContext;
+    }
 
     public void ResetContext()
     {
@@ -49,20 +45,20 @@ public sealed class WorkflowContext
 public static class WorkflowContextExtension
 {
     public static void SetCreateAccountContext(this UserSession userSession, CreateAccountContext createAccountContext) =>
-        userSession.WorkflowContext = new WorkflowContext(createAccountContext);
+        userSession.WorkflowContext = new WorkflowContext(createAccountContext: createAccountContext);
 
     public static void SetTransactionContext(this UserSession userSession, TransactionContext transactionContext) =>
-        userSession.WorkflowContext = new WorkflowContext(transactionContext);
+        userSession.WorkflowContext = new WorkflowContext(transactionContext: transactionContext);
 
     public static void SetHistoryContext(this UserSession userSession, HistoryContext historyContext) =>
-        userSession.WorkflowContext = new WorkflowContext(historyContext);
+        userSession.WorkflowContext = new WorkflowContext(historyContext: historyContext);
 
     public static void SetCreateCategoryContext(this UserSession userSession, CreateCategoryContext createCategoryContext) =>
-        userSession.WorkflowContext = new WorkflowContext(createCategoryContext);
+        userSession.WorkflowContext = new WorkflowContext(createCategoryContext: createCategoryContext);
 
     public static void SetDeleteCategoryContext(this UserSession userSession, DeleteCategoryContext deleteCategoryContext) =>
-        userSession.WorkflowContext = new WorkflowContext(deleteCategoryContext);
+        userSession.WorkflowContext = new WorkflowContext(deleteCategoryContext: deleteCategoryContext);
 
     public static void SetRenameCategoryContext(this UserSession userSession, RenameCategoryContext renameCategoryContext) =>
-        userSession.WorkflowContext = new WorkflowContext(renameCategoryContext);
+        userSession.WorkflowContext = new WorkflowContext(renameCategoryContext: renameCategoryContext);
 }
