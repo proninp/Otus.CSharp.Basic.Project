@@ -42,6 +42,7 @@ public static class TelegramInjection
 
         services
             .AddSingleton<ISessionRegistry, SessionRegistry>()
+            .AddSingleton<ISessionStateRegistry, SessionStateRegistry>()
             .AddScoped<ISessionManager, SessionManager>()
             .AddScoped<ISessionProvider, SessionProvider>()
             .AddScoped<ISessionStateManager, SessionStateManager>();

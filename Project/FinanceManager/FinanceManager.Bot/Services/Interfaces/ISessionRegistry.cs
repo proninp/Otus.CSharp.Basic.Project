@@ -6,5 +6,5 @@ public interface ISessionRegistry
 {
     public ConcurrentDictionary<long, UserSession> Sessions { get; }
 
-    public IEnumerable<UserSession> ExpiredSessions {  get; }
+    public IEnumerable<UserSession> ExpiredSessions { get; }
 }
