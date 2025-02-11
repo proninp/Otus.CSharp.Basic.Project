@@ -25,7 +25,6 @@ public enum WorkflowState
 
     CreateSettingsMenu,
     SelectSettingsMenu,
-    ManageCategories,
     ManageTransactions,
     ManageAccounts,
 

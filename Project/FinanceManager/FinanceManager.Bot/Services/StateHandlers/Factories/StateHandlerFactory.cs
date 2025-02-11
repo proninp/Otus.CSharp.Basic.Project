@@ -7,6 +7,7 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageTransactions;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,13 +51,18 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
 
         WorkflowState.CreateSettingsMenu => _serviceProvider.GetRequiredService<CreateSettingsMenuStateHandler>(),
         WorkflowState.SelectSettingsMenu => _serviceProvider.GetRequiredService<SelectSettingsMenuStateHandler>(),
-        WorkflowState.ManageCategories => _serviceProvider.GetRequiredService<ManageCategoriesStateHandler>(),
         WorkflowState.ManageTransactions => _serviceProvider.GetRequiredService<ManageTransactionsStateHandler>(),
         WorkflowState.ManageAccounts => _serviceProvider.GetRequiredService<ManageAccountsStateHandler>(),
 
         WorkflowState.CreateManageCategoriesMenu => _serviceProvider.GetRequiredService<CreateManageCategoriesMenuStateHandler>(),
         WorkflowState.SelectManageCategoriesMenu => _serviceProvider.GetRequiredService<SelectManageCategoriesMenuStateHandler>(),
-
+        WorkflowState.SendNewCategoryType => _serviceProvider.GetRequiredService<CreateCategoryStartStateHandler>(),
+        WorkflowState.SetNewCategoryType => _serviceProvider.GetRequiredService<SelectTypeCreateCategoryStateHandler>(),
+        WorkflowState.SendInputNewCategoryName => _serviceProvider.GetRequiredService<CreateCategoryInputTitleStateHandler>(),
+        WorkflowState.SetNewCategoryName => _serviceProvider.GetRequiredService<CreateCategorySetTitleStateHandler>(),
+        WorkflowState.SendInputNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategoryInputEmojiStateHandler>(),
+        WorkflowState.SetNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategorySetEmojiStateHandler>(),
+        WorkflowState.RegisterNewCategory => _serviceProvider.GetRequiredService<CreateCategoryRegistrationStateHandler>(),
 
         _ => throw new StateHandlerNotFoundException(state)
     };

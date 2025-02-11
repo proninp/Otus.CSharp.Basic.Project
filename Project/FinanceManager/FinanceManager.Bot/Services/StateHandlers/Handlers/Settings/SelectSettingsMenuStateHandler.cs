@@ -16,7 +16,7 @@ public sealed class SelectSettingsMenuStateHandler : BaseSelectMenuStateHandler
 
     public override Dictionary<string, WorkflowState> MenuStateMapping => new Dictionary<string, WorkflowState>
     {
-        { SettingsMenu.ManageCategories.GetKey(), WorkflowState.ManageCategories },
+        { SettingsMenu.ManageCategories.GetKey(), WorkflowState.CreateManageCategoriesMenu },
         { SettingsMenu.ManageTransactios.GetKey(), WorkflowState.ManageTransactions },
         { SettingsMenu.ManageAccounts.GetKey(), WorkflowState.ManageAccounts },
     };

@@ -23,7 +23,7 @@ public static class SettingsMenuExtension
 {
     public static string GetKey(this SettingsMenu settingsMenu) => settingsMenu switch
     {
-        SettingsMenu.ManageCategories => nameof(ManageCategoriesStateHandler),
+        SettingsMenu.ManageCategories => nameof(CreateManageCategoriesMenuStateHandler),
         SettingsMenu.ManageTransactios => nameof(ManageTransactionsStateHandler),
         SettingsMenu.ManageAccounts => nameof(ManageAccountsStateHandler),
         _ => throw new NotImplementedException(settingsMenu.GetDescription())

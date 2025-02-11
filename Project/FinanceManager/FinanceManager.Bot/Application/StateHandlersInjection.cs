@@ -6,6 +6,7 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Menu;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageTransactions;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,9 @@ public static class StateHandlersInjection
             .AddScoped<RegisterIncomeStartStateHandler>()
             .AddScoped<HistoryStateHandler>()
             .AddScoped<CreateSettingsMenuStateHandler>()
-            .AddScoped<SelectSettingsMenuStateHandler>();
+            .AddScoped<SelectSettingsMenuStateHandler>()
+            .AddScoped<CreateManageCategoriesMenuStateHandler>()
+            .AddScoped<SelectManageCategoriesMenuStateHandler>();
 
         services
             .AddScoped<CreateAccountStartStateHandler>()
@@ -47,9 +50,19 @@ public static class StateHandlersInjection
             .AddScoped<TransactionRegistrationStateHandler>();
 
         services
-            .AddScoped<ManageCategoriesStateHandler>()
+            .AddScoped<CreateManageCategoriesMenuStateHandler>()
+            .AddScoped<SelectManageCategoriesMenuStateHandler>()
             .AddScoped<ManageTransactionsStateHandler>()
             .AddScoped<ManageAccountsStateHandler>();
+
+        services
+            .AddScoped<CreateCategoryStartStateHandler>()
+            .AddScoped<SelectTypeCreateCategoryStateHandler>()
+            .AddScoped<CreateCategoryInputTitleStateHandler>()
+            .AddScoped<CreateCategorySetTitleStateHandler>()
+            .AddScoped<CreateCategoryInputEmojiStateHandler>()
+            .AddScoped<CreateCategorySetEmojiStateHandler>()
+            .AddScoped<CreateCategoryRegistrationStateHandler>();
 
         return services;
     }

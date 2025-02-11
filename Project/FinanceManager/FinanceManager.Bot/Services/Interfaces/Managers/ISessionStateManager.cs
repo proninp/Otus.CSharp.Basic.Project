@@ -16,6 +16,8 @@ public interface ISessionStateManager
 
     Task<bool> ToSettingsMenu(UserSession session);
 
+    Task<bool> ToManageCategoriesMenu(UserSession session);
+
     Task<bool> FromMenu(UserSession session, WorkflowState toState);
 
     Task<bool> Complete(UserSession session);
