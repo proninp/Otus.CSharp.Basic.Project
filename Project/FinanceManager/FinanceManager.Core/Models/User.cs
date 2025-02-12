@@ -11,11 +11,11 @@ public sealed class User : IdentityModel
 
     public string? Lastname { get; set; }
 
-    public ICollection<Account> Accounts { get; } = Array.Empty<Account>();
+    public ICollection<Account> Accounts { get; } = new List<Account>();
 
-    public ICollection<Category> Categories { get; } = Array.Empty<Category>();
+    public ICollection<Category> Categories { get; } = new List<Category>();
 
-    public ICollection<Transaction> Transactions { get; } = Array.Empty<Transaction>();
+    public ICollection<Transaction> Transactions { get; } = new List<Transaction>();
 
     public User(long telegramId, string? username = null, string? firstname = null, string? lastname = null)
     {
