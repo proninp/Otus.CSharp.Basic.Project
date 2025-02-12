@@ -4,7 +4,7 @@ using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
-namespace FinanceManager.Bot.Services.Telegram.Providers;
+namespace FinanceManager.Bot.Services.StateHandlers.Providers;
 public class HistoryContextProvider : IHistoryContextProvider
 {
     private readonly IAccountManager _accountManager;

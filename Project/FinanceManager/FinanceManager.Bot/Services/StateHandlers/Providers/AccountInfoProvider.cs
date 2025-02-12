@@ -4,7 +4,7 @@ using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 
-namespace FinanceManager.Bot.Services.Telegram.Providers;
+namespace FinanceManager.Bot.Services.StateHandlers.Providers;
 public class AccountInfoProvider : IAccountInfoProvider
 {
     private readonly IAccountManager _accountManager;

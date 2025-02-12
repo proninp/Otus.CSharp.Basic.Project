@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using FinanceManager.Application.Utils;
+﻿using FinanceManager.Application.Utils;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
@@ -8,7 +7,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace FinanceManager.Bot.Services.Telegram.Providers;
+namespace FinanceManager.Bot.Services.StateHandlers.Providers;
 public class HistoryInlineKeyBoardProvider : IHistoryInlineKeyBoardProvider
 {
     private readonly IMessageManager _messageManager;

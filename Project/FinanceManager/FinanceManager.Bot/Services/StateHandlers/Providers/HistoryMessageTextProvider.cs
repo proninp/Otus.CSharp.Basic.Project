@@ -3,7 +3,7 @@ using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 
-namespace FinanceManager.Bot.Services.Telegram.Providers;
+namespace FinanceManager.Bot.Services.StateHandlers.Providers;
 public class HistoryMessageTextProvider : IHistoryMessageTextProvider
 {
     public string GetMessgaText(IEnumerable<TransactionDto> incomes, IEnumerable<TransactionDto> expenses)

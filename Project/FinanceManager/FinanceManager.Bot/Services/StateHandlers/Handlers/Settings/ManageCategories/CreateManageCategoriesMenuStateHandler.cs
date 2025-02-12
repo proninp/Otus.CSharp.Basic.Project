@@ -42,13 +42,13 @@ public sealed class CreateManageCategoriesMenuStateHandler : IStateHandler
             new InlineKeyboardButton[]
             {
                 _messageManager.CreateInlineButton(context, ManageCategoriesMenu.Add.GetKey(),
-                $"{Emoji.Category.GetSymbol()} {ManageCategoriesMenu.Add.GetDescription()}"),
+                $"{Emoji.Add.GetSymbol()} {ManageCategoriesMenu.Add.GetDescription()}"),
 
                 _messageManager.CreateInlineButton(context, ManageCategoriesMenu.Delete.GetKey(),
-                $"{Emoji.Money.GetSymbol()} {ManageCategoriesMenu.Delete.GetDescription()}"),
+                $"{Emoji.Delete.GetSymbol()} {ManageCategoriesMenu.Delete.GetDescription()}"),
 
                 _messageManager.CreateInlineButton(context, ManageCategoriesMenu.Rename.GetKey(),
-                $"{Emoji.Accounts.GetSymbol()} {ManageCategoriesMenu.Rename.GetDescription()}")
+                $"{Emoji.Change.GetSymbol()} {ManageCategoriesMenu.Rename.GetDescription()}")
             },
             new InlineKeyboardButton[]
             {

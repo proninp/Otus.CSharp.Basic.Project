@@ -1,8 +1,7 @@
 ﻿using System.Globalization;
-using System.Text.RegularExpressions;
 using FinanceManager.Bot.Services.Interfaces.Validators;
 
-namespace FinanceManager.Bot.Services.Utils;
+namespace FinanceManager.Bot.Services.StateHandlers.Validators;
 public sealed class EmojiTextValidator : IEmojiTextValidator
 {
     public bool ValidateSingleEmoji(string? text)
@@ -32,11 +31,11 @@ public sealed class EmojiTextValidator : IEmojiTextValidator
 
         int codepoint = char.ConvertToUtf32(textElement, 0);
 
-        return (codepoint >= 0x1F300 && codepoint <= 0x1FAFF) ||
-               (codepoint >= 0x1F600 && codepoint <= 0x1F64F) ||
-               (codepoint >= 0x2600 && codepoint <= 0x26FF) ||
-               (codepoint >= 0x2700 && codepoint <= 0x27BF) ||
-               (codepoint >= 0xFE00 && codepoint <= 0xFE0F) ||
-               (codepoint >= 0x1F1E6 && codepoint <= 0x1F1FF);
+        return codepoint >= 0x1F300 && codepoint <= 0x1FAFF ||
+               codepoint >= 0x1F600 && codepoint <= 0x1F64F ||
+               codepoint >= 0x2600 && codepoint <= 0x26FF ||
+               codepoint >= 0x2700 && codepoint <= 0x27BF ||
+               codepoint >= 0xFE00 && codepoint <= 0xFE0F ||
+               codepoint >= 0x1F1E6 && codepoint <= 0x1F1FF;
     }
 }

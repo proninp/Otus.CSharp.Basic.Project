@@ -2,7 +2,7 @@
 using System.Text;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 
-namespace FinanceManager.Bot.Services.Utils;
+namespace FinanceManager.Bot.Services.StateHandlers.Providers;
 public class TransactionDateProvider : ITransactionDateProvider
 {
     private static readonly char[] _separators = ['-', ' ', '.', '/'];
