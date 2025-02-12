@@ -1,8 +1,8 @@
-﻿using FinanceManager.Application.Services.Interfaces.Managers;
-using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
@@ -11,18 +11,18 @@ public sealed class CreateCategorySetTitleStateHandler : IStateHandler
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
-    private readonly ICategoryManager _categoryManager;
+    private readonly ICategoryTitleValidator _categoryTitleValidator;
 
     public CreateCategorySetTitleStateHandler(
         IUpdateMessageProvider messageProvider,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,
-        ICategoryManager categoryManager)
+        ICategoryTitleValidator categoryTitleValidator)
     {
         _messageProvider = messageProvider;
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
-        _categoryManager = categoryManager;
+        _categoryTitleValidator = categoryTitleValidator;
     }
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
@@ -34,26 +34,8 @@ public sealed class CreateCategorySetTitleStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        if (string.IsNullOrEmpty(categoryTitle))
-        {
-            await _messageManager.SendErrorMessage(updateContext,
-                "You must specify the title of the new category. Please try again.");
+        if (!await _categoryTitleValidator.Validate(updateContext, categoryTitle))
             return await _sessionStateManager.Previous(updateContext.Session);
-        }
-
-        if (!categoryTitle.Any(c => char.IsLetterOrDigit(c)))
-        {
-            await _messageManager.SendErrorMessage(updateContext,
-                "The category title must contain at least one letter or digit.");
-            return await _sessionStateManager.Previous(updateContext.Session);
-        }
-
-        if (await _categoryManager.ExistsByTittle(updateContext.Session.Id, categoryTitle, updateContext.CancellationToken))
-        {
-            await _messageManager.SendErrorMessage(updateContext,
-                "A category with that title already exists.");
-            return await _sessionStateManager.Previous(updateContext.Session);
-        }
 
         var context = updateContext.Session.GetCreateCategoryContext();
         context.CategoryTitle = categoryTitle;

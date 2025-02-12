@@ -4,6 +4,8 @@ using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.Interfaces.Validators;
+using FinanceManager.Bot.Services.StateHandlers.Providers;
+using FinanceManager.Bot.Services.StateHandlers.Validators;
 using FinanceManager.Bot.Services.Telegram;
 using FinanceManager.Bot.Services.Telegram.Abstractions;
 using FinanceManager.Bot.Services.Telegram.Handlers;
@@ -11,7 +13,6 @@ using FinanceManager.Bot.Services.Telegram.Providers;
 using FinanceManager.Bot.Services.Telegram.Validators;
 using FinanceManager.Bot.Services.UserServices;
 using FinanceManager.Bot.Services.UserServices.SessianStateManager;
-using FinanceManager.Bot.Services.Utils;
 using FinanceManager.Core.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,7 +61,8 @@ public static class TelegramInjection
             .AddScoped<IHistoryInlineKeyBoardProvider, HistoryInlineKeyBoardProvider>()
             .AddScoped<IAccountInfoProvider, AccountInfoProvider>()
             .AddScoped<IMenuCallbackHandler, MenuCallbackHandler>()
-            .AddScoped<IEmojiTextValidator ,EmojiTextValidator>();
+            .AddScoped<IEmojiTextValidator, EmojiTextValidator>()
+            .AddScoped<ICategoryTitleValidator, CategoryTitleValidator>();
 
         services.AddStateHandlers();
 
