@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
+﻿using ExtendedNumerics;
+using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces;
@@ -45,13 +46,13 @@ public sealed class TransactionManager : ITransactionManager
             cancellationToken: cancellationToken);
     }
 
-    public async Task<decimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken)
+    public async Task<BigDecimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken)
     {
         return (await _repository.GetAsync(
             t => t.ToDto(),
             t => t.UserId == userId && t.AccountId == accountId,
             cancellationToken: cancellationToken))
-            .Sum(t => t.Amount);
+            .Aggregate(BigDecimal.Zero, (totalAmount, t) => totalAmount + t.Amount);
     }
 
     public Task<bool> Exists(Guid userId, Guid accountId, CancellationToken cancellationToken)

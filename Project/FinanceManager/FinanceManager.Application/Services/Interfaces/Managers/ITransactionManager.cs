@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
+﻿using ExtendedNumerics;
+using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 
@@ -9,7 +10,7 @@ public interface ITransactionManager
 
     Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken, int pageIndex = 0, int pageSize = 20);
 
-    Task<decimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken);
+    Task<BigDecimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken);
 
     Task<bool> Exists(Guid userId, Guid accountId, CancellationToken cancellationToken);
 

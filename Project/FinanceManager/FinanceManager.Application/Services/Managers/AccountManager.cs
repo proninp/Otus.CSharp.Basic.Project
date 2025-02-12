@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
+﻿using ExtendedNumerics;
+using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
@@ -71,7 +72,7 @@ public sealed class AccountManager : IAccountManager
         return accountDtos;
     }
 
-    public async Task<decimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken)
+    public async Task<BigDecimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken)
     {
         return await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id, cancellationToken);
     }

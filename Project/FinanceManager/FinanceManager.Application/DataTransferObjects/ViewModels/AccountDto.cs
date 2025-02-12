@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.DataTransferObjects.Abstractions;
+﻿using ExtendedNumerics;
+using FinanceManager.Application.DataTransferObjects.Abstractions;
 using FinanceManager.Core.Models;
 
 namespace FinanceManager.Application.DataTransferObjects.ViewModels;
@@ -12,7 +13,7 @@ public sealed class AccountDto : IdentityDtoBase
 
     public string? Title { get; set; }
 
-    public decimal Balance { get; set; }
+    public BigDecimal Balance { get; set; }
 
     public bool IsDefault { get; set; }
 

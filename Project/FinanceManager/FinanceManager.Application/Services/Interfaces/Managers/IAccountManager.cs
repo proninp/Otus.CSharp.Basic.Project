@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.DataTransferObjects.Commands.Create;
+﻿using ExtendedNumerics;
+using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 
@@ -19,5 +20,5 @@ public interface IAccountManager
 
     Task Delete(Guid id, CancellationToken cancellationToken);
 
-    Task<decimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken);
+    Task<BigDecimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken);
 }
