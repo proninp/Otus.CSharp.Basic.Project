@@ -51,12 +51,11 @@ public sealed class TransactionRegistrationStateHandler : CompleteStateHandler
         };
 
         var transaction = await _transactionManager.Create(command, updateContext.CancellationToken);
-        var balance = await _accountManager.GetBalance(account, updateContext.CancellationToken);
 
-        var message = $"The transaction was successfully registered{Environment.NewLine}" +
-            $"Current balance: {balance}";
+        var message = $"The {command.Amount}";
         if (account.Currency is not null)
             message += $" {account.Currency.CurrencyCode} {account.Currency.Emoji}";
+        message += " transaction was registered successfully";
 
         await _messageManager.SendApproveMessage(updateContext, message);
     }

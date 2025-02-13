@@ -7,6 +7,8 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Rename;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageTransactions;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +65,10 @@ public static class StateHandlersInjection
             .AddScoped<CreateCategoryInputEmojiStateHandler>()
             .AddScoped<CreateCategorySetEmojiStateHandler>()
             .AddScoped<CreateCategoryRegistrationStateHandler>();
+
+        services
+            .AddScoped<DeleteCategoryStartStateHandler>()
+            .AddScoped<RenameCategoryStartStateHandler>();
 
         return services;
     }

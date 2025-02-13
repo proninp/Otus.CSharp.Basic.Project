@@ -8,6 +8,8 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageAccounts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Rename;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageTransactions;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,6 +58,7 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
 
         WorkflowState.CreateManageCategoriesMenu => _serviceProvider.GetRequiredService<CreateManageCategoriesMenuStateHandler>(),
         WorkflowState.SelectManageCategoriesMenu => _serviceProvider.GetRequiredService<SelectManageCategoriesMenuStateHandler>(),
+        
         WorkflowState.SendNewCategoryType => _serviceProvider.GetRequiredService<CreateCategoryStartStateHandler>(),
         WorkflowState.SetNewCategoryType => _serviceProvider.GetRequiredService<SelectTypeCreateCategoryStateHandler>(),
         WorkflowState.SendInputNewCategoryName => _serviceProvider.GetRequiredService<CreateCategoryInputTitleStateHandler>(),
@@ -63,6 +66,9 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SendInputNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategoryInputEmojiStateHandler>(),
         WorkflowState.SetNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategorySetEmojiStateHandler>(),
         WorkflowState.RegisterNewCategory => _serviceProvider.GetRequiredService<CreateCategoryRegistrationStateHandler>(),
+        
+        WorkflowState.SendChooseDeletingCategoryType => _serviceProvider.GetRequiredService<DeleteCategoryStartStateHandler>(),
+        WorkflowState.SendChooseRenamingCategory => _serviceProvider.GetRequiredService<RenameCategoryStartStateHandler>(),
 
         _ => throw new StateHandlerNotFoundException(state)
     };
