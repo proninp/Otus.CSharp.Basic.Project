@@ -56,11 +56,13 @@ public static class TelegramInjection
             .AddScoped<IChatProvider, ChatProvider>()
             .AddScoped<IMessageManager, MessageManager>()
             .AddScoped<ITransactionDateProvider, TransactionDateProvider>()
+            .AddScoped<IDecimalNumberProvider, DecimalNumberProvider>()
             .AddScoped<IHistoryMessageTextProvider, HistoryMessageTextProvider>()
             .AddScoped<IHistoryContextProvider, HistoryContextProvider>()
             .AddScoped<IHistoryInlineKeyBoardProvider, HistoryInlineKeyBoardProvider>()
             .AddScoped<IAccountInfoProvider, AccountInfoProvider>()
             .AddScoped<IMenuCallbackHandler, MenuCallbackHandler>()
+            .AddScoped<ITextSanitizer, TextSanitizer>()
             .AddScoped<IEmojiTextValidator, EmojiTextValidator>()
             .AddScoped<ICategoryTitleValidator, CategoryTitleValidator>();
 
