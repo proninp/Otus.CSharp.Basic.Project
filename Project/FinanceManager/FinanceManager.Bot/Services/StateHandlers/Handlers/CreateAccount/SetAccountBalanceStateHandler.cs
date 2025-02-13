@@ -10,13 +10,18 @@ public sealed class SetAccountBalanceStateHandler : IStateHandler
     private readonly IUpdateMessageProvider _updateMessageProvider;
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
+    private readonly IDecimalNumberProvider _decimalNumberProvider;
 
     public SetAccountBalanceStateHandler(
-        IUpdateMessageProvider updateMessageProvider, IMessageManager messageManager, ISessionStateManager sessionStateManager)
+        IUpdateMessageProvider updateMessageProvider,
+        IMessageManager messageManager,
+        ISessionStateManager sessionStateManager,
+        IDecimalNumberProvider decimalNumberProvider)
     {
         _updateMessageProvider = updateMessageProvider;
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
+        _decimalNumberProvider = decimalNumberProvider;
     }
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
@@ -24,8 +29,8 @@ public sealed class SetAccountBalanceStateHandler : IStateHandler
         if (!_updateMessageProvider.GetMessage(updateContext.Update, out var message))
             return false;
 
-        var amountText = message.Text;
-        if (!decimal.TryParse(amountText, out var amount))
+
+        if (!_decimalNumberProvider.Provide(message.Text, out var value))
         {
             await _messageManager.SendErrorMessage(updateContext,
                 "The entered value is not a number. Please try again.");
@@ -33,7 +38,7 @@ public sealed class SetAccountBalanceStateHandler : IStateHandler
         }
 
         var context = updateContext.Session.GetCreateAccountContext();
-        context.InitialBalance = amount;
+        context.InitialBalance = value;
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

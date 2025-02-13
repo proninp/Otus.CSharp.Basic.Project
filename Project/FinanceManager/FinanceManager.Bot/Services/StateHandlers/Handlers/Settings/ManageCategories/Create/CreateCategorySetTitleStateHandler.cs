@@ -30,15 +30,15 @@ public sealed class CreateCategorySetTitleStateHandler : IStateHandler
         if (!_messageProvider.GetMessage(updateContext.Update, out var message))
             return false;
 
-        var categoryTitle = message.Text;
-
         await _messageManager.DeleteLastMessage(updateContext);
 
-        if (!await _categoryTitleValidator.Validate(updateContext, categoryTitle))
+        var validationResult = await _categoryTitleValidator.Validate(updateContext, message.Text);
+
+        if (!validationResult.isValid)
             return await _sessionStateManager.Previous(updateContext.Session);
 
         var context = updateContext.Session.GetCreateCategoryContext();
-        context.CategoryTitle = categoryTitle;
+        context.CategoryTitle = validationResult.newTitle;
         return await _sessionStateManager.Next(updateContext.Session);
     }
 }

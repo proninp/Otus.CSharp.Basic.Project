@@ -10,15 +10,18 @@ public sealed class TransactionSetAmountStateHandler : IStateHandler
     private readonly IUpdateMessageProvider _messageProvider;
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
+    private readonly IDecimalNumberProvider _decimalNumberProvider;
 
     public TransactionSetAmountStateHandler(
         IUpdateMessageProvider messageProvider,
         IMessageManager messageManager,
-        ISessionStateManager sessionStateManager)
+        ISessionStateManager sessionStateManager,
+        IDecimalNumberProvider decimalNumberProvider)
     {
         _messageProvider = messageProvider;
         _messageManager = messageManager;
         _sessionStateManager = sessionStateManager;
+        _decimalNumberProvider = decimalNumberProvider;
     }
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
@@ -30,14 +33,14 @@ public sealed class TransactionSetAmountStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        if (!decimal.TryParse(amountText, out var amount))
+        if (!_decimalNumberProvider.Provide(message.Text, out var value))
         {
             await _messageManager.SendErrorMessage(updateContext,
                 "The entered value is not a number.");
             return await _sessionStateManager.Previous(updateContext.Session);
         }
 
-        if (amount < 0)
+        if (value < 0)
         {
             await _messageManager.SendErrorMessage(updateContext,
                 "The expense amount must be a non-negative number.");
@@ -45,7 +48,7 @@ public sealed class TransactionSetAmountStateHandler : IStateHandler
         }
 
         var context = updateContext.Session.GetTransactionContext();
-        context.Amount = amount;
+        context.Amount = value;
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

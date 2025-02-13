@@ -1,4 +1,5 @@
-﻿using FinanceManager.Application.Services.Interfaces.Managers;
+﻿using System.Net;
+using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Validators;
@@ -8,35 +9,45 @@ public class CategoryTitleValidator : ICategoryTitleValidator
 {
     private readonly IMessageManager _messageManager;
     private readonly ICategoryManager _categoryManager;
+    private readonly ITextSanitizer _textSanitizer;
 
-    public CategoryTitleValidator(IMessageManager messageManager, ICategoryManager categoryManager)
+    public CategoryTitleValidator(
+        IMessageManager messageManager, ICategoryManager categoryManager, ITextSanitizer textSanitizer)
     {
         _messageManager = messageManager;
+        _textSanitizer = textSanitizer;
         _categoryManager = categoryManager;
     }
 
-    public async Task<bool> Validate(BotUpdateContext context, string? categoryTitle)
+    public async Task<(bool isValid, string newTitle)> Validate(BotUpdateContext context, string? categoryTitle)
     {
-        if (string.IsNullOrEmpty(categoryTitle))
+        if (!_textSanitizer.Sanitize(categoryTitle, out var title))
+        {
+            await _messageManager.SendErrorMessage(context,
+                "This category name is not allowed.");
+            return (false, title);
+        }
+
+        if (string.IsNullOrEmpty(title))
         {
             await _messageManager.SendErrorMessage(context,
                 "You must specify the title of the new category. Please try again.");
-            return false;
+            return (false, title);
         }
 
-        if (!categoryTitle.Any(c => char.IsLetterOrDigit(c)))
+        if (!title.Any(c => char.IsLetterOrDigit(c)))
         {
             await _messageManager.SendErrorMessage(context,
                 "The category title must contain at least one letter or digit.");
-            return false;
+            return (false, title);
         }
 
-        if (await _categoryManager.ExistsByTittle(context.Session.Id, categoryTitle, context.CancellationToken))
+        if (await _categoryManager.ExistsByTittle(context.Session.Id, title, context.CancellationToken))
         {
             await _messageManager.SendErrorMessage(context,
                 "A category with that title already exists.");
-            return false;
+            return (false, title);
         }
-        return true;
+        return (true, title);
     }
 }
