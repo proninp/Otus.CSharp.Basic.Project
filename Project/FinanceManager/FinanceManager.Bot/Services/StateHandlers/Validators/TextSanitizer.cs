@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 using FinanceManager.Bot.Services.Interfaces.Validators;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Validators;
-public class TextSanitizer : ITextSanitizer
+public sealed class TextSanitizer : ITextSanitizer
 {
     private const string DangerousPatternText = @"<script[\s\S]*?>|</script>|<\?|<\s*iframe|<\?xml| echo |win\.ini";
     private readonly Regex _dangerousPattern;

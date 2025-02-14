@@ -1,5 +1,4 @@
-﻿using System.Net;
-using FinanceManager.Application.Services.Interfaces.Managers;
+﻿using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
@@ -40,7 +39,7 @@ public sealed class ChooseAccountNameStateHandler : IStateHandler
             await _messageManager.SendErrorMessage(updateContext, "This account name is not allowed.");
             return false;
         }
-        
+
         if (string.IsNullOrWhiteSpace(accountTitle) || accountTitle.Length == 0)
         {
             await _messageManager.SendErrorMessage(updateContext,
@@ -53,8 +52,6 @@ public sealed class ChooseAccountNameStateHandler : IStateHandler
                 "The account name must start with a number or letter. Enter a different account name.");
             return false;
         }
-
-        accountTitle = WebUtility.HtmlEncode(accountTitle);
 
         var existingAccount = await _accountManager.GetByName(updateContext.Session.Id, accountTitle, false, updateContext.CancellationToken);
         if (existingAccount is not null)

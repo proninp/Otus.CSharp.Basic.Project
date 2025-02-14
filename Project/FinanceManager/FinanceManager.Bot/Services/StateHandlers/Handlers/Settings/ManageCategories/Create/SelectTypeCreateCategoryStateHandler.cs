@@ -8,7 +8,7 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Core.Enums;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
-public class SelectTypeCreateCategoryStateHandler : IStateHandler
+public sealed class SelectTypeCreateCategoryStateHandler : IStateHandler
 {
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly IMessageManager _messageManager;
@@ -30,7 +30,7 @@ public class SelectTypeCreateCategoryStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessage(updateContext);
 
-        if (callbackData is null || string.IsNullOrEmpty(callbackData.Data))
+        if (callbackData is null || string.IsNullOrWhiteSpace(callbackData.Data))
             return await _sessionStateManager.Previous(updateContext.Session);
 
         var transactionTypeText = callbackData.Data;

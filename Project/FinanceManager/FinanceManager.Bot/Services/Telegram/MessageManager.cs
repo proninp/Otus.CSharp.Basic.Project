@@ -35,7 +35,7 @@ public sealed class MessageManager : IMessageManager
         await SendMessage(updateContext, messageText, isSaveMessage);
     }
 
-    public async Task SendApproveMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true)
+    public async Task SendApproveMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false)
     {
         messageText = $"{Enums.Emoji.Success.GetSymbol()} " + messageText;
         await SendMessage(updateContext, messageText, isSaveMessage);

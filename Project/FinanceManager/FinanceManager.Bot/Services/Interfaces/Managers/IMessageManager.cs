@@ -8,7 +8,7 @@ public interface IMessageManager
 
     Task SendErrorMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false);
 
-    Task SendApproveMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true);
+    Task SendApproveMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false);
 
     Task SendInlineKeyboardMessage(BotUpdateContext updateContext, string messageText, IReplyMarkup inlineKeyboard);
 
