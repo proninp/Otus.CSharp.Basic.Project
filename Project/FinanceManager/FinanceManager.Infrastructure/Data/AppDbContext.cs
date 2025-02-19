@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace FinanceManager.Infrastructure.Data;
-public class AppDbContext : DbContext, IUnitOfWork
+public sealed class AppDbContext : DbContext, IUnitOfWork
 {
     private readonly AppSettings _options;
 
