@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System;
+using System.Linq.Expressions;
 using FinanceManager.Core.Enums;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models.Abstractions;
@@ -23,10 +24,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
         TrackingType trackingType = TrackingType.NoTracking,
         CancellationToken cancellationToken = default)
     {
-        var query = GetTrackingConfiguredQuery(trackingType);
-
-        if (include != null)
-            query = include(query);
+        var query = BuildQueryable(include: include);
 
         var entity = query
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

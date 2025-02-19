@@ -14,6 +14,4 @@ public sealed class AppSettings
     public required int InMemoryUserSessionExpirationMinutes { get; set; }
     
     public required int SessionCleanupIntervalMinutes { get; set; }
-
-
 }
