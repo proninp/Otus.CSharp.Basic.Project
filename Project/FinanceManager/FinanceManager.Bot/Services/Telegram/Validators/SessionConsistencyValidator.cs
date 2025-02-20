@@ -5,7 +5,7 @@ using FinanceManager.Bot.Services.Interfaces.Validators;
 
 namespace FinanceManager.Bot.Services.Telegram.Validators;
 
-public class SessionConsistencyValidator : ISessionConsistencyValidator
+public sealed class SessionConsistencyValidator : ISessionConsistencyValidator
 {
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly IMessageManager _messageManager;
@@ -39,7 +39,6 @@ public class SessionConsistencyValidator : ISessionConsistencyValidator
         var message = callbackData is null ?
             "The data for processing the selected command could not be received." :
             "The session associated with this action has ended. Please try again.";
-
 
         if (updateContext.Update.CallbackQuery.Message?.Id != null)
             await _messageManager.DeleteMessage(updateContext, updateContext.Update.CallbackQuery.Message.Id);

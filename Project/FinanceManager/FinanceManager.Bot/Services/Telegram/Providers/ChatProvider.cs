@@ -4,7 +4,7 @@ using Serilog;
 using Telegram.Bot.Types;
 
 namespace FinanceManager.Bot.Services.Telegram.Providers;
-public class ChatProvider : IChatProvider
+public sealed class ChatProvider : IChatProvider
 {
     private readonly ILogger _logger;
 
