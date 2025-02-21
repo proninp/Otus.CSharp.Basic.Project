@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
 using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Models;
@@ -49,8 +50,15 @@ public sealed class SessionManager : ISessionManager
         }
         var callbackSessionId = GenerateCallbackSessionId();
         var session = userDto.ToUserSession(callbackSessionId, _options.InMemoryUserSessionExpirationMinutes);
-        
-        _logger.Information("New session created for user {UserId}", from.Id);
+
+        var logMessage = new StringBuilder($"New session created for user {from.Id}");
+        if (!string.IsNullOrWhiteSpace(from.Username))
+            logMessage.Append($" Username: {from.Username}");
+        if (!string.IsNullOrWhiteSpace(from.FirstName))
+            logMessage.Append($" FirstName: {from.FirstName}");
+        if (!string.IsNullOrWhiteSpace(from.LastName))
+            logMessage.Append($" LastName: {from.LastName}");
+        _logger.Information(logMessage.ToString());
 
         return session;
     }
