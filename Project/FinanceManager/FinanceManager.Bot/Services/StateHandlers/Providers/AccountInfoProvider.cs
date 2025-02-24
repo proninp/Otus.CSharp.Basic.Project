@@ -1,8 +1,8 @@
-﻿using System.Text;
-using FinanceManager.Application.DataTransferObjects.ViewModels;
+﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Services.Interfaces.Providers;
+using System.Text;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Providers;
 public class AccountInfoProvider : IAccountInfoProvider

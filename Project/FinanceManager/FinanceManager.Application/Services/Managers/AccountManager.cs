@@ -47,7 +47,8 @@ public sealed class AccountManager : IAccountManager
             .FirstOrDefault();
     }
 
-    public async Task<AccountDto?> GetByName(Guid userId, string accountTitle, bool isIncludeBalance, CancellationToken cancellationToken)
+    public async Task<AccountDto?> GetByName(
+        Guid userId, string accountTitle, bool isIncludeBalance, CancellationToken cancellationToken)
     {
         var accountDto = (await _repository.GetAsync(
             a => a.ToDto(),
@@ -74,7 +75,8 @@ public sealed class AccountManager : IAccountManager
 
     public async Task<BigDecimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken)
     {
-        return await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id, cancellationToken);
+        var balance = await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id, cancellationToken);
+        return BigDecimal.Round(balance, 2);
     }
 
     public async Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken = default)

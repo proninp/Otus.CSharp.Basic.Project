@@ -15,7 +15,7 @@ public class DecimalNumberProvider : IDecimalNumberProvider
         if (!decimal.TryParse(textValue, NumberStyles.Number, CultureInfo.InvariantCulture, out var decimalValue))
             return false;
 
-        value = decimalValue;
+        value = Math.Round(decimalValue, 2, MidpointRounding.ToEven);
         return true;
     }
 }
