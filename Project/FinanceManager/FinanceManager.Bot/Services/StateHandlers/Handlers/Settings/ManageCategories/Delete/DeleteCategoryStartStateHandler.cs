@@ -4,7 +4,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
-public sealed class DeleteCategoryStartStateHandler : BaseSendCategoriesTypeStateHandler
+public sealed class DeleteCategoryStartStateHandler : BaseSendCategoryTypeStateHandler
 {
     public DeleteCategoryStartStateHandler(
         IMessageManager messageManager,

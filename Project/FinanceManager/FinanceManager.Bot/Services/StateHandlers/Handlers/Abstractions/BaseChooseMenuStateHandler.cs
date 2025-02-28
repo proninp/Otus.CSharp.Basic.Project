@@ -5,13 +5,13 @@ using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
-public abstract class BaseSelectMenuStateHandler : IStateHandler
+public abstract class BaseChooseMenuStateHandler : IStateHandler
 {
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly ISessionStateManager _sessionStateManager;
     private readonly IMessageManager _messageManager;
 
-    protected BaseSelectMenuStateHandler(
+    protected BaseChooseMenuStateHandler(
         ICallbackDataProvider callbackDataProvider,
         ISessionStateManager sessionStateManager,
         IMessageManager messageManager)

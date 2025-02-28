@@ -4,23 +4,17 @@ using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Core.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 
-public abstract class BaseSelectTypeCategoryStateHandler : IStateHandler
+public abstract class BaseChooseCategoryTypeStateHandler : IStateHandler
 {
     private readonly ICallbackDataProvider _callbackDataProvider;
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
 
-    protected BaseSelectTypeCategoryStateHandler(
+    protected BaseChooseCategoryTypeStateHandler(
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager)

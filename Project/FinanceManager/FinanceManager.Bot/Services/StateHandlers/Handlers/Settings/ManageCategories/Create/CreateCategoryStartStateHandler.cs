@@ -4,7 +4,7 @@ using FinanceManager.Bot.Services.Interfaces.StateHandlers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
-public sealed class CreateCategoryStartStateHandler : BaseSendCategoriesTypeStateHandler
+public sealed class CreateCategoryStartStateHandler : BaseSendCategoryTypeStateHandler
 {
     public CreateCategoryStartStateHandler(
         IMessageManager messageManager,

@@ -5,10 +5,11 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 using FinanceManager.Core.Enums;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
-public sealed class SelectTypeCreateCategoryStateHandler : BaseSelectTypeCategoryStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
+
+public class DeleteChooseCategoryTypeStateHandler : BaseChooseCategoryTypeStateHandler
 {
-    public SelectTypeCreateCategoryStateHandler(
+    public DeleteChooseCategoryTypeStateHandler(
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager)
@@ -17,5 +18,5 @@ public sealed class SelectTypeCreateCategoryStateHandler : BaseSelectTypeCategor
     }
 
     protected override void SaveCategoryToContext(UserSession session, CategoryType categoryType) =>
-        session.SetCreateCategoryContext(CreateCategoryContext.CreateContext(categoryType));
+        session.SetDeleteCategoryContext(DeleteCategoryContext.CreateContext(categoryType));
 }

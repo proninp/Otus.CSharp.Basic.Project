@@ -59,7 +59,7 @@ public static class StateHandlersInjection
 
         services
             .AddScoped<CreateCategoryStartStateHandler>()
-            .AddScoped<SelectTypeCreateCategoryStateHandler>()
+            .AddScoped<CreateChooseCategoryTypeStateHandler>()
             .AddScoped<CreateCategoryInputTitleStateHandler>()
             .AddScoped<CreateCategorySetTitleStateHandler>()
             .AddScoped<CreateCategoryInputEmojiStateHandler>()

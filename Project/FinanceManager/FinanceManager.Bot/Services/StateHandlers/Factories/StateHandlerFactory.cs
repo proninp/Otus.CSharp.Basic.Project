@@ -60,7 +60,7 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SelectManageCategoriesMenu => _serviceProvider.GetRequiredService<SelectManageCategoriesMenuStateHandler>(),
         
         WorkflowState.SendNewCategoryType => _serviceProvider.GetRequiredService<CreateCategoryStartStateHandler>(),
-        WorkflowState.SetNewCategoryType => _serviceProvider.GetRequiredService<SelectTypeCreateCategoryStateHandler>(),
+        WorkflowState.SetNewCategoryType => _serviceProvider.GetRequiredService<CreateChooseCategoryTypeStateHandler>(),
         WorkflowState.SendInputNewCategoryName => _serviceProvider.GetRequiredService<CreateCategoryInputTitleStateHandler>(),
         WorkflowState.SetNewCategoryName => _serviceProvider.GetRequiredService<CreateCategorySetTitleStateHandler>(),
         WorkflowState.SendInputNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategoryInputEmojiStateHandler>(),

@@ -4,22 +4,17 @@ using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 
-public abstract class BaseSendCategoriesTypeStateHandler : IStateHandler
+public abstract class BaseSendCategoryTypeStateHandler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
     private readonly IMenuCallbackHandler _menuCallbackProvider;
     private readonly ISessionStateManager _sessionStateManager;
 
-    protected BaseSendCategoriesTypeStateHandler(
+    protected BaseSendCategoryTypeStateHandler(
         IMessageManager messageManager,
         IMenuCallbackHandler menuCallbackProvider,
         ISessionStateManager sessionStateManager)

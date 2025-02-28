@@ -4,7 +4,7 @@ using FinanceManager.Bot.Services.Interfaces.Providers;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories;
-public sealed class SelectManageCategoriesMenuStateHandler : BaseSelectMenuStateHandler
+public sealed class SelectManageCategoriesMenuStateHandler : BaseChooseMenuStateHandler
 {
     public SelectManageCategoriesMenuStateHandler(
         ICallbackDataProvider callbackDataProvider,
