@@ -5,6 +5,7 @@ using FinanceManager.Bot.Enums;
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
 using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Core.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
@@ -29,25 +30,26 @@ public abstract class BaseSendCategoriesStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var transactionType = GetTransactionType(updateContext.Session);
-        var categories = await (transactionType switch
+        var session = updateContext.Session;
+        var categoryType = GetCategoryType(updateContext.Session);
+        var categories = await (categoryType switch
         {
-            TransactionType.Expense => _categoryManager.GetExpenses(updateContext.Session.Id, updateContext.CancellationToken),
-            TransactionType.Income => _categoryManager.GetIncomes(updateContext.Session.Id, updateContext.CancellationToken),
+            CategoryType.Expense => _categoryManager.GetExpenses(session.Id, updateContext.CancellationToken),
+            CategoryType.Income => _categoryManager.GetIncomes(session.Id, updateContext.CancellationToken),
             _ => throw new InvalidOperationException(
-                $"There is no handler for the {transactionType.GetDescription()} transaction type")
+                $"There is no handler for the {categoryType.GetDescription()} transaction type")
         });
 
-        var message = GetMessageText(updateContext.Session);
+        var message = GetMessageText(session);
         var inlineKeyboard = CreateInlineKeyboard(updateContext, categories);
 
         if (!await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
             await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
 
-        return await _sessionStateManager.Next(updateContext.Session);
+        return await _sessionStateManager.Next(session);
     }
 
-    protected abstract TransactionType GetTransactionType(UserSession session);
+    protected abstract CategoryType GetCategoryType(UserSession session);
 
     protected abstract string GetMessageText(UserSession session);
 
