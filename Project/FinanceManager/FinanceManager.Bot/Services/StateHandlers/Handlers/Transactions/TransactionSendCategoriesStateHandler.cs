@@ -10,9 +10,9 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories
 using FinanceManager.Core.Enums;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public sealed class SendTransactionCategoriesStateHandler : BaseSendCategoriesStateHandler
+public sealed class TransactionSendCategoriesStateHandler : BaseSendCategoriesStateHandler
 {
-    public SendTransactionCategoriesStateHandler(
+    public TransactionSendCategoriesStateHandler(
         ICategoryManager categoryManager,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,

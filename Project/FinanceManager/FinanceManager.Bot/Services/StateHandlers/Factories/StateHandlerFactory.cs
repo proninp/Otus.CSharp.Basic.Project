@@ -43,8 +43,8 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.AddExpense => _serviceProvider.GetRequiredService<RegisterExpenseStartStateHandler>(),
         WorkflowState.AddIncome => _serviceProvider.GetRequiredService<RegisterIncomeStartStateHandler>(),
 
-        WorkflowState.SendTransactionCategories => _serviceProvider.GetRequiredService<SendTransactionCategoriesStateHandler>(),
-        WorkflowState.ChooseTransactionCategory => _serviceProvider.GetRequiredService<ChooseTransactionCategoryStateHandler>(),
+        WorkflowState.SendTransactionCategories => _serviceProvider.GetRequiredService<TransactionSendCategoriesStateHandler>(),
+        WorkflowState.ChooseTransactionCategory => _serviceProvider.GetRequiredService<TransactionChooseCategoryStateHandler>(),
         WorkflowState.SendInputTransactionDate => _serviceProvider.GetRequiredService<TransactionInputDateStateHandler>(),
         WorkflowState.SetTransactionDate => _serviceProvider.GetRequiredService<TransactionSetDateStateHandler>(),
         WorkflowState.SendInputTransactionAmount => _serviceProvider.GetRequiredService<TransactionIputAmountStateHandler>(),

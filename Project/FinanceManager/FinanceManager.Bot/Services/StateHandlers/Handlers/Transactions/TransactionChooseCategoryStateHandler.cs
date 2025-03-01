@@ -7,9 +7,9 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public sealed class ChooseTransactionCategoryStateHandler : BaseChooseCategoryStateHandler
+public sealed class TransactionChooseCategoryStateHandler : BaseChooseCategoryStateHandler
 {
-    public ChooseTransactionCategoryStateHandler(
+    public TransactionChooseCategoryStateHandler(
         ICategoryManager categoryManager,
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
