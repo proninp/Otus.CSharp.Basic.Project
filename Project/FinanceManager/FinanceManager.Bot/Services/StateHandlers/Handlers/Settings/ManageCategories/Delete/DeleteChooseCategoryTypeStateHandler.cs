@@ -7,7 +7,7 @@ using FinanceManager.Core.Enums;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
 
-public class DeleteChooseCategoryTypeStateHandler : BaseChooseCategoryTypeStateHandler
+public sealed class DeleteChooseCategoryTypeStateHandler : BaseChooseCategoryTypeStateHandler
 {
     public DeleteChooseCategoryTypeStateHandler(
         ICallbackDataProvider callbackDataProvider,
