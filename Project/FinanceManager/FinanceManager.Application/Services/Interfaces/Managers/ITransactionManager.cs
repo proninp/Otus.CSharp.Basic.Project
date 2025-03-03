@@ -14,7 +14,8 @@ public interface ITransactionManager
 
     Task<bool> Exists(Guid userId, Guid accountId, CancellationToken cancellationToken);
 
-    Task<long> GetCount(Guid userId, Guid accountId, CancellationToken cancellationToken);
+    Task<long> GetCount(
+        Guid userId, Guid accountId = default, Guid categoryId = default, CancellationToken cancellationToken = default);
 
     Task<TransactionDto> Create(CreateTransactionDto command, CancellationToken cancellationToken);
 

@@ -8,6 +8,7 @@ using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FinanceManager.Application.Services.Managers;
 public sealed class TransactionManager : ITransactionManager
@@ -60,9 +61,13 @@ public sealed class TransactionManager : ITransactionManager
         return _repository.Exists(t => t.UserId == userId && t.AccountId == accountId, cancellationToken);
     }
 
-    public Task<long> GetCount(Guid userId, Guid accountId, CancellationToken cancellationToken)
+    public Task<long> GetCount(
+        Guid userId, Guid accountId = default, Guid categoryId = default, CancellationToken cancellationToken = default)
     {
-        return _repository.Count(t => t.UserId == userId && t.AccountId == accountId, cancellationToken);
+        Expression<Func<Transaction, bool>> predicate = t => t.UserId == userId && 
+            (accountId == default || t.AccountId == accountId) &&
+            (categoryId == default || t.CategoryId == categoryId);
+        return _repository.Count(predicate, cancellationToken);
     }
 
     public async Task<TransactionDto> Create(CreateTransactionDto command, CancellationToken cancellationToken)
