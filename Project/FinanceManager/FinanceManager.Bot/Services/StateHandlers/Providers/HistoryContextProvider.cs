@@ -41,7 +41,7 @@ public class HistoryContextProvider : IHistoryContextProvider
         }
 
         var transactionsCount = await _transactionManager.GetCount(
-            updateContext.Session.Id, account.Id, updateContext.CancellationToken);
+            updateContext.Session.Id, account.Id, cancellationToken: updateContext.CancellationToken);
         if (transactionsCount == 0)
         {
             await _messageManager.DeleteLastMessage(updateContext);
