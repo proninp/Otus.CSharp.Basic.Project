@@ -14,6 +14,16 @@ public sealed class DeleteCategorySendConfirm : IStateHandler
     private readonly ISessionStateManager _sessionStateManager;
     private readonly ITransactionManager _transactionManager;
 
+    public DeleteCategorySendConfirm(
+        IMessageManager messageManager,
+        ISessionStateManager sessionStateManager,
+        ITransactionManager transactionManager)
+    {
+        _messageManager = messageManager;
+        _sessionStateManager = sessionStateManager;
+        _transactionManager = transactionManager;
+    }
+
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var session = updateContext.Session;
@@ -34,11 +44,11 @@ public sealed class DeleteCategorySendConfirm : IStateHandler
 
         var transactionsCount = await _transactionManager.GetCount(
             session.Id, default, context.Category.Id, updateContext.CancellationToken);
-
         if (transactionsCount > 0)
         {
-            message.AppendLine();
-            message.Append($"Transactions were registered for this category: {transactionsCount}.");
+            message
+                .AppendLine()
+                .Append($"Transactions were registered for this category: {transactionsCount}.");
         }
 
         var inlineKeyboard = CreateInlineKeyboard(updateContext);

@@ -11,6 +11,8 @@ public sealed class DeleteCategoryContext
 
     public CategoryDto? Category { get; set; }
 
+    public bool IsConfirm { get; set; }
+
     public static DeleteCategoryContext CreateContext(CategoryType type) =>
         new DeleteCategoryContext { CategoryType = type };
 }
