@@ -36,7 +36,7 @@ public sealed class ChooseAccountNameStateHandler : IStateHandler
 
         if (!_textSanitizer.Sanitize(message.Text, out var accountTitle))
         {
-            await _messageManager.SendErrorMessage(updateContext, "This account name is not allowed.");
+            await _messageManager.SendErrorMessage(updateContext, "This account name is not allowed. Please Try again.");
             return false;
         }
 
