@@ -8,13 +8,13 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
 
-public sealed class DeleteCategorySendConfirm : IStateHandler
+public sealed class DeleteCategorySendConfirmStateHadler : IStateHandler
 {
     private readonly IMessageManager _messageManager;
     private readonly ISessionStateManager _sessionStateManager;
     private readonly ITransactionManager _transactionManager;
 
-    public DeleteCategorySendConfirm(
+    public DeleteCategorySendConfirmStateHadler(
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,
         ITransactionManager transactionManager)

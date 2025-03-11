@@ -6,13 +6,13 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete
 {
-    public sealed class DeleteCategoryChooseConfirm : IStateHandler
+    public sealed class DeleteCategoryChooseConfirmStateHandler : IStateHandler
     {
         private readonly ICallbackDataProvider _callbackDataProvider;
         private readonly IMessageManager _messageManager;
         private readonly ISessionStateManager _sessionStateManager;
 
-        public DeleteCategoryChooseConfirm(
+        public DeleteCategoryChooseConfirmStateHandler(
             ICallbackDataProvider callbackDataProvider,
             IMessageManager messageManager,
             ISessionStateManager sessionStateManager)

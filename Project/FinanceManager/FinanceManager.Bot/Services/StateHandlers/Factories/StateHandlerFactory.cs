@@ -49,7 +49,7 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SetTransactionDate => _serviceProvider.GetRequiredService<TransactionSetDateStateHandler>(),
         WorkflowState.SendInputTransactionAmount => _serviceProvider.GetRequiredService<TransactionIputAmountStateHandler>(),
         WorkflowState.SetTransactionAmount => _serviceProvider.GetRequiredService<TransactionSetAmountStateHandler>(),
-        WorkflowState.RegisterTransaction => _serviceProvider.GetRequiredService<TransactionRegistrationStateHandler>(),
+        WorkflowState.RegisterTransaction => _serviceProvider.GetRequiredService<TransactionComplitionStateHandler>(),
 
         WorkflowState.CreateSettingsMenu => _serviceProvider.GetRequiredService<CreateSettingsMenuStateHandler>(),
         WorkflowState.SelectSettingsMenu => _serviceProvider.GetRequiredService<SelectSettingsMenuStateHandler>(),

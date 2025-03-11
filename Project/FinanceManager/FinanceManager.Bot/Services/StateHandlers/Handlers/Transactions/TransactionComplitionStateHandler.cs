@@ -6,12 +6,12 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Transactions;
-public sealed class TransactionRegistrationStateHandler : CompleteStateHandler
+public sealed class TransactionComplitionStateHandler : CompleteStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
 
-    public TransactionRegistrationStateHandler(
+    public TransactionComplitionStateHandler(
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,
         IAccountManager accountManager,

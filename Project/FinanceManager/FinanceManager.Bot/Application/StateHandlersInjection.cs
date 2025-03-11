@@ -49,7 +49,7 @@ public static class StateHandlersInjection
             .AddScoped<TransactionSetDateStateHandler>()
             .AddScoped<TransactionIputAmountStateHandler>()
             .AddScoped<TransactionSetAmountStateHandler>()
-            .AddScoped<TransactionRegistrationStateHandler>();
+            .AddScoped<TransactionComplitionStateHandler>();
 
         services
             .AddScoped<CreateManageCategoriesMenuStateHandler>()
