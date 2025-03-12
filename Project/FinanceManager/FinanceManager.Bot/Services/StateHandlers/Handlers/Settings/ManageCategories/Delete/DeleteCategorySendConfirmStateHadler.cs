@@ -33,7 +33,8 @@ public sealed class DeleteCategorySendConfirmStateHadler : IStateHandler
         {
             await _messageManager.DeleteLastMessage(updateContext);
             await _messageManager.SendErrorMessage(
-                updateContext, "An error occurred while performing the category deletion operation, please start from the beginning");
+                updateContext,
+                "An error occurred while performing the category deletion operation, please start from the beginning");
             return await _sessionStateManager.ToManageCategoriesMenu(session);
         }
 

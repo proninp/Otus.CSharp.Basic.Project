@@ -23,8 +23,8 @@ public partial class SessionStateRegistry : ISessionStateRegistry
 
         AddCreateCategoryWorkflowPrevious();
         AddCreateCategoryWorkflowNext();
-        AddRemoveCategoryWorkflowPrevious();
-        AddRemoveCategoryWorkflowNext();
+        AddDeleteCategoryWorkflowPrevious();
+        AddDeleteCategoryWorkflowNext();
         AddRenameCategoryWorkflowPrevious();
         AddRenameCategoryWorkflowNext();
 

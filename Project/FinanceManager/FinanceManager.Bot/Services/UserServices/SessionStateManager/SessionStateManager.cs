@@ -68,6 +68,7 @@ public sealed class SessionStateManager : ISessionStateManager
     {
         WorkflowState.RegisterTransaction => await ToMainMenu(session),
         WorkflowState.RegisterNewCategory => await Continue(session, WorkflowState.CreateManageCategoriesMenu),
+        WorkflowState.RegisterDeleteCategory => await Continue(session, WorkflowState.CreateManageCategoriesMenu),
         _ => await Reset(session)
     };
 

@@ -67,7 +67,7 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SetNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategorySetEmojiStateHandler>(),
         WorkflowState.RegisterNewCategory => _serviceProvider.GetRequiredService<CreateCategoryRegistrationStateHandler>(),
         
-        WorkflowState.SendChooseDeletingCategoryType => _serviceProvider.GetRequiredService<DeleteCategoryStartStateHandler>(),
+        WorkflowState.SendChooseDeleteCategoryType => _serviceProvider.GetRequiredService<DeleteCategoryStartStateHandler>(),
         WorkflowState.SendChooseRenamingCategory => _serviceProvider.GetRequiredService<RenameCategoryStartStateHandler>(),
 
         _ => throw new StateHandlerNotFoundException(state)

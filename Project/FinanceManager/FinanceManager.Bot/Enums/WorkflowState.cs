@@ -39,11 +39,11 @@ public enum WorkflowState
     SetNewCategoryEmoji,
     RegisterNewCategory,
 
-    SendChooseDeletingCategoryType,
-    SetDeletingCategoryType,
+    SendChooseDeleteCategoryType,
+    SetDeleteCategoryType,
     SendChooseCategoryToDelete,
     ChooseCategoryToDelete,
-    SendDeletingCategoryConfirmation,
+    SendDeleteCategoryConfirmation,
     HandleDeletingCategoryConfirmation,
     RegisterDeleteCategory,
 

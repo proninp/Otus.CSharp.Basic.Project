@@ -17,7 +17,7 @@ public sealed class SelectManageCategoriesMenuStateHandler : BaseChooseMenuState
     public override Dictionary<string, WorkflowState> MenuStateMapping => new Dictionary<string, WorkflowState>
     {
         { ManageCategoriesMenu.Add.GetKey(), WorkflowState.SendNewCategoryType },
-        { ManageCategoriesMenu.Delete.GetKey(), WorkflowState.SendChooseDeletingCategoryType },
+        { ManageCategoriesMenu.Delete.GetKey(), WorkflowState.SendChooseDeleteCategoryType },
         { ManageCategoriesMenu.Rename.GetKey(), WorkflowState.SendChooseRenamingCategory },
     };
 }

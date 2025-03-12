@@ -21,20 +21,20 @@ public sealed partial class SessionStateRegistry
         _nextStatesMap.TryAdd(WorkflowState.RegisterNewCategory, (WorkflowState.CreateManageCategoriesMenu, true));
     }
 
-    private void AddRemoveCategoryWorkflowPrevious()
+    private void AddDeleteCategoryWorkflowPrevious()
     {
-        _previousStatesMap.TryAdd(WorkflowState.SetDeletingCategoryType, WorkflowState.SendChooseDeletingCategoryType);
+        _previousStatesMap.TryAdd(WorkflowState.SetDeleteCategoryType, WorkflowState.SendChooseDeleteCategoryType);
         _previousStatesMap.TryAdd(WorkflowState.ChooseCategoryToDelete, WorkflowState.SendChooseCategoryToDelete);
-        _previousStatesMap.TryAdd(WorkflowState.HandleDeletingCategoryConfirmation, WorkflowState.SendDeletingCategoryConfirmation);
+        _previousStatesMap.TryAdd(WorkflowState.HandleDeletingCategoryConfirmation, WorkflowState.SendDeleteCategoryConfirmation);
     }
 
-    private void AddRemoveCategoryWorkflowNext()
+    private void AddDeleteCategoryWorkflowNext()
     {
-        _nextStatesMap.TryAdd(WorkflowState.SendChooseDeletingCategoryType, (WorkflowState.SetDeletingCategoryType, false));
-        _nextStatesMap.TryAdd(WorkflowState.SetDeletingCategoryType, (WorkflowState.SendChooseCategoryToDelete, true));
+        _nextStatesMap.TryAdd(WorkflowState.SendChooseDeleteCategoryType, (WorkflowState.SetDeleteCategoryType, false));
+        _nextStatesMap.TryAdd(WorkflowState.SetDeleteCategoryType, (WorkflowState.SendChooseCategoryToDelete, true));
         _nextStatesMap.TryAdd(WorkflowState.SendChooseCategoryToDelete, (WorkflowState.ChooseCategoryToDelete, false));
-        _nextStatesMap.TryAdd(WorkflowState.ChooseCategoryToDelete, (WorkflowState.SendDeletingCategoryConfirmation, true));
-        _nextStatesMap.TryAdd(WorkflowState.SendDeletingCategoryConfirmation, (WorkflowState.HandleDeletingCategoryConfirmation, false));
+        _nextStatesMap.TryAdd(WorkflowState.ChooseCategoryToDelete, (WorkflowState.SendDeleteCategoryConfirmation, true));
+        _nextStatesMap.TryAdd(WorkflowState.SendDeleteCategoryConfirmation, (WorkflowState.HandleDeletingCategoryConfirmation, false));
         _nextStatesMap.TryAdd(WorkflowState.HandleDeletingCategoryConfirmation, (WorkflowState.RegisterDeleteCategory, true));
         _nextStatesMap.TryAdd(WorkflowState.RegisterDeleteCategory, (WorkflowState.CreateManageCategoriesMenu, true));
     }
