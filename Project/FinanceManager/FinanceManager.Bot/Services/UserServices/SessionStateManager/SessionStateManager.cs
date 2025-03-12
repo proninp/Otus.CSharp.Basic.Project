@@ -18,7 +18,6 @@ public sealed class SessionStateManager : ISessionStateManager
 
     public async Task<bool> Previous(UserSession session)
     {
-        
         if (_sessionStateRegistry.PreviousStatesMap.TryGetValue(session.State, out var toState))
         {
             await SetState(session, toState);
@@ -66,9 +65,9 @@ public sealed class SessionStateManager : ISessionStateManager
 
     public async Task<bool> Complete(UserSession session) => session.State switch
     {
-        WorkflowState.RegisterTransaction => await ToMainMenu(session),
-        WorkflowState.RegisterNewCategory => await Continue(session, WorkflowState.CreateManageCategoriesMenu),
-        WorkflowState.RegisterDeleteCategory => await Continue(session, WorkflowState.CreateManageCategoriesMenu),
+        WorkflowState.AddTransactionComplete => await ToMainMenu(session),
+        WorkflowState.NewCategoryComplete => await Continue(session, WorkflowState.CreateManageCategoriesMenu),
+        WorkflowState.DeleteCategoryComplete => await Continue(session, WorkflowState.CreateManageCategoriesMenu),
         _ => await Reset(session)
     };
 

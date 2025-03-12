@@ -17,8 +17,8 @@ public sealed partial class SessionStateRegistry
         _nextStatesMap.TryAdd(WorkflowState.SendInputNewCategoryName, (WorkflowState.SetNewCategoryName, false));
         _nextStatesMap.TryAdd(WorkflowState.SetNewCategoryName, (WorkflowState.SendInputNewCategoryEmoji, true));
         _nextStatesMap.TryAdd(WorkflowState.SendInputNewCategoryEmoji, (WorkflowState.SetNewCategoryEmoji, false));
-        _nextStatesMap.TryAdd(WorkflowState.SetNewCategoryEmoji, (WorkflowState.RegisterNewCategory, true));
-        _nextStatesMap.TryAdd(WorkflowState.RegisterNewCategory, (WorkflowState.CreateManageCategoriesMenu, true));
+        _nextStatesMap.TryAdd(WorkflowState.SetNewCategoryEmoji, (WorkflowState.NewCategoryComplete, true));
+        _nextStatesMap.TryAdd(WorkflowState.NewCategoryComplete, (WorkflowState.CreateManageCategoriesMenu, true));
     }
 
     private void AddDeleteCategoryWorkflowPrevious()
@@ -35,8 +35,8 @@ public sealed partial class SessionStateRegistry
         _nextStatesMap.TryAdd(WorkflowState.SendChooseCategoryToDelete, (WorkflowState.ChooseCategoryToDelete, false));
         _nextStatesMap.TryAdd(WorkflowState.ChooseCategoryToDelete, (WorkflowState.SendDeleteCategoryConfirmation, true));
         _nextStatesMap.TryAdd(WorkflowState.SendDeleteCategoryConfirmation, (WorkflowState.HandleDeletingCategoryConfirmation, false));
-        _nextStatesMap.TryAdd(WorkflowState.HandleDeletingCategoryConfirmation, (WorkflowState.RegisterDeleteCategory, true));
-        _nextStatesMap.TryAdd(WorkflowState.RegisterDeleteCategory, (WorkflowState.CreateManageCategoriesMenu, true));
+        _nextStatesMap.TryAdd(WorkflowState.HandleDeletingCategoryConfirmation, (WorkflowState.DeleteCategoryComplete, true));
+        _nextStatesMap.TryAdd(WorkflowState.DeleteCategoryComplete, (WorkflowState.CreateManageCategoriesMenu, true));
     }
 
     private void AddRenameCategoryWorkflowPrevious()

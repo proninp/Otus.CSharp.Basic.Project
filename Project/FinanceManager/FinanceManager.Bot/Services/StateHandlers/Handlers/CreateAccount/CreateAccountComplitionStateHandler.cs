@@ -8,13 +8,13 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.CreateAccount;
-public sealed class CreateAccountEndStateHandler : CompleteStateHandler
+public sealed class CreateAccountComplitionStateHandler : CompleteStateHandler
 {
     private readonly IAccountManager _accountManager;
     private readonly ITransactionManager _transactionManager;
     private readonly ICategoriesInitializer _categoriesInitializer;
 
-    public CreateAccountEndStateHandler(
+    public CreateAccountComplitionStateHandler(
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,
         IAccountManager accountManager,

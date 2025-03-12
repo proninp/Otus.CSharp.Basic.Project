@@ -8,9 +8,9 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
 
-public sealed class DeleteChooseCategoryStateHandler : BaseChooseCategoryStateHandler
+public sealed class DeleteCategoryChooseStateHandler : BaseChooseCategoryStateHandler
 {
-    public DeleteChooseCategoryStateHandler(
+    public DeleteCategoryChooseStateHandler(
         ICategoryManager categoryManager,
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,

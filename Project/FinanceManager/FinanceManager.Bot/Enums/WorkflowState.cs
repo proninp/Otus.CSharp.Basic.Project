@@ -10,7 +10,7 @@ public enum WorkflowState
     ChooseCurrency,
     SendInputAccountInitialBalance,
     SetAccountInitialBalance,
-    CreateAccountEnd,
+    CreateAccountComplete,
 
     AddExpense,
     AddIncome,
@@ -21,7 +21,7 @@ public enum WorkflowState
     SetTransactionAmount,
     SendTransactionCategories,
     ChooseTransactionCategory,
-    RegisterTransaction,
+    AddTransactionComplete,
 
     CreateSettingsMenu,
     SelectSettingsMenu,
@@ -37,7 +37,7 @@ public enum WorkflowState
     SetNewCategoryName,
     SendInputNewCategoryEmoji,
     SetNewCategoryEmoji,
-    RegisterNewCategory,
+    NewCategoryComplete,
 
     SendChooseDeleteCategoryType,
     SetDeleteCategoryType,
@@ -45,7 +45,7 @@ public enum WorkflowState
     ChooseCategoryToDelete,
     SendDeleteCategoryConfirmation,
     HandleDeletingCategoryConfirmation,
-    RegisterDeleteCategory,
+    DeleteCategoryComplete,
 
     SendChooseRenamingCategoryType,
     SetRenamingCategoryType,

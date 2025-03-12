@@ -40,7 +40,7 @@ public static class StateHandlersInjection
             .AddScoped<ChooseCurrencyStateHandler>()
             .AddScoped<SendInputAccountBalanceStateHandler>()
             .AddScoped<SetAccountBalanceStateHandler>()
-            .AddScoped<CreateAccountEndStateHandler>();
+            .AddScoped<CreateAccountComplitionStateHandler>();
 
         services
             .AddScoped<TransactionSendCategoriesStateHandler>()
@@ -59,12 +59,21 @@ public static class StateHandlersInjection
 
         services
             .AddScoped<CreateCategoryStartStateHandler>()
-            .AddScoped<CreateChooseCategoryTypeStateHandler>()
+            .AddScoped<CreateCategoryChooseTypeStateHandler>()
             .AddScoped<CreateCategoryInputTitleStateHandler>()
             .AddScoped<CreateCategorySetTitleStateHandler>()
             .AddScoped<CreateCategoryInputEmojiStateHandler>()
             .AddScoped<CreateCategorySetEmojiStateHandler>()
-            .AddScoped<CreateCategoryRegistrationStateHandler>();
+            .AddScoped<CreateCategoryComplitionStateHandler>();
+
+        services
+            .AddScoped<DeleteCategoryStartStateHandler>()
+            .AddScoped<DeleteCategoryChooseTypeStateHandler>()
+            .AddScoped<DeleteCategorySendCategoriesStateHandler>()
+            .AddScoped<DeleteCategoryChooseStateHandler>()
+            .AddScoped<DeleteCategorySendConfirmStateHadler>()
+            .AddScoped<DeleteCategoryChooseConfirmStateHandler>()
+            .AddScoped<DeleteCategoryComplitionStateHandler>();
 
         services
             .AddScoped<DeleteCategoryStartStateHandler>()

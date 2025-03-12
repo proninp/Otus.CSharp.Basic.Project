@@ -17,7 +17,7 @@ public sealed partial class SessionStateRegistry
         _nextStatesMap.TryAdd(WorkflowState.SendCurrencies, (WorkflowState.ChooseCurrency, false));
         _nextStatesMap.TryAdd(WorkflowState.ChooseCurrency, (WorkflowState.SendInputAccountInitialBalance, true));
         _nextStatesMap.TryAdd(WorkflowState.SendInputAccountInitialBalance, (WorkflowState.SetAccountInitialBalance, false));
-        _nextStatesMap.TryAdd(WorkflowState.SetAccountInitialBalance, (WorkflowState.CreateAccountEnd, true));
-        _nextStatesMap.TryAdd(WorkflowState.CreateAccountEnd, (WorkflowState.CreateMenu, true));
+        _nextStatesMap.TryAdd(WorkflowState.SetAccountInitialBalance, (WorkflowState.CreateAccountComplete, true));
+        _nextStatesMap.TryAdd(WorkflowState.CreateAccountComplete, (WorkflowState.CreateMenu, true));
     }
 }

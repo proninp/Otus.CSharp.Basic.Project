@@ -6,9 +6,9 @@ using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories
 using FinanceManager.Core.Enums;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
-public sealed class CreateChooseCategoryTypeStateHandler : BaseChooseCategoryTypeStateHandler
+public sealed class CreateCategoryChooseTypeStateHandler : BaseChooseCategoryTypeStateHandler
 {
-    public CreateChooseCategoryTypeStateHandler(
+    public CreateCategoryChooseTypeStateHandler(
         ICallbackDataProvider callbackDataProvider,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager)

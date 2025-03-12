@@ -6,10 +6,10 @@ using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
-public sealed class CreateCategoryRegistrationStateHandler : CompleteStateHandler
+public sealed class CreateCategoryComplitionStateHandler : CompleteStateHandler
 {
     private readonly ICategoryManager _categoryManager;
-    public CreateCategoryRegistrationStateHandler(
+    public CreateCategoryComplitionStateHandler(
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,
         ICategoryManager categoryManager)

@@ -20,7 +20,7 @@ public sealed partial class SessionStateRegistry
         _nextStatesMap.TryAdd(WorkflowState.SendInputTransactionDate, (WorkflowState.SetTransactionDate, false));
         _nextStatesMap.TryAdd(WorkflowState.SetTransactionDate, (WorkflowState.SendInputTransactionAmount, true));
         _nextStatesMap.TryAdd(WorkflowState.SendInputTransactionAmount, (WorkflowState.SetTransactionAmount, false));
-        _nextStatesMap.TryAdd(WorkflowState.SetTransactionAmount, (WorkflowState.RegisterTransaction, true));
-        _nextStatesMap.TryAdd(WorkflowState.RegisterTransaction, (WorkflowState.CreateMenu, true));
+        _nextStatesMap.TryAdd(WorkflowState.SetTransactionAmount, (WorkflowState.AddTransactionComplete, true));
+        _nextStatesMap.TryAdd(WorkflowState.AddTransactionComplete, (WorkflowState.CreateMenu, true));
     }
 }

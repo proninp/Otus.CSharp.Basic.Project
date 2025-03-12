@@ -9,9 +9,9 @@ using FinanceManager.Core.Enums;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Delete;
 
-public sealed class DeleteSendCategoriesStateHandler : BaseSendCategoriesStateHandler
+public sealed class DeleteCategorySendCategoriesStateHandler : BaseSendCategoriesStateHandler
 {
-    public DeleteSendCategoriesStateHandler(
+    public DeleteCategorySendCategoriesStateHandler(
         ICategoryManager categoryManager,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,

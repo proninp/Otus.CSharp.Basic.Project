@@ -38,7 +38,7 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.ChooseCurrency => _serviceProvider.GetRequiredService<ChooseCurrencyStateHandler>(),
         WorkflowState.SendInputAccountInitialBalance => _serviceProvider.GetRequiredService<SendInputAccountBalanceStateHandler>(),
         WorkflowState.SetAccountInitialBalance => _serviceProvider.GetRequiredService<SetAccountBalanceStateHandler>(),
-        WorkflowState.CreateAccountEnd => _serviceProvider.GetRequiredService<CreateAccountEndStateHandler>(),
+        WorkflowState.CreateAccountComplete => _serviceProvider.GetRequiredService<CreateAccountComplitionStateHandler>(),
 
         WorkflowState.AddExpense => _serviceProvider.GetRequiredService<RegisterExpenseStartStateHandler>(),
         WorkflowState.AddIncome => _serviceProvider.GetRequiredService<RegisterIncomeStartStateHandler>(),
@@ -49,7 +49,7 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SetTransactionDate => _serviceProvider.GetRequiredService<TransactionSetDateStateHandler>(),
         WorkflowState.SendInputTransactionAmount => _serviceProvider.GetRequiredService<TransactionIputAmountStateHandler>(),
         WorkflowState.SetTransactionAmount => _serviceProvider.GetRequiredService<TransactionSetAmountStateHandler>(),
-        WorkflowState.RegisterTransaction => _serviceProvider.GetRequiredService<TransactionComplitionStateHandler>(),
+        WorkflowState.AddTransactionComplete => _serviceProvider.GetRequiredService<TransactionComplitionStateHandler>(),
 
         WorkflowState.CreateSettingsMenu => _serviceProvider.GetRequiredService<CreateSettingsMenuStateHandler>(),
         WorkflowState.SelectSettingsMenu => _serviceProvider.GetRequiredService<SelectSettingsMenuStateHandler>(),
@@ -60,14 +60,21 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.SelectManageCategoriesMenu => _serviceProvider.GetRequiredService<SelectManageCategoriesMenuStateHandler>(),
         
         WorkflowState.SendNewCategoryType => _serviceProvider.GetRequiredService<CreateCategoryStartStateHandler>(),
-        WorkflowState.SetNewCategoryType => _serviceProvider.GetRequiredService<CreateChooseCategoryTypeStateHandler>(),
+        WorkflowState.SetNewCategoryType => _serviceProvider.GetRequiredService<CreateCategoryChooseTypeStateHandler>(),
         WorkflowState.SendInputNewCategoryName => _serviceProvider.GetRequiredService<CreateCategoryInputTitleStateHandler>(),
         WorkflowState.SetNewCategoryName => _serviceProvider.GetRequiredService<CreateCategorySetTitleStateHandler>(),
         WorkflowState.SendInputNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategoryInputEmojiStateHandler>(),
         WorkflowState.SetNewCategoryEmoji => _serviceProvider.GetRequiredService<CreateCategorySetEmojiStateHandler>(),
-        WorkflowState.RegisterNewCategory => _serviceProvider.GetRequiredService<CreateCategoryRegistrationStateHandler>(),
-        
+        WorkflowState.NewCategoryComplete => _serviceProvider.GetRequiredService<CreateCategoryComplitionStateHandler>(),
+
         WorkflowState.SendChooseDeleteCategoryType => _serviceProvider.GetRequiredService<DeleteCategoryStartStateHandler>(),
+        WorkflowState.SetDeleteCategoryType => _serviceProvider.GetRequiredService<DeleteCategoryChooseTypeStateHandler>(),
+        WorkflowState.SendChooseCategoryToDelete => _serviceProvider.GetRequiredService<DeleteCategorySendCategoriesStateHandler>(),
+        WorkflowState.ChooseCategoryToDelete => _serviceProvider.GetRequiredService<DeleteCategoryChooseStateHandler>(),
+        WorkflowState.SendDeleteCategoryConfirmation => _serviceProvider.GetRequiredService<DeleteCategorySendConfirmStateHadler>(),
+        WorkflowState.HandleDeletingCategoryConfirmation => _serviceProvider.GetRequiredService<DeleteCategoryChooseConfirmStateHandler>(),
+        WorkflowState.DeleteCategoryComplete => _serviceProvider.GetRequiredService<DeleteCategoryComplitionStateHandler>(),
+
         WorkflowState.SendChooseRenamingCategory => _serviceProvider.GetRequiredService<RenameCategoryStartStateHandler>(),
 
         _ => throw new StateHandlerNotFoundException(state)
