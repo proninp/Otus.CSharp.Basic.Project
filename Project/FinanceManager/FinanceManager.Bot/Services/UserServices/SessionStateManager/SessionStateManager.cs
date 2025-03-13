@@ -2,18 +2,25 @@
 using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces;
 using FinanceManager.Bot.Services.Interfaces.Managers;
+using FinanceManager.Core.Options;
 using FinanceManager.Redis.Services.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace FinanceManager.Bot.Services.UserServices.SessianStateManager;
 public sealed class SessionStateManager : ISessionStateManager
 {
     private readonly ISessionStateRegistry _sessionStateRegistry;
     private readonly IRedisCacheService _redisCacheService;
+    private readonly AppSettings _options;
 
-    public SessionStateManager(ISessionStateRegistry sessionStateRegistry, IRedisCacheService redisCacheService)
+    public SessionStateManager(
+        ISessionStateRegistry sessionStateRegistry,
+        IRedisCacheService redisCacheService,
+        IOptionsSnapshot<AppSettings> options)
     {
         _sessionStateRegistry = sessionStateRegistry;
         _redisCacheService = redisCacheService;
+        _options = options.Value;
     }
 
     public async Task<bool> Previous(UserSession session)
@@ -82,6 +89,7 @@ public sealed class SessionStateManager : ISessionStateManager
     {
         session.State = newState;
         session.LastActivity = DateTime.UtcNow;
-        await _redisCacheService.SaveDataAsync(session.TelegramId.ToString(), session);
+        await _redisCacheService.SaveDataAsync(
+            session.TelegramId.ToString(), session, TimeSpan.FromMinutes(_options.RedisUserSessionExpirationMinutes));
     }
 }

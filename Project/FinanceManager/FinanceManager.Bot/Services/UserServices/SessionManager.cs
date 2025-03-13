@@ -64,10 +64,9 @@ public sealed class SessionManager : ISessionManager
     }
 
     public async Task<int> CleanupExpiredSessions(CancellationToken cancellationToken)
-    {
-        var ttl = TimeSpan.FromMinutes(_options.RedisUserSessionExpirationMinutes);
-        
+    {      
         var expiredSessions = _userSessionRegistry.ExpiredSessions;
+        var ttl = TimeSpan.FromMinutes(_options.RedisUserSessionExpirationMinutes);
         foreach (var session in expiredSessions)
         {
             await _redisCacheService.SaveDataAsync(session.TelegramId.ToString(), session, ttl);
