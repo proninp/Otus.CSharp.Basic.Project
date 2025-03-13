@@ -13,19 +13,20 @@ namespace FinanceManager.Application.Services.Managers;
 public sealed class AccountManager : IAccountManager
 {
     private readonly IRepository<Account> _repository;
+    private readonly IRepository<Transaction> _transactionRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly ITransactionManager _transactionManager;
     private readonly ICurrencyManager _currencyManager;
 
     public AccountManager(
         IRepository<Account> repository,
+        IRepository<Transaction> transactionRepository,
         IUnitOfWork unitOfWork,
-        ITransactionManager transactionManager,
-        ICurrencyManager currencyManager)
+        ICurrencyManager currencyManager
+        )
     {
         _repository = repository;
+        _transactionRepository = transactionRepository;
         _unitOfWork = unitOfWork;
-        _transactionManager = transactionManager;
         _currencyManager = currencyManager;
     }
 
@@ -76,8 +77,18 @@ public sealed class AccountManager : IAccountManager
 
     public async Task<BigDecimal> GetBalanceAsync(AccountDto viewModel, CancellationToken cancellationToken)
     {
-        var balance = await _transactionManager.GetAccountBalanceAsync(viewModel.UserId, viewModel.Id, cancellationToken);
+        var balance = (await _transactionRepository.GetAsync(
+            t => t.ToDto(),
+            t => t.UserId == viewModel.UserId && t.AccountId == viewModel.Id,
+            cancellationToken: cancellationToken))
+            .Aggregate(BigDecimal.Zero, (totalAmount, t) => totalAmount + t.Amount);
         return BigDecimal.Round(balance, 2);
+    }
+
+    public async Task<bool> ExistsAsync(Guid accountId, CancellationToken cancellationToken)
+    {
+        var account = await _repository.GetByIdAsync(accountId, cancellationToken: cancellationToken);
+        return account is not null;
     }
 
     public async Task<AccountDto> CreateAsync(CreateAccountDto command, CancellationToken cancellationToken = default)

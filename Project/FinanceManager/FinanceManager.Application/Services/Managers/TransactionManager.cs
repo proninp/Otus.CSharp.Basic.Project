@@ -1,29 +1,29 @@
-﻿using ExtendedNumerics;
+﻿using System.Linq.Expressions;
+using ExtendedNumerics;
+using FinanceManager.Application.DataTransferObjects.Abstractions;
 using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
-using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
 using FinanceManager.Core.Enums;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace FinanceManager.Application.Services.Managers;
 public sealed class TransactionManager : ITransactionManager
 {
-    private readonly ITransactionValidator _transactionValidator;
+    private readonly IAccountManager _accountManager;
     private readonly IRepository<Transaction> _repository;
     private readonly IUnitOfWork _unitOfWork;
 
     public TransactionManager(
-        ITransactionValidator transactionValidator,
+        IAccountManager accountManager,
         IRepository<Transaction> repository,
         IUnitOfWork unitOfWork)
     {
-        _transactionValidator = transactionValidator;
+        _accountManager = accountManager;
         _repository = repository;
         _unitOfWork = unitOfWork;
     }
@@ -65,7 +65,7 @@ public sealed class TransactionManager : ITransactionManager
     public Task<long> GetCountAsync(
         Guid userId, Guid accountId = default, Guid categoryId = default, CancellationToken cancellationToken = default)
     {
-        Expression<Func<Transaction, bool>> predicate = t => t.UserId == userId && 
+        Expression<Func<Transaction, bool>> predicate = t => t.UserId == userId &&
             (accountId == default || t.AccountId == accountId) &&
             (categoryId == default || t.CategoryId == categoryId);
         return _repository.CountAsync(predicate, cancellationToken);
@@ -73,7 +73,7 @@ public sealed class TransactionManager : ITransactionManager
 
     public async Task<TransactionDto> CreateAsync(CreateTransactionDto command, CancellationToken cancellationToken)
     {
-        await _transactionValidator.ValidateAsync(command, cancellationToken);
+        await ValidateAsync(command, cancellationToken);
         var transaction = _repository.Add(command.ToModel());
         await _unitOfWork.CommitAsync(cancellationToken);
         return transaction.ToDto();
@@ -81,7 +81,7 @@ public sealed class TransactionManager : ITransactionManager
 
     public async Task<TransactionDto> UpdateAsync(UpdateTransactionDto command, CancellationToken cancellationToken)
     {
-        await _transactionValidator.ValidateAsync(command, cancellationToken);
+        await ValidateAsync(command, cancellationToken);
         var transaction = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
         transaction.AccountId = command.AccountId;
@@ -101,5 +101,17 @@ public sealed class TransactionManager : ITransactionManager
         var transaction = await _repository.GetByIdOrThrowAsync(id, trackingType: TrackingType.Tracking, cancellationToken: cancellationToken);
         _repository.Delete(transaction);
         await _unitOfWork.CommitAsync(cancellationToken);
+    }
+
+    private async Task ValidateAsync(ITransactionableCommand transactionCommand, CancellationToken cancellationToken)
+    {
+        if (transactionCommand.Amount <= 0)
+            throw new ArgumentException("Операция может быть зарегистрирована только для положительного значения суммы.");
+
+        if (transactionCommand.TransactionType is not (TransactionType.Income or TransactionType.Expense))
+            throw new ArgumentException("Неизвестный тип транзакциии.");
+
+        if (!(await _accountManager.ExistsAsync(transactionCommand.AccountId, cancellationToken)))
+            throw new ArgumentException("В транзакции не указан счет.");
     }
 }
