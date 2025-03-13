@@ -41,13 +41,13 @@ public sealed class SessionConsistencyValidator : ISessionConsistencyValidator
             "The session associated with this action has ended. Please try again.";
 
         if (updateContext.Update.CallbackQuery.Message?.Id != null)
-            await _messageManager.DeleteMessage(updateContext, updateContext.Update.CallbackQuery.Message.Id);
+            await _messageManager.DeleteMessageAsync(updateContext, updateContext.Update.CallbackQuery.Message.Id);
 
         if (updateContext.Session.LastMessage != null)
             if (updateContext.Session.LastMessage.IsContainsInlineKeyboard)
-                await _messageManager.DeleteLastMessage(updateContext);
+                await _messageManager.DeleteLastMessageAsync(updateContext);
 
-        await _messageManager.SendErrorMessage(updateContext, message);
+        await _messageManager.SendErrorMessageAsync(updateContext, message);
 
         await _sessionStateManager.Previous(updateContext.Session);
         return false;

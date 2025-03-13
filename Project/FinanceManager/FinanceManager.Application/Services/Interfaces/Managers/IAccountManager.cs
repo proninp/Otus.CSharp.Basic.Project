@@ -6,19 +6,19 @@ using FinanceManager.Application.DataTransferObjects.ViewModels;
 namespace FinanceManager.Application.Services.Interfaces.Managers;
 public interface IAccountManager
 {
-    Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken);
+    Task<AccountDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<AccountDto?> GetDefault(Guid userId, CancellationToken cancellationToken);
+    Task<AccountDto?> GetDefaultAsync(Guid userId, CancellationToken cancellationToken);
 
-    Task<AccountDto?> GetByName(Guid userId, string accountName, bool isIncludeBalance, CancellationToken cancellationToken);
+    Task<AccountDto?> GetByNameAsync(Guid userId, string accountName, bool isIncludeBalance, CancellationToken cancellationToken);
 
-    Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken);
+    Task<AccountDto[]> GetAsync(Guid userId, CancellationToken cancellationToken);
 
-    Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken = default);
+    Task<AccountDto> CreateAsync(CreateAccountDto command, CancellationToken cancellationToken = default);
 
-    Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken);
+    Task<AccountDto> UpdateAsync(UpdateAccountDto command, CancellationToken cancellationToken);
 
-    Task Delete(Guid id, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<BigDecimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken);
+    Task<BigDecimal> GetBalanceAsync(AccountDto viewModel, CancellationToken cancellationToken);
 }

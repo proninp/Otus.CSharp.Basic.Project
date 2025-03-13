@@ -27,7 +27,7 @@ public sealed class CallbackDataProvider : ICallbackDataProvider
         if (callbackData is null)
         {
             if (isDeleteMessageWhenNull)
-                await _messageManager.DeleteLastMessage(updateContext);
+                await _messageManager.DeleteLastMessageAsync(updateContext);
         }
         else
         {

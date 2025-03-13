@@ -13,12 +13,12 @@ public sealed class CurrencyManager : ICurrencyManager
         _repository = repository;
     }
 
-    public async Task<CurrencyDto?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<CurrencyDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
-    public async Task<CurrencyDto[]> GetAll(CancellationToken cancellationToken)
+    public async Task<CurrencyDto[]> GetAllAsync(CancellationToken cancellationToken)
     {
         return await _repository.GetAsync(
             c => c.ToDto(),

@@ -29,23 +29,23 @@ public class HistoryContextProvider : IHistoryContextProvider
         if (updateContext.Session.WorkflowContext is not null)
             return updateContext.Session.GetHistoryContext();
 
-        var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
+        var account = await _accountManager.GetDefaultAsync(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
         {
-            await _messageManager.DeleteLastMessage(updateContext);
+            await _messageManager.DeleteLastMessageAsync(updateContext);
             var message = "The operation cannot be performed because you do not have a default account." +
                 "Please create a default account first.";
-            await _messageManager.SendErrorMessage(updateContext, message);
+            await _messageManager.SendErrorMessageAsync(updateContext, message);
             await _sessionStateManager.InitAccount(updateContext.Session);
             return null;
         }
 
-        var transactionsCount = await _transactionManager.GetCount(
+        var transactionsCount = await _transactionManager.GetCountAsync(
             updateContext.Session.Id, account.Id, cancellationToken: updateContext.CancellationToken);
         if (transactionsCount == 0)
         {
-            await _messageManager.DeleteLastMessage(updateContext);
-            await _messageManager.SendMessage(
+            await _messageManager.DeleteLastMessageAsync(updateContext);
+            await _messageManager.SendMessageAsync(
                 updateContext,
                 "At the moment, you do not have any registered transactions on the selected account.");
             await _sessionStateManager.ToMainMenu(updateContext.Session);

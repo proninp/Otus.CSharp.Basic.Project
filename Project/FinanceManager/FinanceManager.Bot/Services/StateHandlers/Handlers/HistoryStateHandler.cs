@@ -55,7 +55,7 @@ public sealed class HistoryStateHandler : IStateHandler
 
         var inlineKeyboard = _inlineKeyboardProvider.GetKeyboard(updateContext);
 
-        var transactions = await _transactionManager.Get(
+        var transactions = await _transactionManager.GetAsync(
             updateContext.Session.Id, updateContext.CancellationToken, context.PageIndex, context.PageSize);
 
         var incomes = transactions.Where(t => t.Amount > 0);
@@ -63,8 +63,8 @@ public sealed class HistoryStateHandler : IStateHandler
 
         var messageText = _historyMessageTextProvider.GetMessgaText(incomes, expenses);
 
-        if (!await _messageManager.EditLastMessage(updateContext, messageText, inlineKeyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
+        if (!await _messageManager.EditLastMessageAsync(updateContext, messageText, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, messageText, inlineKeyboard);
 
         return false;
     }

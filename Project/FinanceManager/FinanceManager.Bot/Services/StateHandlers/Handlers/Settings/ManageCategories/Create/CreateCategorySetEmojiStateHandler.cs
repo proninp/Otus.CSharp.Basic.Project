@@ -32,7 +32,7 @@ public sealed class CreateCategorySetEmojiStateHandler : IStateHandler
     {
         var context = updateContext.Session.GetCreateCategoryContext();
 
-        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.DeleteLastMessageAsync(updateContext);
 
         var callBackData = await _callbackDataProvider.GetCallbackData(updateContext, false);
         if (callBackData is not null)
@@ -46,7 +46,7 @@ public sealed class CreateCategorySetEmojiStateHandler : IStateHandler
 
         if (message.Text is null || !_emojiTextValidator.ValidateSingleEmoji(message.Text))
         {
-            await _messageManager.SendErrorMessage(updateContext, "The specified text is not recognized as an emoji.");
+            await _messageManager.SendErrorMessageAsync(updateContext, "The specified text is not recognized as an emoji.");
             return await _sessionStateManager.Previous(updateContext.Session);
         }
 

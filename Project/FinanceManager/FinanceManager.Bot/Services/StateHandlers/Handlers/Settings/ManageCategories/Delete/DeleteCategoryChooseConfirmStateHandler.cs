@@ -24,7 +24,7 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCate
 
         public async Task<bool> HandleAsync(BotUpdateContext updateContext)
         {
-            await _messageManager.DeleteLastMessage(updateContext);
+            await _messageManager.DeleteLastMessageAsync(updateContext);
 
             var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
             if (callbackData is null || string.IsNullOrEmpty(callbackData.Data))

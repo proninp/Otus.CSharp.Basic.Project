@@ -31,7 +31,7 @@ public abstract class BaseChooseCategoryStateHandler : IStateHandler
 
         if (callbackData is null || string.IsNullOrEmpty(callbackData.Data))
         {
-            await _messageManager.DeleteLastMessage(updateContext);
+            await _messageManager.DeleteLastMessageAsync(updateContext);
             return await _sessionStateManager.Previous(updateContext.Session);
         }
 
@@ -41,7 +41,7 @@ public abstract class BaseChooseCategoryStateHandler : IStateHandler
 
         if (categoryId != Guid.Empty.ToString())
         {
-            category = await _categoryManager.GetById(new Guid(categoryId), updateContext.CancellationToken);
+            category = await _categoryManager.GetByIdAsync(new Guid(categoryId), updateContext.CancellationToken);
             if (category is null)
                 return await _sessionStateManager.Previous(updateContext.Session);
         }

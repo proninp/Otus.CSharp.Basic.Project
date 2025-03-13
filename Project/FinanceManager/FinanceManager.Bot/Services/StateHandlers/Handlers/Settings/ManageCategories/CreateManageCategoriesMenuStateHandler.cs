@@ -29,8 +29,8 @@ public sealed class CreateManageCategoriesMenuStateHandler : IStateHandler
 
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
 
-        if (!await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
+        if (!await _messageManager.EditLastMessageAsync(updateContext, message, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, message, inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

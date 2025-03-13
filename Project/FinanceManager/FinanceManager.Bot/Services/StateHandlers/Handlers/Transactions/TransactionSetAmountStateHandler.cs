@@ -31,18 +31,18 @@ public sealed class TransactionSetAmountStateHandler : IStateHandler
 
         var amountText = message.Text;
 
-        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.DeleteLastMessageAsync(updateContext);
 
         if (!_decimalNumberProvider.Provide(message.Text, out var value))
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "The entered value is not a number.");
             return await _sessionStateManager.Previous(updateContext.Session);
         }
 
         if (value < 0)
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "The expense amount must be a non-negative number.");
             return await _sessionStateManager.Previous(updateContext.Session);
         }

@@ -12,7 +12,7 @@ public class AccountValidator : IAccountValidator
         _repository = repository;
     }
 
-    public async Task<bool> AccountExists(Guid accountId, CancellationToken cancellationToken)
+    public async Task<bool> ExistsAsync(Guid accountId, CancellationToken cancellationToken)
     {
         var account = await _repository.GetByIdAsync(accountId, cancellationToken: cancellationToken);
         return account is not null;

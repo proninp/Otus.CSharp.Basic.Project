@@ -34,7 +34,7 @@ public sealed class TransactionIputAmountStateHandler : IStateHandler
             _ => string.Empty
         };
 
-        await _messageManager.SendInlineKeyboardMessage(
+        await _messageManager.SendInlineKeyboardMessageAsync(
             updateContext,
             $"Please enter {context.TransactionTypeDescription} {emoji} amount:",
             CreateInlineKeyboard(updateContext));

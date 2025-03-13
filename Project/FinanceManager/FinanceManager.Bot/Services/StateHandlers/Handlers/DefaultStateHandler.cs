@@ -22,13 +22,13 @@ public sealed class DefaultStateHandler : IStateHandler
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
         var session = updateContext.Session;
-        var defaultAccount = await _accountManager.GetDefault(session.Id, updateContext.CancellationToken);
+        var defaultAccount = await _accountManager.GetDefaultAsync(session.Id, updateContext.CancellationToken);
         if (defaultAccount is null)
         {
             var messageText = $"Hi, {session.UserName}! {Emoji.Greeting.GetSymbol()}" +
                 $"{Environment.NewLine}Let's set you up!";
 
-            await _messageManager.SendMessage(updateContext, messageText);
+            await _messageManager.SendMessageAsync(updateContext, messageText);
 
             return await _sessionStateManager.InitAccount(session);
         }

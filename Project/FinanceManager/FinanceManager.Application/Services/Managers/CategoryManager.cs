@@ -19,12 +19,12 @@ public sealed class CategoryManager : ICategoryManager
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CategoryDto?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<CategoryDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
-    public Task<CategoryDto[]> Get(Guid userId, CancellationToken cancellationToken)
+    public Task<CategoryDto[]> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
         return _repository.GetAsync(
             c => c.ToDto(),
@@ -33,7 +33,7 @@ public sealed class CategoryManager : ICategoryManager
             cancellationToken: cancellationToken);
     }
 
-    public Task<CategoryDto[]> GetExpenses(Guid userId, CancellationToken cancellationToken)
+    public Task<CategoryDto[]> GetExpensesAsync(Guid userId, CancellationToken cancellationToken)
     {
         return _repository.GetAsync(
             c => c.ToDto(),
@@ -43,7 +43,7 @@ public sealed class CategoryManager : ICategoryManager
             cancellationToken: cancellationToken);
     }
 
-    public Task<CategoryDto[]> GetIncomes(Guid userId, CancellationToken cancellationToken)
+    public Task<CategoryDto[]> GetIncomesAsync(Guid userId, CancellationToken cancellationToken)
     {
         return _repository.GetAsync(
             c => c.ToDto(),
@@ -53,20 +53,20 @@ public sealed class CategoryManager : ICategoryManager
             cancellationToken: cancellationToken);
     }
 
-    public Task<bool> Exists(Guid userId, CancellationToken cancellationToken) =>
-        _repository.Exists(c => c.UserId == userId, cancellationToken);
+    public Task<bool> ExistsAsync(Guid userId, CancellationToken cancellationToken) =>
+        _repository.ExistsAsync(c => c.UserId == userId, cancellationToken);
 
-    public Task<bool> ExistsByTittle(Guid userId, string title, CancellationToken cancellationToken) =>
-        _repository.Exists(c => c.UserId == userId && c.Title == title, cancellationToken);
+    public Task<bool> ExistsByTittleAsync(Guid userId, string title, CancellationToken cancellationToken) =>
+        _repository.ExistsAsync(c => c.UserId == userId && c.Title == title, cancellationToken);
 
-    public async Task<CategoryDto> Create(CreateCategoryDto command, CancellationToken cancellationToken)
+    public async Task<CategoryDto> CreateAsync(CreateCategoryDto command, CancellationToken cancellationToken)
     {
         var category = _repository.Add(command.ToModel());
         await _unitOfWork.CommitAsync(cancellationToken);
         return category.ToDto();
     }
 
-    public async Task<CategoryDto> Update(UpdateCategoryDto command, CancellationToken cancellationToken)
+    public async Task<CategoryDto> UpdateAsync(UpdateCategoryDto command, CancellationToken cancellationToken)
     {
         var category = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
@@ -78,7 +78,7 @@ public sealed class CategoryManager : ICategoryManager
         return category.ToDto();
     }
 
-    public async Task Delete(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var category = await _repository.GetByIdOrThrowAsync(id, trackingType: TrackingType.Tracking, cancellationToken: cancellationToken);
         _repository.Delete(category);

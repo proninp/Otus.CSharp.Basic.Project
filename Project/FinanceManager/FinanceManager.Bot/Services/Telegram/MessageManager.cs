@@ -18,7 +18,7 @@ public sealed class MessageManager : IMessageManager
         _logger = logger;
     }
 
-    public async Task SendMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true)
+    public async Task SendMessageAsync(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true)
     {
         var message =
             await updateContext.BotClient.SendMessage(
@@ -29,19 +29,19 @@ public sealed class MessageManager : IMessageManager
             updateContext.Session.LastMessage = message.ToUserMessage();
     }
 
-    public async Task SendErrorMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false)
+    public async Task SendErrorMessageAsync(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false)
     {
         messageText = $"{Enums.Emoji.Error.GetSymbol()} " + messageText;
-        await SendMessage(updateContext, messageText, isSaveMessage);
+        await SendMessageAsync(updateContext, messageText, isSaveMessage);
     }
 
-    public async Task SendApproveMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false)
+    public async Task SendApproveMessageAsync(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false)
     {
         messageText = $"{Enums.Emoji.Success.GetSymbol()} " + messageText;
-        await SendMessage(updateContext, messageText, isSaveMessage);
+        await SendMessageAsync(updateContext, messageText, isSaveMessage);
     }
 
-    public async Task SendInlineKeyboardMessage(
+    public async Task SendInlineKeyboardMessageAsync(
         BotUpdateContext updateContext, string messageText, IReplyMarkup inlineKeyboard)
     {
         var message =
@@ -53,7 +53,7 @@ public sealed class MessageManager : IMessageManager
         updateContext.Session.LastMessage = message.ToUserMessage();
     }
 
-    public async Task<bool> EditLastMessage(
+    public async Task<bool> EditLastMessageAsync(
         BotUpdateContext updateContext, string newMessageText, InlineKeyboardMarkup? inlineKeyboard = default)
     {
         if (updateContext.Session.LastMessage == default)
@@ -79,18 +79,18 @@ public sealed class MessageManager : IMessageManager
             );
     }
 
-    public async Task<bool> DeleteLastMessage(BotUpdateContext updateContext)
+    public async Task<bool> DeleteLastMessageAsync(BotUpdateContext updateContext)
     {
         if (updateContext.Session.LastMessage is null)
             return false;
 
-        var result = await DeleteMessage(updateContext, updateContext.Session.LastMessage.Id);
+        var result = await DeleteMessageAsync(updateContext, updateContext.Session.LastMessage.Id);
 
         updateContext.Session.LastMessage = null;
         return result;
     }
 
-    public async Task<bool> DeleteMessage(BotUpdateContext updateContext, int messageId)
+    public async Task<bool> DeleteMessageAsync(BotUpdateContext updateContext, int messageId)
     {
         return await ExecuteWithErrorHandlingAsync(
             async () =>

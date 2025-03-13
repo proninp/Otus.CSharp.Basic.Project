@@ -4,19 +4,19 @@ using Telegram.Bot.Types.ReplyMarkups;
 namespace FinanceManager.Bot.Services.Interfaces.Managers;
 public interface IMessageManager
 {
-    Task SendMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true);
+    Task SendMessageAsync(BotUpdateContext updateContext, string messageText, bool isSaveMessage = true);
 
-    Task SendErrorMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false);
+    Task SendErrorMessageAsync(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false);
 
-    Task SendApproveMessage(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false);
+    Task SendApproveMessageAsync(BotUpdateContext updateContext, string messageText, bool isSaveMessage = false);
 
-    Task SendInlineKeyboardMessage(BotUpdateContext updateContext, string messageText, IReplyMarkup inlineKeyboard);
+    Task SendInlineKeyboardMessageAsync(BotUpdateContext updateContext, string messageText, IReplyMarkup inlineKeyboard);
 
-    Task<bool> EditLastMessage(BotUpdateContext updateContext, string newMessageText, InlineKeyboardMarkup? inlineKeyboard = default);
+    Task<bool> EditLastMessageAsync(BotUpdateContext updateContext, string newMessageText, InlineKeyboardMarkup? inlineKeyboard = default);
 
-    Task<bool> DeleteLastMessage(BotUpdateContext updateContext);
+    Task<bool> DeleteLastMessageAsync(BotUpdateContext updateContext);
 
-    Task<bool> DeleteMessage(BotUpdateContext updateContext, int messageId);
+    Task<bool> DeleteMessageAsync(BotUpdateContext updateContext, int messageId);
 
     InlineKeyboardButton CreateInlineButton(BotUpdateContext updateContext, string data, string message);
 

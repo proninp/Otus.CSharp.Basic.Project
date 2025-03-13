@@ -32,7 +32,7 @@ public sealed class SetAccountBalanceStateHandler : IStateHandler
 
         if (!_decimalNumberProvider.Provide(message.Text, out var value))
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "The entered value is not a number. Please try again.");
             return false;
         }

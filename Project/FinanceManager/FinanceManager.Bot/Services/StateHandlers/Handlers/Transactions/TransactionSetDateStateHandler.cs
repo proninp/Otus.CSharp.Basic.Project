@@ -37,8 +37,8 @@ public sealed class TransactionSetDateStateHandler : IStateHandler
         if (!_transactionDateProvider.TryParseDate(dateText, out var date))
         {
             var incorrectDateMessage = _transactionDateProvider.GetIncorrectDateText();
-            await _messageManager.DeleteLastMessage(updateContext);
-            await _messageManager.SendErrorMessage(updateContext, incorrectDateMessage);
+            await _messageManager.DeleteLastMessageAsync(updateContext);
+            await _messageManager.SendErrorMessageAsync(updateContext, incorrectDateMessage);
 
             return await _sessionStateManager.Previous(updateContext.Session);
         }
@@ -46,7 +46,7 @@ public sealed class TransactionSetDateStateHandler : IStateHandler
         var context = updateContext.Session.GetTransactionContext();
         context.Date = date;
 
-        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.DeleteLastMessageAsync(updateContext);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

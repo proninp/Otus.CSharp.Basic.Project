@@ -36,7 +36,7 @@ public interface IReadRepository<T> where T : IdentityModel
         int pageSize = 20,
         CancellationToken cancellationToken = default);
     
-    Task<bool> Exists(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
 
-    Task<long> Count(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
+    Task<long> CountAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default);
 }

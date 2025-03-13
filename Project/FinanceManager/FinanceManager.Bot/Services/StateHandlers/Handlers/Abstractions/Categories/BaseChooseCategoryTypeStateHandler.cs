@@ -28,7 +28,7 @@ public abstract class BaseChooseCategoryTypeStateHandler : IStateHandler
     {
         var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
 
-        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.DeleteLastMessageAsync(updateContext);
 
         if (callbackData is null || string.IsNullOrWhiteSpace(callbackData.Data))
             return await _sessionStateManager.Previous(updateContext.Session);

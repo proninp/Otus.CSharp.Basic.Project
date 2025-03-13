@@ -28,8 +28,8 @@ public abstract class BaseSendCategoryTypeStateHandler : IStateHandler
     {
         var keyboard = CreateInlineKeyboard(updateContext);
         var message = GetMessageText(updateContext.Session);
-        if (!await _messageManager.EditLastMessage(updateContext, message, keyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, message, keyboard);
+        if (!await _messageManager.EditLastMessageAsync(updateContext, message, keyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, message, keyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

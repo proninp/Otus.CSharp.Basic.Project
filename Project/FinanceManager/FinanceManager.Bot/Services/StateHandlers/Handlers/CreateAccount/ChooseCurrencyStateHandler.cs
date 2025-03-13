@@ -34,21 +34,21 @@ public sealed class ChooseCurrencyStateHandler : IStateHandler
         if (string.IsNullOrEmpty(currencyId))
             return await DeleteLastMessageAndContinue(updateContext);
 
-        var currency = await _currencyManager.GetById(new Guid(currencyId), updateContext.CancellationToken);
+        var currency = await _currencyManager.GetByIdAsync(new Guid(currencyId), updateContext.CancellationToken);
         if (currency is null)
             return await DeleteLastMessageAndContinue(updateContext);
 
         var context = updateContext.Session.GetCreateAccountContext();
         context.Currency = currency;
 
-        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.DeleteLastMessageAsync(updateContext);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }
 
     private async Task<bool> DeleteLastMessageAndContinue(BotUpdateContext updateContext)
     {
-        await _messageManager.DeleteLastMessage(updateContext);
+        await _messageManager.DeleteLastMessageAsync(updateContext);
         return await _sessionStateManager.Previous(updateContext.Session);
     }
 }

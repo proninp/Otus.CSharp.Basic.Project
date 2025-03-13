@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using FinanceManager.Core.Enums;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models.Abstractions;
@@ -85,7 +84,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
             .ToArrayAsync(cancellationToken);
     }
 
-    public Task<bool> Exists(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
+    public Task<bool> ExistsAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
     {
         var query = _dbSet.AsNoTracking();
         if (predicate is not null)
@@ -93,7 +92,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
         return query.AnyAsync(cancellationToken);
     }
 
-    public Task<long> Count(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
+    public Task<long> CountAsync(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default)
     {
         if (predicate is null)
             return _dbSet.LongCountAsync(cancellationToken);

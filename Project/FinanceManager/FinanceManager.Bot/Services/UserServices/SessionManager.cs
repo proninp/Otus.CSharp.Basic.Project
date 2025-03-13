@@ -36,7 +36,7 @@ public sealed class SessionManager : ISessionManager
 
     public async Task<UserSession> InstantiateSession(User from, CancellationToken cancellationToken)
     {
-        var userDto = await _userManager.GetByTelegramId(from.Id, cancellationToken);
+        var userDto = await _userManager.GetByTelegramIdAsync(from.Id, cancellationToken);
         if (userDto is null)
         {
             var userCommand = new CreateUserDto
@@ -46,7 +46,7 @@ public sealed class SessionManager : ISessionManager
                 Firstname = from.FirstName,
                 Lastname = from.LastName
             };
-            userDto = await _userManager.Create(userCommand, cancellationToken);
+            userDto = await _userManager.CreateAsync(userCommand, cancellationToken);
         }
         var callbackSessionId = GenerateCallbackSessionId();
         var session = userDto.ToUserSession(callbackSessionId, _options.InMemoryUserSessionExpirationMinutes);

@@ -16,7 +16,7 @@ public sealed class CreateAccountStartStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        await _messageManager.SendMessage(updateContext, "Please enter the account name:");
+        await _messageManager.SendMessageAsync(updateContext, "Please enter the account name:");
         return await _sessionStateManager.Next(updateContext.Session);
     }
 }

@@ -6,20 +6,20 @@ using FinanceManager.Application.DataTransferObjects.ViewModels;
 namespace FinanceManager.Application.Services.Interfaces.Managers;
 public interface ITransactionManager
 {
-    Task<TransactionDto?> GetById(Guid id, CancellationToken cancellationToken);
+    Task<TransactionDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken, int pageIndex = 0, int pageSize = 20);
+    Task<TransactionDto[]> GetAsync(Guid userId, CancellationToken cancellationToken, int pageIndex = 0, int pageSize = 20);
 
-    Task<BigDecimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken);
+    Task<BigDecimal> GetAccountBalanceAsync(Guid userId, Guid accountId, CancellationToken cancellationToken);
 
-    Task<bool> Exists(Guid userId, Guid accountId, CancellationToken cancellationToken);
+    Task<bool> ExistsAsync(Guid userId, Guid accountId, CancellationToken cancellationToken);
 
-    Task<long> GetCount(
+    Task<long> GetCountAsync(
         Guid userId, Guid accountId = default, Guid categoryId = default, CancellationToken cancellationToken = default);
 
-    Task<TransactionDto> Create(CreateTransactionDto command, CancellationToken cancellationToken);
+    Task<TransactionDto> CreateAsync(CreateTransactionDto command, CancellationToken cancellationToken);
 
-    Task<TransactionDto> Update(UpdateTransactionDto command, CancellationToken cancellationToken);
+    Task<TransactionDto> UpdateAsync(UpdateTransactionDto command, CancellationToken cancellationToken);
 
-    Task Delete(Guid id, CancellationToken cancellationToken);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 }

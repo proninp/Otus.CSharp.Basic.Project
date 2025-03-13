@@ -28,12 +28,12 @@ public sealed class TransactionManager : ITransactionManager
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<TransactionDto?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<TransactionDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return (await _repository.GetByIdAsync(id, cancellationToken: cancellationToken))?.ToDto();
     }
 
-    public Task<TransactionDto[]> Get(Guid userId, CancellationToken cancellationToken, int pageIndex = 0, int pageSize = 20)
+    public Task<TransactionDto[]> GetAsync(Guid userId, CancellationToken cancellationToken, int pageIndex = 0, int pageSize = 20)
     {
         return _repository.GetPagedAsync(
             t => t.ToDto(),
@@ -48,7 +48,7 @@ public sealed class TransactionManager : ITransactionManager
             cancellationToken: cancellationToken);
     }
 
-    public async Task<BigDecimal> GetAccountBalance(Guid userId, Guid accountId, CancellationToken cancellationToken)
+    public async Task<BigDecimal> GetAccountBalanceAsync(Guid userId, Guid accountId, CancellationToken cancellationToken)
     {
         return (await _repository.GetAsync(
             t => t.ToDto(),
@@ -57,31 +57,31 @@ public sealed class TransactionManager : ITransactionManager
             .Aggregate(BigDecimal.Zero, (totalAmount, t) => totalAmount + t.Amount);
     }
 
-    public Task<bool> Exists(Guid userId, Guid accountId, CancellationToken cancellationToken)
+    public Task<bool> ExistsAsync(Guid userId, Guid accountId, CancellationToken cancellationToken)
     {
-        return _repository.Exists(t => t.UserId == userId && t.AccountId == accountId, cancellationToken);
+        return _repository.ExistsAsync(t => t.UserId == userId && t.AccountId == accountId, cancellationToken);
     }
 
-    public Task<long> GetCount(
+    public Task<long> GetCountAsync(
         Guid userId, Guid accountId = default, Guid categoryId = default, CancellationToken cancellationToken = default)
     {
         Expression<Func<Transaction, bool>> predicate = t => t.UserId == userId && 
             (accountId == default || t.AccountId == accountId) &&
             (categoryId == default || t.CategoryId == categoryId);
-        return _repository.Count(predicate, cancellationToken);
+        return _repository.CountAsync(predicate, cancellationToken);
     }
 
-    public async Task<TransactionDto> Create(CreateTransactionDto command, CancellationToken cancellationToken)
+    public async Task<TransactionDto> CreateAsync(CreateTransactionDto command, CancellationToken cancellationToken)
     {
-        await _transactionValidator.Validate(command, cancellationToken);
+        await _transactionValidator.ValidateAsync(command, cancellationToken);
         var transaction = _repository.Add(command.ToModel());
         await _unitOfWork.CommitAsync(cancellationToken);
         return transaction.ToDto();
     }
 
-    public async Task<TransactionDto> Update(UpdateTransactionDto command, CancellationToken cancellationToken)
+    public async Task<TransactionDto> UpdateAsync(UpdateTransactionDto command, CancellationToken cancellationToken)
     {
-        await _transactionValidator.Validate(command, cancellationToken);
+        await _transactionValidator.ValidateAsync(command, cancellationToken);
         var transaction = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
         transaction.AccountId = command.AccountId;
@@ -96,7 +96,7 @@ public sealed class TransactionManager : ITransactionManager
         return transaction.ToDto();
     }
 
-    public async Task Delete(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var transaction = await _repository.GetByIdOrThrowAsync(id, trackingType: TrackingType.Tracking, cancellationToken: cancellationToken);
         _repository.Delete(transaction);

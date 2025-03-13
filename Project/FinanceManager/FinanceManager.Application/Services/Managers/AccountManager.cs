@@ -29,16 +29,16 @@ public sealed class AccountManager : IAccountManager
         _currencyManager = currencyManager;
     }
 
-    public async Task<AccountDto?> GetById(Guid id, CancellationToken cancellationToken)
+    public async Task<AccountDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var accountDto = (await _repository.GetByIdAsync(
             id, include: q => q.Include(a => a.Currency), cancellationToken: cancellationToken))?.ToDto();
         if (accountDto is not null)
-            accountDto.Balance = await GetBalance(accountDto, cancellationToken);
+            accountDto.Balance = await GetBalanceAsync(accountDto, cancellationToken);
         return accountDto;
     }
 
-    public async Task<AccountDto?> GetDefault(Guid userId, CancellationToken cancellationToken)
+    public async Task<AccountDto?> GetDefaultAsync(Guid userId, CancellationToken cancellationToken)
     {
         return (await _repository.GetAsync(
             a => a.ToDto(),
@@ -48,7 +48,7 @@ public sealed class AccountManager : IAccountManager
             .FirstOrDefault();
     }
 
-    public async Task<AccountDto?> GetByName(
+    public async Task<AccountDto?> GetByNameAsync(
         Guid userId, string accountTitle, bool isIncludeBalance, CancellationToken cancellationToken)
     {
         var accountDto = (await _repository.GetAsync(
@@ -58,11 +58,11 @@ public sealed class AccountManager : IAccountManager
             cancellationToken: cancellationToken))?
             .FirstOrDefault();
         if (isIncludeBalance && accountDto is not null)
-            accountDto.Balance = await GetBalance(accountDto, cancellationToken);
+            accountDto.Balance = await GetBalanceAsync(accountDto, cancellationToken);
         return accountDto;
     }
 
-    public async Task<AccountDto[]> Get(Guid userId, CancellationToken cancellationToken)
+    public async Task<AccountDto[]> GetAsync(Guid userId, CancellationToken cancellationToken)
     {
         var accountDtos = await _repository.GetAsync(
             a => a.ToDto(),
@@ -70,19 +70,19 @@ public sealed class AccountManager : IAccountManager
             q => q.Include(a => a.Currency),
             cancellationToken: cancellationToken);
         foreach (var accountDto in accountDtos)
-            accountDto.Balance = await GetBalance(accountDto, cancellationToken);
+            accountDto.Balance = await GetBalanceAsync(accountDto, cancellationToken);
         return accountDtos;
     }
 
-    public async Task<BigDecimal> GetBalance(AccountDto viewModel, CancellationToken cancellationToken)
+    public async Task<BigDecimal> GetBalanceAsync(AccountDto viewModel, CancellationToken cancellationToken)
     {
-        var balance = await _transactionManager.GetAccountBalance(viewModel.UserId, viewModel.Id, cancellationToken);
+        var balance = await _transactionManager.GetAccountBalanceAsync(viewModel.UserId, viewModel.Id, cancellationToken);
         return BigDecimal.Round(balance, 2);
     }
 
-    public async Task<AccountDto> Create(CreateAccountDto command, CancellationToken cancellationToken = default)
+    public async Task<AccountDto> CreateAsync(CreateAccountDto command, CancellationToken cancellationToken = default)
     {
-        var currency = await _currencyManager.GetById(command.CurrencyId, cancellationToken);
+        var currency = await _currencyManager.GetByIdAsync(command.CurrencyId, cancellationToken);
         if (currency is null)
             throw new InvalidOperationException($"Currency with ID {command.CurrencyId} was not found in the database.");
 
@@ -95,7 +95,7 @@ public sealed class AccountManager : IAccountManager
         return accountDto;
     }
 
-    public async Task<AccountDto> Update(UpdateAccountDto command, CancellationToken cancellationToken)
+    public async Task<AccountDto> UpdateAsync(UpdateAccountDto command, CancellationToken cancellationToken)
     {
         var account = await _repository.GetByIdOrThrowAsync(command.Id, cancellationToken: cancellationToken);
 
@@ -108,7 +108,7 @@ public sealed class AccountManager : IAccountManager
         return account.ToDto();
     }
 
-    public async Task Delete(Guid id, CancellationToken cancellationToken)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var account = await _repository.GetByIdOrThrowAsync(id, trackingType: TrackingType.Tracking, cancellationToken: cancellationToken);
         _repository.Delete(account);

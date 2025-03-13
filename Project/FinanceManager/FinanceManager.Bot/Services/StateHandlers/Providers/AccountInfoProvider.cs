@@ -16,7 +16,7 @@ public class AccountInfoProvider : IAccountInfoProvider
 
     public async Task<string> GetAccountInfoAsync(AccountDto account, CancellationToken cancellationToken)
     {
-        var balance = await _accountManager.GetBalance(account, cancellationToken);
+        var balance = await _accountManager.GetBalanceAsync(account, cancellationToken);
 
         var messageBuilder = new StringBuilder($"{Emoji.IncomeAmount.GetSymbol()} Account: {account.Title}");
         messageBuilder.AppendLine();

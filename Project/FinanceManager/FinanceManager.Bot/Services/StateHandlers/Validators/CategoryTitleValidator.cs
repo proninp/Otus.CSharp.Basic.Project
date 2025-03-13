@@ -23,28 +23,28 @@ public class CategoryTitleValidator : ICategoryTitleValidator
     {
         if (!_textSanitizer.Sanitize(categoryTitle, out var title))
         {
-            await _messageManager.SendErrorMessage(context,
+            await _messageManager.SendErrorMessageAsync(context,
                 "This category name is not allowed.");
             return (false, title);
         }
 
         if (string.IsNullOrEmpty(title))
         {
-            await _messageManager.SendErrorMessage(context,
+            await _messageManager.SendErrorMessageAsync(context,
                 "You must specify the title of the new category. Please try again.");
             return (false, title);
         }
 
         if (!title.Any(c => char.IsLetterOrDigit(c)))
         {
-            await _messageManager.SendErrorMessage(context,
+            await _messageManager.SendErrorMessageAsync(context,
                 "The category title must contain at least one letter or digit.");
             return (false, title);
         }
 
-        if (await _categoryManager.ExistsByTittle(context.Session.Id, title, context.CancellationToken))
+        if (await _categoryManager.ExistsByTittleAsync(context.Session.Id, title, context.CancellationToken))
         {
-            await _messageManager.SendErrorMessage(context,
+            await _messageManager.SendErrorMessageAsync(context,
                 "A category with that title already exists.");
             return (false, title);
         }

@@ -3,5 +3,5 @@
 namespace FinanceManager.Application.Services.Interfaces;
 public interface ITransactionValidator
 {
-    Task Validate(ITransactionableCommand transactionCommand, CancellationToken cancellationToken);
+    Task ValidateAsync(ITransactionableCommand transactionCommand, CancellationToken cancellationToken);
 }

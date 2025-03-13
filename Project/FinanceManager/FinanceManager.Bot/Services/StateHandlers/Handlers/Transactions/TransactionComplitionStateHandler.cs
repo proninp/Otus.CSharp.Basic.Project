@@ -27,15 +27,15 @@ public sealed class TransactionComplitionStateHandler : CompleteStateHandler
         var context = updateContext.Session.GetTransactionContext();
         if (context.Amount <= 0)
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "The transaction was not registered because a zero amount was entered.");
             return;
         }
 
-        var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
+        var account = await _accountManager.GetDefaultAsync(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "The operation cannot be performed because you do not have a default account.");
             return;
         }
@@ -50,13 +50,13 @@ public sealed class TransactionComplitionStateHandler : CompleteStateHandler
             TransactionType = context.TransactionType
         };
 
-        var transaction = await _transactionManager.Create(command, updateContext.CancellationToken);
+        var transaction = await _transactionManager.CreateAsync(command, updateContext.CancellationToken);
 
         var message = $"The {command.Amount}";
         if (account.Currency is not null)
             message += $" {account.Currency.CurrencyCode} {account.Currency.Emoji}";
         message += " transaction was registered successfully";
 
-        await _messageManager.SendApproveMessage(updateContext, message);
+        await _messageManager.SendApproveMessageAsync(updateContext, message);
     }
 }

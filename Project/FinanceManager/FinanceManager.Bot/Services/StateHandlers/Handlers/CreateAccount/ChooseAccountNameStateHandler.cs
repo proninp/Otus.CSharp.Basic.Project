@@ -36,27 +36,27 @@ public sealed class ChooseAccountNameStateHandler : IStateHandler
 
         if (!_textSanitizer.Sanitize(message.Text, out var accountTitle))
         {
-            await _messageManager.SendErrorMessage(updateContext, "This account name is not allowed. Please Try again.");
+            await _messageManager.SendErrorMessageAsync(updateContext, "This account name is not allowed. Please Try again.");
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(accountTitle) || accountTitle.Length == 0)
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "The account name must contain at least one non-whitespace character.");
             return false;
         }
         if (!char.IsLetterOrDigit(accountTitle[0]))
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "The account name must start with a number or letter. Enter a different account name.");
             return false;
         }
 
-        var existingAccount = await _accountManager.GetByName(updateContext.Session.Id, accountTitle, false, updateContext.CancellationToken);
+        var existingAccount = await _accountManager.GetByNameAsync(updateContext.Session.Id, accountTitle, false, updateContext.CancellationToken);
         if (existingAccount is not null)
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "An account with that name already exists. Enter a different name.");
             return false;
         }

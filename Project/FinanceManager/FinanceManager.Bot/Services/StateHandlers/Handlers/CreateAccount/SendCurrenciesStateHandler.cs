@@ -22,10 +22,10 @@ public sealed class SendCurrenciesStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var currencies = await _currencyManager.GetAll(updateContext.CancellationToken);
+        var currencies = await _currencyManager.GetAllAsync(updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(updateContext, currencies);
 
-        await _messageManager.SendInlineKeyboardMessage(updateContext, "Choose currency:", inlineKeyboard);
+        await _messageManager.SendInlineKeyboardMessageAsync(updateContext, "Choose currency:", inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

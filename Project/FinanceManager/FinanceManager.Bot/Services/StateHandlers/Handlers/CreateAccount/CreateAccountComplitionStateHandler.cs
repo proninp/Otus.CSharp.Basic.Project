@@ -30,7 +30,7 @@ public sealed class CreateAccountComplitionStateHandler : CompleteStateHandler
     private protected override async Task HandleCompleteAsync(BotUpdateContext updateContext)
     {
         await CreateAccount(updateContext);
-        await _categoriesInitializer.InitializeDefaults(updateContext.Session.Id, updateContext.CancellationToken);
+        await _categoriesInitializer.InitializeDefaultsAsync(updateContext.Session.Id, updateContext.CancellationToken);
     }
 
     private async Task CreateAccount(BotUpdateContext updateContext)
@@ -38,7 +38,7 @@ public sealed class CreateAccountComplitionStateHandler : CompleteStateHandler
         var context = updateContext.Session.GetCreateAccountContext();
         ArgumentNullException.ThrowIfNull(context.Currency, nameof(context.Currency));
 
-        var defaultAccount = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
+        var defaultAccount = await _accountManager.GetDefaultAsync(updateContext.Session.Id, updateContext.CancellationToken);
         var isDefaultExists = defaultAccount is not null;
 
         var accountCommand = new CreateAccountDto
@@ -50,7 +50,7 @@ public sealed class CreateAccountComplitionStateHandler : CompleteStateHandler
             IsArchived = false
         };
 
-        var account = await _accountManager.Create(accountCommand, updateContext.CancellationToken);
+        var account = await _accountManager.CreateAsync(accountCommand, updateContext.CancellationToken);
 
         var command = new CreateTransactionDto
         {
@@ -63,13 +63,13 @@ public sealed class CreateAccountComplitionStateHandler : CompleteStateHandler
             Description = "Initial balance"
         };
 
-        var transaction = await _transactionManager.Create(command, updateContext.CancellationToken);
+        var transaction = await _transactionManager.CreateAsync(command, updateContext.CancellationToken);
 
         var message = account.Currency is null ?
             $"The account {account.Title} with initial balance {context.InitialBalance} has been created!" :
             $"The account {account.Title} with initial balance {context.InitialBalance} {account.Currency.CurrencyCode} " +
             $"{account.Currency.Emoji} has been created!";
 
-        await _messageManager.SendApproveMessage(updateContext, message);
+        await _messageManager.SendApproveMessageAsync(updateContext, message);
     }
 }

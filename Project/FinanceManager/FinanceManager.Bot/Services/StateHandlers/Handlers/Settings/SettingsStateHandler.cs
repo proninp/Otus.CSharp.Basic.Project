@@ -17,8 +17,8 @@ public sealed class SettingsStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        await _messageManager.DeleteLastMessage(updateContext);
-        await _messageManager.SendMessage(updateContext,
+        await _messageManager.DeleteLastMessageAsync(updateContext);
+        await _messageManager.SendMessageAsync(updateContext,
             $"The settings feature is under development {Emoji.Rocket.GetSymbol()}");
         return await _sessionStateManager.ToMainMenu(updateContext.Session);
     }

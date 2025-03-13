@@ -32,8 +32,8 @@ public sealed class TransactionInputDateStateHandler : IStateHandler
              $"{Environment.NewLine}" +
              "You can enter date in <code>dd</code>, <code>dd.mm</code> or <code>dd.mm.yyyy</code> formats:";
 
-        if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
+        if (! await _messageManager.EditLastMessageAsync(updateContext, message, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, message, inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

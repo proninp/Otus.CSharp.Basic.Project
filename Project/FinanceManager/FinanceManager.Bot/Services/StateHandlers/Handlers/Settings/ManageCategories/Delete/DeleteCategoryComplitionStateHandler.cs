@@ -23,11 +23,11 @@ public sealed class DeleteCategoryComplitionStateHandler : CompleteStateHandler
         var context = updateContext.Session.GetDeleteCategoryContext();
         if (!context.IsConfirm)
         {
-            await _messageManager.SendErrorMessage(updateContext, "The action has been canceled.");
+            await _messageManager.SendErrorMessageAsync(updateContext, "The action has been canceled.");
             return;
         }
 
-        await _categoryManager.Delete(context.Category!.Id, updateContext.CancellationToken);
-        await _messageManager.SendApproveMessage(updateContext, $"Category {context.Category.Title} has been deleted");
+        await _categoryManager.DeleteAsync(context.Category!.Id, updateContext.CancellationToken);
+        await _messageManager.SendApproveMessageAsync(updateContext, $"Category {context.Category.Title} has been deleted");
     }
 }

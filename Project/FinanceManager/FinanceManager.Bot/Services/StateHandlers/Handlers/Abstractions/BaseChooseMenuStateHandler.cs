@@ -32,7 +32,7 @@ public abstract class BaseChooseMenuStateHandler : IStateHandler
         if (!MenuStateMapping.TryGetValue(callbackData.Data, out var newState))
         {
             if (callbackData.MessageId is not null)
-                await _messageManager.DeleteMessage(updateContext, callbackData.MessageId.Value);
+                await _messageManager.DeleteMessageAsync(updateContext, callbackData.MessageId.Value);
             return await _sessionStateManager.Previous(updateContext.Session);
         }
 

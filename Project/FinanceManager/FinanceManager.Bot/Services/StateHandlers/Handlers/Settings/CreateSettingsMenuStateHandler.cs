@@ -35,15 +35,15 @@ public sealed class CreateSettingsMenuStateHandler : IStateHandler
         var message = updateContext.Session.LastMessage?.Text;
         if (message is null)
         {
-            var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
+            var account = await _accountManager.GetDefaultAsync(updateContext.Session.Id, updateContext.CancellationToken);
             if (account is null)
                 return await _sessionStateManager.Reset(updateContext.Session);
             message = await _accountInfoProvider.GetAccountInfoAsync(account, updateContext.CancellationToken);
         }
             
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
-        if (! await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
+        if (! await _messageManager.EditLastMessageAsync(updateContext, message, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, message, inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

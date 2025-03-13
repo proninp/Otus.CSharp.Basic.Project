@@ -39,9 +39,9 @@ public class CategoriesInitializer : ICategoriesInitializer
         _categoryManager = categoryManager;
     }
 
-    public async Task InitializeDefaults(Guid userId, CancellationToken cancellationToken)
+    public async Task InitializeDefaultsAsync(Guid userId, CancellationToken cancellationToken)
     {
-        if (await _categoryManager.Exists(userId, cancellationToken))
+        if (await _categoryManager.ExistsAsync(userId, cancellationToken))
             return;
 
         var createCommands = _defaultCategories
@@ -55,6 +55,6 @@ public class CategoriesInitializer : ICategoriesInitializer
             });
 
         foreach (var category in createCommands)
-            await _categoryManager.Create(category, cancellationToken);
+            await _categoryManager.CreateAsync(category, cancellationToken);
     }
 }

@@ -23,7 +23,7 @@ public sealed class CreateCategoryInputEmojiStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        await _messageManager.SendInlineKeyboardMessage(
+        await _messageManager.SendInlineKeyboardMessageAsync(
         updateContext,
             $"Please specify the emoji that will be associated with the category:",
             CreateInlineKeyboard(updateContext));

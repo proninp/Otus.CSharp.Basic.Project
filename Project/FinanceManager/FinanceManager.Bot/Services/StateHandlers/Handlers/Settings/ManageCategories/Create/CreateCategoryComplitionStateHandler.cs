@@ -30,10 +30,10 @@ public sealed class CreateCategoryComplitionStateHandler : CompleteStateHandler
             Emoji = context.Emoji,
         };
 
-        await _categoryManager.Create(command, updateContext.CancellationToken);
+        await _categoryManager.CreateAsync(command, updateContext.CancellationToken);
 
         var message = $"The category '{context.CategoryTitle}' was successfully created!";
 
-        await _messageManager.SendApproveMessage(updateContext, message);
+        await _messageManager.SendApproveMessageAsync(updateContext, message);
     }
 }

@@ -22,7 +22,7 @@ public abstract class CompleteStateHandler : IStateHandler
         }
         catch (Exception)
         {
-            await _messageManager.SendErrorMessage(updateContext,
+            await _messageManager.SendErrorMessageAsync(updateContext,
                 "An error occurred while performing the action. Please try again later.");
             throw;
         }

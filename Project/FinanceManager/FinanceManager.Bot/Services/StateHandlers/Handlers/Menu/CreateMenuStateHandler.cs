@@ -29,15 +29,15 @@ public sealed class CreateMenuStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var account = await _accountManager.GetDefault(updateContext.Session.Id, updateContext.CancellationToken);
+        var account = await _accountManager.GetDefaultAsync(updateContext.Session.Id, updateContext.CancellationToken);
         if (account is null)
             return await _sessionStateManager.Reset(updateContext.Session);
 
         var messageText = await _accountInfoProvider.GetAccountInfoAsync(account, updateContext.CancellationToken);
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
         
-        if (!await _messageManager.EditLastMessage(updateContext, messageText, inlineKeyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, messageText, inlineKeyboard);
+        if (!await _messageManager.EditLastMessageAsync(updateContext, messageText, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, messageText, inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

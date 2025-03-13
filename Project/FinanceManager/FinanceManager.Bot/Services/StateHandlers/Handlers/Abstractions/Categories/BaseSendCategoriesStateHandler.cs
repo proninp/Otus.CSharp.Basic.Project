@@ -34,8 +34,8 @@ public abstract class BaseSendCategoriesStateHandler : IStateHandler
         var categoryType = GetCategoryType(updateContext.Session);
         var categories = await (categoryType switch
         {
-            CategoryType.Expense => _categoryManager.GetExpenses(session.Id, updateContext.CancellationToken),
-            CategoryType.Income => _categoryManager.GetIncomes(session.Id, updateContext.CancellationToken),
+            CategoryType.Expense => _categoryManager.GetExpensesAsync(session.Id, updateContext.CancellationToken),
+            CategoryType.Income => _categoryManager.GetIncomesAsync(session.Id, updateContext.CancellationToken),
             _ => throw new InvalidOperationException(
                 $"There is no handler for the {categoryType.GetDescription()} transaction type")
         });
@@ -43,8 +43,8 @@ public abstract class BaseSendCategoriesStateHandler : IStateHandler
         var message = GetMessageText(session);
         var inlineKeyboard = CreateInlineKeyboard(updateContext, categories);
 
-        if (!await _messageManager.EditLastMessage(updateContext, message, inlineKeyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, message, inlineKeyboard);
+        if (!await _messageManager.EditLastMessageAsync(updateContext, message, inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, message, inlineKeyboard);
 
         return await _sessionStateManager.Next(session);
     }

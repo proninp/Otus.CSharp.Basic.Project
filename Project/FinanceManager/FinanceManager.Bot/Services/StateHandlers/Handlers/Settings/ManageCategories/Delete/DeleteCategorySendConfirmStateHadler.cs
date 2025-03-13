@@ -31,8 +31,8 @@ public sealed class DeleteCategorySendConfirmStateHadler : IStateHandler
 
         if (context.Category is null)
         {
-            await _messageManager.DeleteLastMessage(updateContext);
-            await _messageManager.SendErrorMessage(
+            await _messageManager.DeleteLastMessageAsync(updateContext);
+            await _messageManager.SendErrorMessageAsync(
                 updateContext,
                 "An error occurred while performing the category deletion operation, please start from the beginning");
             return await _sessionStateManager.ToManageCategoriesMenu(session);
@@ -43,7 +43,7 @@ public sealed class DeleteCategorySendConfirmStateHadler : IStateHandler
             message.Append($" {context.Category.Emoji}");
         message.Append('?');
 
-        var transactionsCount = await _transactionManager.GetCount(
+        var transactionsCount = await _transactionManager.GetCountAsync(
             session.Id, default, context.Category.Id, updateContext.CancellationToken);
         if (transactionsCount > 0)
         {
@@ -54,8 +54,8 @@ public sealed class DeleteCategorySendConfirmStateHadler : IStateHandler
 
         var inlineKeyboard = CreateInlineKeyboard(updateContext);
 
-        if (!await _messageManager.EditLastMessage(updateContext, message.ToString(), inlineKeyboard))
-            await _messageManager.SendInlineKeyboardMessage(updateContext, message.ToString(), inlineKeyboard);
+        if (!await _messageManager.EditLastMessageAsync(updateContext, message.ToString(), inlineKeyboard))
+            await _messageManager.SendInlineKeyboardMessageAsync(updateContext, message.ToString(), inlineKeyboard);
 
         return await _sessionStateManager.Next(updateContext.Session);
     }

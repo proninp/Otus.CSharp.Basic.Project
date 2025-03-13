@@ -14,10 +14,10 @@ public abstract class UnderDevelopmentStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        if (!await _messageManager.EditLastMessage(updateContext, MessageText))
+        if (!await _messageManager.EditLastMessageAsync(updateContext, MessageText))
         {
-            await _messageManager.DeleteLastMessage(updateContext);
-            await _messageManager.SendMessage(updateContext, MessageText);
+            await _messageManager.DeleteLastMessageAsync(updateContext);
+            await _messageManager.SendMessageAsync(updateContext, MessageText);
         }
         updateContext.Session.LastMessage = null;
         return await Navigate(updateContext);
