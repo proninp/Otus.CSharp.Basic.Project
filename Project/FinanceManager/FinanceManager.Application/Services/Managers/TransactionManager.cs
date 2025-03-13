@@ -4,6 +4,7 @@ using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces;
 using FinanceManager.Application.Services.Interfaces.Managers;
+using FinanceManager.Core.Enums;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
@@ -97,7 +98,7 @@ public sealed class TransactionManager : ITransactionManager
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var transaction = await _repository.GetByIdOrThrowAsync(id, cancellationToken: cancellationToken);
+        var transaction = await _repository.GetByIdOrThrowAsync(id, trackingType: TrackingType.Tracking, cancellationToken: cancellationToken);
         _repository.Delete(transaction);
         await _unitOfWork.CommitAsync(cancellationToken);
     }

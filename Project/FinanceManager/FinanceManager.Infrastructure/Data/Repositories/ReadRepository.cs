@@ -24,7 +24,7 @@ public class ReadRepository<T> : IReadRepository<T> where T : IdentityModel
         TrackingType trackingType = TrackingType.NoTracking,
         CancellationToken cancellationToken = default)
     {
-        var query = BuildQueryable(include: include);
+        var query = BuildQueryable(include: include, trackingType: trackingType);
 
         var entity = query
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

@@ -3,6 +3,7 @@ using FinanceManager.Application.DataTransferObjects.Commands.Create;
 using FinanceManager.Application.DataTransferObjects.Commands.Update;
 using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Application.Services.Interfaces.Managers;
+using FinanceManager.Core.Enums;
 using FinanceManager.Core.Interfaces;
 using FinanceManager.Core.Interfaces.Repositories;
 using FinanceManager.Core.Models;
@@ -109,7 +110,7 @@ public sealed class AccountManager : IAccountManager
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var account = await _repository.GetByIdOrThrowAsync(id, cancellationToken: cancellationToken);
+        var account = await _repository.GetByIdOrThrowAsync(id, trackingType: TrackingType.Tracking, cancellationToken: cancellationToken);
         _repository.Delete(account);
         await _unitOfWork.CommitAsync(cancellationToken);
     }

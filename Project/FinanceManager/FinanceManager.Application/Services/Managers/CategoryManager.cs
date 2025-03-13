@@ -80,7 +80,7 @@ public sealed class CategoryManager : ICategoryManager
 
     public async Task Delete(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _repository.GetByIdOrThrowAsync(id, cancellationToken: cancellationToken);
+        var category = await _repository.GetByIdOrThrowAsync(id, trackingType: TrackingType.Tracking, cancellationToken: cancellationToken);
         _repository.Delete(category);
         await _unitOfWork.CommitAsync(cancellationToken);
     }
