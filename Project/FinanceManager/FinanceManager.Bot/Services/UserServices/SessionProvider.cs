@@ -28,7 +28,7 @@ public sealed class SessionProvider : ISessionProvider
         _options = options.Value;
     }
 
-    public async Task<UserSession> GetUserSession(User? from, CancellationToken cancellationToken)
+    public async Task<UserSession> GetUserSessionAsync(User? from, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(from);
 

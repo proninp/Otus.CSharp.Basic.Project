@@ -26,7 +26,7 @@ public sealed class SessionConsistencyValidator : ISessionConsistencyValidator
         if (updateContext.Update.CallbackQuery is null)
             return true;
 
-        var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, false);
+        var callbackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, false);
 
         var isValidCallback = false;
 

@@ -57,7 +57,7 @@ public sealed class TransactionSetDateStateHandler : IStateHandler
         if (_messageProvider.GetMessage(updateContext.Update, out var message))
             return message?.Text;
 
-        var callBackData = await _callbackDataProvider.GetCallbackData(updateContext, false);
+        var callBackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, false);
         if (callBackData is not null)
         {
             dateText = callBackData.Data;

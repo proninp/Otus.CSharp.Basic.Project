@@ -36,11 +36,11 @@ public sealed class HistoryStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
+        var callbackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, true);
         if (callbackData is null)
             return await _sessionStateManager.ToMainMenu(updateContext.Session);
 
-        var context = await _contextProvider.GetHistoryContex(updateContext);
+        var context = await _contextProvider.GetHistoryContexAsync(updateContext);
         if (context is null)
             return false;
 

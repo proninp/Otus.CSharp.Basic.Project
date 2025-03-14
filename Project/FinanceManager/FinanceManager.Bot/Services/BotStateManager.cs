@@ -32,7 +32,7 @@ public sealed class BotStateManager : IBotStateManager
     public async Task HandleUpdateAsync(
         ITelegramBotClient botClient, Update update, User? user, CancellationToken cancellationToken)
     {
-        var session = await _userSessionProvider.GetUserSession(user, cancellationToken);
+        var session = await _userSessionProvider.GetUserSessionAsync(user, cancellationToken);
         
         if (!_chatProvider.GetChat(session.Id, update, out var chat))
             return;

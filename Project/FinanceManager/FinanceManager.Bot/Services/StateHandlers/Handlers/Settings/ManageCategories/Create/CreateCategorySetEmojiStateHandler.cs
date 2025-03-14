@@ -34,7 +34,7 @@ public sealed class CreateCategorySetEmojiStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessageAsync(updateContext);
 
-        var callBackData = await _callbackDataProvider.GetCallbackData(updateContext, false);
+        var callBackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, false);
         if (callBackData is not null)
         {
             if (callBackData.Data == Guid.Empty.ToString())

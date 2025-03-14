@@ -26,7 +26,7 @@ public sealed class ChooseCurrencyStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var callbackQuery = await _callbackDataProvider.GetCallbackData(updateContext, true);
+        var callbackQuery = await _callbackDataProvider.GetCallbackDataAsync(updateContext, true);
         if (callbackQuery is null)
             return await _sessionStateManager.Previous(updateContext.Session);
 

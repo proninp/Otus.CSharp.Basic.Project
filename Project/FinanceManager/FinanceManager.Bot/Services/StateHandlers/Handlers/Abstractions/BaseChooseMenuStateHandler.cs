@@ -25,7 +25,7 @@ public abstract class BaseChooseMenuStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
+        var callbackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, true);
         if (callbackData is null)
             return await _sessionStateManager.Previous(updateContext.Session);
 

@@ -33,7 +33,7 @@ public sealed class MenuCallbackHandler : IMenuCallbackHandler
 
     public async Task<bool> HandleMenuCallback(BotUpdateContext context)
     {
-        var callbackData = await _callbackDataProvider.GetCallbackData(context, true);
+        var callbackData = await _callbackDataProvider.GetCallbackDataAsync(context, true);
         if (callbackData is not null)
         {
             var menuData = NavigationCommand.Memu.GetCallbackData();

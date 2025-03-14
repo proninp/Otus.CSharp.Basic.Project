@@ -24,7 +24,7 @@ public class HistoryContextProvider : IHistoryContextProvider
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task<HistoryContext?> GetHistoryContex(BotUpdateContext updateContext)
+    public async Task<HistoryContext?> GetHistoryContexAsync(BotUpdateContext updateContext)
     {
         if (updateContext.Session.WorkflowContext is not null)
             return updateContext.Session.GetHistoryContext();

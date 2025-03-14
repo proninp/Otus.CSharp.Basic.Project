@@ -26,7 +26,7 @@ public abstract class BaseChooseCategoryTypeStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
+        var callbackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, true);
 
         await _messageManager.DeleteLastMessageAsync(updateContext);
 

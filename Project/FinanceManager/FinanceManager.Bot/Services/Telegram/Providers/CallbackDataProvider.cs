@@ -12,7 +12,7 @@ public sealed class CallbackDataProvider : ICallbackDataProvider
         _messageManager = messageManager;
     }
 
-    public async Task<CallbackData?> GetCallbackData(
+    public async Task<CallbackData?> GetCallbackDataAsync(
         BotUpdateContext updateContext, bool isDeleteMessageWhenNull = true)
     {
         CallbackData? callbackData = null;

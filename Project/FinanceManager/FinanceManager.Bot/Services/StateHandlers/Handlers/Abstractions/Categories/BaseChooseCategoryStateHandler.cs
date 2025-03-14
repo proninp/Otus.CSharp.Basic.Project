@@ -27,7 +27,7 @@ public abstract class BaseChooseCategoryStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
+        var callbackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, true);
 
         if (callbackData is null || string.IsNullOrEmpty(callbackData.Data))
         {

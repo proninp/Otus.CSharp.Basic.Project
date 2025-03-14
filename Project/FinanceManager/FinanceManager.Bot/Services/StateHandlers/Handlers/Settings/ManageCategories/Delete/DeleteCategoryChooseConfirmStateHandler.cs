@@ -26,7 +26,7 @@ namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCate
         {
             await _messageManager.DeleteLastMessageAsync(updateContext);
 
-            var callbackData = await _callbackDataProvider.GetCallbackData(updateContext, true);
+            var callbackData = await _callbackDataProvider.GetCallbackDataAsync(updateContext, true);
             if (callbackData is null || string.IsNullOrEmpty(callbackData.Data))
                 return await _sessionStateManager.Previous(updateContext.Session);
 
