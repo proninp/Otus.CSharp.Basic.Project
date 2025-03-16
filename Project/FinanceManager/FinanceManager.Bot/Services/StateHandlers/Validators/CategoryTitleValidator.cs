@@ -19,7 +19,7 @@ public class CategoryTitleValidator : ICategoryTitleValidator
         _categoryManager = categoryManager;
     }
 
-    public async Task<(bool isValid, string newTitle)> Validate(BotUpdateContext context, string? categoryTitle)
+    public async Task<(bool isValid, string newTitle)> ValidateAsync(BotUpdateContext context, string? categoryTitle)
     {
         if (!_textSanitizer.Sanitize(categoryTitle, out var title))
         {

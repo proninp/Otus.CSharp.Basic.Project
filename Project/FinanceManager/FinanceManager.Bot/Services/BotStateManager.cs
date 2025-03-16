@@ -39,8 +39,8 @@ public sealed class BotStateManager : IBotStateManager
 
         var botContext = new BotUpdateContext(session, botClient, update, chat, cancellationToken);
 
-        if (await _consistencyValidator.ValidateCallbackConsistency(botContext))
-            await _menuCallbackHandler.HandleMenuCallback(botContext);
+        if (await _consistencyValidator.ValidateCallbackConsistencyAsync(botContext))
+            await _menuCallbackHandler.HandleMenuCallbackAsync(botContext);
 
         bool isContinue;
         do

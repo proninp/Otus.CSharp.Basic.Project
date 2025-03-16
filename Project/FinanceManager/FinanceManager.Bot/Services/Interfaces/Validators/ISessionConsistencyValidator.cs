@@ -3,5 +3,5 @@
 namespace FinanceManager.Bot.Services.Interfaces.Validators;
 public interface ISessionConsistencyValidator
 {
-    Task<bool> ValidateCallbackConsistency(BotUpdateContext updateContext);
+    Task<bool> ValidateCallbackConsistencyAsync(BotUpdateContext updateContext);
 }

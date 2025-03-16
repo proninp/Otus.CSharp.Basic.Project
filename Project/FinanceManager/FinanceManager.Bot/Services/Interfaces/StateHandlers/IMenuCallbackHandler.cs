@@ -6,5 +6,5 @@ public interface IMenuCallbackHandler
 {
     InlineKeyboardButton GetMenuButton(BotUpdateContext context);
 
-    Task<bool> HandleMenuCallback(BotUpdateContext context);
+    Task<bool> HandleMenuCallbackAsync(BotUpdateContext context);
 }

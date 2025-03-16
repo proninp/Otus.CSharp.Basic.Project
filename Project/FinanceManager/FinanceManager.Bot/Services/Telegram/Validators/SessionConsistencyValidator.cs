@@ -21,7 +21,7 @@ public sealed class SessionConsistencyValidator : ISessionConsistencyValidator
         _sessionStateManager = sessionStateManager;
     }
 
-    public async Task<bool> ValidateCallbackConsistency(BotUpdateContext updateContext)
+    public async Task<bool> ValidateCallbackConsistencyAsync(BotUpdateContext updateContext)
     {
         if (updateContext.Update.CallbackQuery is null)
             return true;

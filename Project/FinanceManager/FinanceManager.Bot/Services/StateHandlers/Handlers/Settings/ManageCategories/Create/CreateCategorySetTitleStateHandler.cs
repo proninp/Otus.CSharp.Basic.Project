@@ -32,7 +32,7 @@ public sealed class CreateCategorySetTitleStateHandler : IStateHandler
 
         await _messageManager.DeleteLastMessageAsync(updateContext);
 
-        var validationResult = await _categoryTitleValidator.Validate(updateContext, message.Text);
+        var validationResult = await _categoryTitleValidator.ValidateAsync(updateContext, message.Text);
 
         if (!validationResult.isValid)
             return await _sessionStateManager.Previous(updateContext.Session);

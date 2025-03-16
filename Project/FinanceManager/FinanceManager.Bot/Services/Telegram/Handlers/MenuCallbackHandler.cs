@@ -31,7 +31,7 @@ public sealed class MenuCallbackHandler : IMenuCallbackHandler
         return menuButton;
     }
 
-    public async Task<bool> HandleMenuCallback(BotUpdateContext context)
+    public async Task<bool> HandleMenuCallbackAsync(BotUpdateContext context)
     {
         var callbackData = await _callbackDataProvider.GetCallbackDataAsync(context, true);
         if (callbackData is not null)
