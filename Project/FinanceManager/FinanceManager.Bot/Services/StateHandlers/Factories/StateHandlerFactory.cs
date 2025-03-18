@@ -75,7 +75,7 @@ public sealed class StateHandlerFactory : IStateHandlerFactory
         WorkflowState.HandleDeletingCategoryConfirmation => _serviceProvider.GetRequiredService<DeleteCategoryChooseConfirmStateHandler>(),
         WorkflowState.DeleteCategoryComplete => _serviceProvider.GetRequiredService<DeleteCategoryComplitionStateHandler>(),
 
-        WorkflowState.SendChooseRenamingCategory => _serviceProvider.GetRequiredService<RenameCategoryStartStateHandler>(),
+        WorkflowState.SendChooseRenamingCategory => _serviceProvider.GetRequiredService<RenameCategoryUDStateHandler>(),
 
         _ => throw new StateHandlerNotFoundException(state)
     };

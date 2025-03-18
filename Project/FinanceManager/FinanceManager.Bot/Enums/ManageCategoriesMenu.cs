@@ -24,7 +24,7 @@ public static class ManageCategoriesMenuExtension
     {
         ManageCategoriesMenu.Add => nameof(CreateCategoryStartStateHandler),
         ManageCategoriesMenu.Delete => nameof(DeleteCategoryStartStateHandler),
-        ManageCategoriesMenu.Rename => nameof(RenameCategoryStartStateHandler),
+        ManageCategoriesMenu.Rename => nameof(RenameCategoryUDStateHandler),
         _ => throw new NotImplementedException(manageCategoryMenu.GetDescription())
     };
 }

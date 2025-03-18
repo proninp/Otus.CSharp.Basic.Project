@@ -77,7 +77,7 @@ public static class StateHandlersInjection
 
         services
             .AddScoped<DeleteCategoryStartStateHandler>()
-            .AddScoped<RenameCategoryStartStateHandler>();
+            .AddScoped<RenameCategoryUDStateHandler>();
 
         return services;
     }

@@ -1,12 +1,13 @@
 ﻿using FinanceManager.Application.DataTransferObjects.ViewModels;
 using FinanceManager.Bot.Exceptions;
 using FinanceManager.Bot.Models;
+using FinanceManager.Core.Enums;
 
 namespace FinanceManager.Bot.Services.StateHandlers.Contexts;
 
 public sealed class RenameCategoryContext
 {
-    public TransactionType CategoryType { get; set; }
+    public CategoryType CategoryType { get; set; }
 
     public CategoryDto? Category { get; set; }
 

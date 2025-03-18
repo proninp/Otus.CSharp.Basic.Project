@@ -1,21 +1,21 @@
-﻿using FinanceManager.Bot.Enums;
-using FinanceManager.Bot.Models;
+﻿using FinanceManager.Bot.Models;
 using FinanceManager.Bot.Services.Interfaces.Managers;
-using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions;
+using FinanceManager.Bot.Services.Interfaces.StateHandlers;
+using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Rename;
-public sealed class RenameCategoryStartStateHandler : UnderDevelopmentStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Rename
 {
-    private readonly ISessionStateManager _sessionStateManager;
-
-    public RenameCategoryStartStateHandler(IMessageManager messageManager, ISessionStateManager sessionStateManager)
-        : base(messageManager)
+    public class RenameCategoryStartStateHandler : BaseSendCategoryTypeStateHandler
     {
-        _sessionStateManager = sessionStateManager;
+        public RenameCategoryStartStateHandler(
+            IMessageManager messageManager,
+            IMenuCallbackHandler menuCallbackProvider,
+            ISessionStateManager sessionStateManager)
+            : base(messageManager, menuCallbackProvider, sessionStateManager)
+        {
+        }
+
+        protected override string GetMessageText(UserSession session) =>
+            "Please select the type of category to rename";
     }
-
-    public override string MessageText => $"Rename category feature is under development {Emoji.Rocket.GetSymbol()}";
-
-    public override async Task<bool> Navigate(BotUpdateContext context) =>
-        await _sessionStateManager.ToManageCategoriesMenu(context.Session);
 }

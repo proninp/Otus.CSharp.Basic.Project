@@ -30,7 +30,7 @@ public sealed class TransactionSetDateStateHandler : IStateHandler
 
     public async Task<bool> HandleAsync(BotUpdateContext updateContext)
     {
-        var dateText = await GetUpdateText(updateContext);
+        var dateText = await GetUpdateTextAsync(updateContext);
         if (dateText is null)
             return false;
 
@@ -51,7 +51,7 @@ public sealed class TransactionSetDateStateHandler : IStateHandler
         return await _sessionStateManager.Next(updateContext.Session);
     }
 
-    private async Task<string?> GetUpdateText(BotUpdateContext updateContext)
+    private async Task<string?> GetUpdateTextAsync(BotUpdateContext updateContext)
     {
         string? dateText = null;
         if (_messageProvider.GetMessage(updateContext.Update, out var message))
