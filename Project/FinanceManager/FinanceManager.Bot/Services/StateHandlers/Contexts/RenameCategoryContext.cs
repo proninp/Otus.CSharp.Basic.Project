@@ -14,6 +14,9 @@ public sealed class RenameCategoryContext
     public string? CategoryName { get; set; }
 
     public string Emoji { get; set; } = string.Empty;
+
+    public static RenameCategoryContext CreateContext(CategoryType type) =>
+        new RenameCategoryContext { CategoryType = type };
 }
 
 public static class RenameCategoryContextExtesion
