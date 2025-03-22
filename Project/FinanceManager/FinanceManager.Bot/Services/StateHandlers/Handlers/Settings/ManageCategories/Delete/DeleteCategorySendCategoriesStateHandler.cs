@@ -20,15 +20,9 @@ public sealed class DeleteCategorySendCategoriesStateHandler : BaseSendCategorie
     {
     }
 
-    protected override string GetMessageText(UserSession session)
-    {
-        var context = session.GetDeleteCategoryContext();
-        return $"Please choose a category {Emoji.Category.GetSymbol()} to delete:";
-    }
+    protected override string GetMessageText(UserSession session) =>
+        $"Please choose a category {Emoji.Category.GetSymbol()} to delete:";
 
-    protected override CategoryType GetCategoryType(UserSession session)
-    {
-        var context = session.GetDeleteCategoryContext();
-        return context.CategoryType;
-    }
+    protected override CategoryType GetCategoryType(UserSession session) =>
+        session.GetDeleteCategoryContext().CategoryType;
 }

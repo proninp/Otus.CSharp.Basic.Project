@@ -21,7 +21,6 @@ public sealed class DeleteCategoryChooseStateHandler : BaseChooseCategoryStateHa
 
     protected override void SaveCategoryToContext(UserSession session, CategoryDto? category)
     {
-        var context = session.GetDeleteCategoryContext();
-        context.Category = category;
+        var context = session.GetDeleteCategoryContext().Category = category;
     }
 }
