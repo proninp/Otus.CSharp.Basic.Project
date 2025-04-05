@@ -1,4 +1,6 @@
+using FinanceManager.API.Middleware;
 using FinanceManager.CompositionRoot;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<RequestLogContextMiddleWare>();
+
+app.UseSerilogRequestLogging();
 
 app.UseAuthorization();
 

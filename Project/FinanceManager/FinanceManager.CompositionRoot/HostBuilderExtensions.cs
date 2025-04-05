@@ -7,11 +7,8 @@ public static class HostBuilderExtensions
 {
     public static IHostBuilder AddLogging(this IHostBuilder hostBuilder, IConfiguration configuration)
     {
-        Log.Logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(configuration)
-            .CreateLogger();
-
-        return hostBuilder.UseSerilog(Log.Logger);
+        return hostBuilder.UseSerilog((context, loggerConfig) =>
+            loggerConfig.ReadFrom.Configuration(context.Configuration));
     }
 
     public static IHostBuilder AddGlobalExceptionHandler(this IHostBuilder hostBuilder)
