@@ -5,10 +5,11 @@ using FinanceManager.Bot.Services.Interfaces.Validators;
 using FinanceManager.Bot.Services.StateHandlers.Contexts;
 using FinanceManager.Bot.Services.StateHandlers.Handlers.Abstractions.Categories;
 
-namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Create;
-public sealed class CreateCategorySetTitleStateHandler : BaseSetCategoryTitleStateHandler
+namespace FinanceManager.Bot.Services.StateHandlers.Handlers.Settings.ManageCategories.Rename;
+
+public sealed class RenameCategorySetTitleStateHandler : BaseSetCategoryTitleStateHandler
 {
-    public CreateCategorySetTitleStateHandler(
+    public RenameCategorySetTitleStateHandler(
         IUpdateMessageProvider messageProvider,
         IMessageManager messageManager,
         ISessionStateManager sessionStateManager,
@@ -18,5 +19,5 @@ public sealed class CreateCategorySetTitleStateHandler : BaseSetCategoryTitleSta
     }
 
     private protected override void SetNewTitleToContext(UserSession session, string newTitle) =>
-        session.GetCreateCategoryContext().CategoryTitle = newTitle;
+        session.GetRenameCategoryContext().CategoryName = newTitle;
 }
